@@ -6,7 +6,7 @@ setup(
     version = "0.1.0-dev1",
     author = "Eldarion",
     author_email = "development@eldarion.com",
-    description = "contact importing for Django",
+    description = "the eldarion.com blog app intended to be suitable for site-level company and project blogs",
     long_description = open("README.rst").read(),
     license = "BSD",
     url = "http://github.com/eldarion/biblion",
