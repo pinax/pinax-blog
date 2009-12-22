@@ -4,6 +4,7 @@ from django import forms
 
 from biblion.creole_parser import parse, BiblionHtmlEmitter
 from biblion.models import Post, Revision
+from biblion.utils import can_tweet
 
 
 class AdminPostForm(forms.ModelForm):
@@ -33,10 +34,12 @@ class AdminPostForm(forms.ModelForm):
         required = False,
         help_text = u"Checking this will publish this articles on the site",
     )
-    tweet = forms.BooleanField(
-        required = False,
-        help_text = u"Checking this will send out a tweet for this post",
-    )
+    
+    if can_tweet():
+        tweet = forms.BooleanField(
+            required = False,
+            help_text = u"Checking this will send out a tweet for this post",
+        )
     
     class Meta:
         model = Post
@@ -84,7 +87,7 @@ class AdminPostForm(forms.ModelForm):
         r.published = post.published
         r.save()
         
-        if self.cleaned_data["tweet"]:
+        if can_tweet() and self.cleaned_data["tweet"]:
             post.tweet()
         
         return post

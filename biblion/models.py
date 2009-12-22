@@ -11,9 +11,13 @@ from django.utils import simplejson as json
 
 from django.contrib.sites.models import Site
 
-import twitter
+try:
+    import twitter
+except ImportError:
+    twitter = None
 
 from biblion.managers import PostManager
+from biblion.utils import can_tweet
 
 
 class Post(models.Model):
@@ -82,11 +86,12 @@ class Post(models.Model):
         return self.tweet_text
     
     def tweet(self):
-        account = twitter.Api(
-            username = settings.TWITTER_USERNAME,
-            password = settings.TWITTER_PASSWORD,
-        )
-        account.PostUpdate(self.as_tweet())
+        if can_tweet():
+            account = twitter.Api(
+                username = settings.TWITTER_USERNAME,
+                password = settings.TWITTER_PASSWORD,
+            )
+            account.PostUpdate(self.as_tweet())
     
     def save(self, **kwargs):
         self.updated_at = datetime.now()
