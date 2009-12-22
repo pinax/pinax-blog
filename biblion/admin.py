@@ -3,6 +3,7 @@ from django.utils.functional import curry
 
 from biblion.models import Post, Image
 from biblion.forms import AdminPostForm
+from biblion.utils import can_tweet
 
 
 class ImageInline(admin.TabularInline):
@@ -22,8 +23,9 @@ class PostAdmin(admin.ModelAdmin):
         "teaser",
         "content",
         "publish",
-        "tweet",
     ]
+    if can_tweet():
+        fields.append("tweet")
     prepopulated_fields = {"slug": ("title",)}
     inlines = [
         ImageInline,
