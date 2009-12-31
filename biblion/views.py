@@ -105,7 +105,7 @@ def blog_feed(request, section=None):
     hit.request_data = serialize_request(request)
     hit.save()
     
-    atom = render_to_string("atom_feed.xml", {
+    atom = render_to_string("biblion/atom_feed.xml", {
         "feed_id": feed_url,
         "feed_title": feed_title,
         "blog_url": blog_url,
