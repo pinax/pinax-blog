@@ -11,6 +11,6 @@
     <updated>{{ feed_updated|date:"Y-m-d\TH:i:s\Z" }}</updated>
     
     {% for entry in entries %}
-        {% include "atom_entry.xml" %}
+        {% include "biblion/atom_entry.xml" %}
     {% endfor %}
 </feed>
