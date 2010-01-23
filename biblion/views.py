@@ -17,7 +17,7 @@ def blog_index(request):
     
     posts = Post.objects.current()
     
-    return render_to_response("blog_list.html", {
+    return render_to_response("biblion/blog_list.html", {
         "posts": posts,
     }, context_instance=RequestContext(request))
 
@@ -29,7 +29,7 @@ def blog_section_list(request, section):
     except InvalidSection:
         raise Http404()
     
-    return render_to_response("blog_section_list.html", {
+    return render_to_response("biblion/blog_section_list.html", {
         "section": section,
         "posts": posts,
     }, context_instance=RequestContext(request))
@@ -53,7 +53,7 @@ def blog_post_detail(request, **kwargs):
         post = get_object_or_404(queryset, slug=kwargs["slug"])
         post.inc_views()
     
-    return render_to_response("blog_post.html", {
+    return render_to_response("biblion/blog_post.html", {
         "post": post,
     }, context_instance=RequestContext(request))
 
