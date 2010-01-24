@@ -41,3 +41,30 @@ class LatestBlogPostNode(template.Node):
 def latest_blog_post(parser, token):
     bits = token.split_contents()
     return LatestBlogPostNode(bits[2])
+
+
+class LatestSectionPost(template.Node):
+    
+    def __init__(self, section, context_var):
+        self.section = template.Variable(section)
+        self.context_var = context_var
+    
+    def render(self, context):
+        section = self.section.resolve(context)
+        post = Post.objects.section(section, queryset=Post.objects.current())
+        try:
+            post = post[0]
+        except IndexError:
+            post = None
+        self.context[self.context_var] = post
+        return u""
+
+
+@register.tag
+def latest_section_post(parser, token):
+    """
+        {% latest_section_post "articles" as latest_article_post %}
+    """
+    bits = token.split_contents()
+    return LatestSectionPostNode(bits[1], bits[3])
+    

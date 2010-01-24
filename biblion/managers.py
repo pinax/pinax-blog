@@ -13,9 +13,10 @@ class PostManager(models.Manager):
     def current(self):
         return self.published().order_by("-published")
     
-    def section(self, value):
+    def section(self, value, queryset=None):
         
-        queryset = self.published()
+        if queryset is None:
+            queryset = self.published()
         
         if not value:
             return queryset
