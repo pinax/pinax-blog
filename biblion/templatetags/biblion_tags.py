@@ -56,7 +56,7 @@ class LatestSectionPostNode(template.Node):
             post = post[0]
         except IndexError:
             post = None
-        self.context[self.context_var] = post
+        context[self.context_var] = post
         return u""
 
 
