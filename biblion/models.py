@@ -24,11 +24,9 @@ from biblion.utils import can_tweet
 
 class Post(models.Model):
     
-    SECTION_CHOICES = [
-        ("1", ALL_SECTION_NAME)
-    ] + SECTIONS
+    SECTION_CHOICES = [(1, ALL_SECTION_NAME)] + zip(range(2, 2 + len(SECTIONS)), SECTIONS)
     
-    section = models.CharField(max_length=1, choices=SECTION_CHOICES)
+    section = models.IntegerField(choices=SECTION_CHOICES)
     
     title = models.CharField(max_length=90)
     slug = models.SlugField()
