@@ -43,7 +43,7 @@ def latest_blog_post(parser, token):
     return LatestBlogPostNode(bits[2])
 
 
-class LatestSectionPost(template.Node):
+class LatestSectionPostNode(template.Node):
     
     def __init__(self, section, context_var):
         self.section = template.Variable(section)
