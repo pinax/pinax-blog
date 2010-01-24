@@ -18,16 +18,15 @@ except ImportError:
     twitter = None
 
 from biblion.managers import PostManager
+from biblion.settings import ALL_SECTION_NAME, SECTIONS
 from biblion.utils import can_tweet
 
 
 class Post(models.Model):
     
     SECTION_CHOICES = [
-        ("1", "business"),
-        ("2", "technical"),
-        ("3", "general"),
-    ]
+        ("1", ALL_SECTION_NAME)
+    ] + SECTIONS
     
     section = models.CharField(max_length=1, choices=SECTION_CHOICES)
     
