@@ -1,5 +1,8 @@
 from distutils.core import setup
 
+# see requirements.txt for dependencies
+
+
 
 setup(
     name = "biblion",

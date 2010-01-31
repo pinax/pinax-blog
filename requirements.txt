@@ -1,0 +1,6 @@
+# required
+creole==1.0.1
+Pygments==1.2.2
+
+# optional
+python-twitter==0.6
