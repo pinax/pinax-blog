@@ -21,13 +21,9 @@ class PostManager(models.Manager):
         if not value:
             return queryset
         else:
-            sections = dict(
-                [(v, k) for k, v in self.model.SECTION_CHOICES]
-            )
             try:
-                section = sections[value]
+                section_idx = self.model.section_idx(value)
             except KeyError:
                 raise InvalidSection
-            return queryset.filter(
-                Q(section=sections[ALL_SECTION_NAME]) | Q(section=section),
-            )
+            all_sections = Q(section=self.model.section_idx(ALL_SECTION_NAME))
+            return queryset.filter(all_sections | Q(section=section_idx))

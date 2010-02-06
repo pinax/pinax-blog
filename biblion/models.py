@@ -22,9 +22,15 @@ from biblion.settings import ALL_SECTION_NAME, SECTIONS
 from biblion.utils import can_tweet
 
 
+
+def ig(L, i):
+    for x in L:
+        yield x[i]
+
+
 class Post(models.Model):
     
-    SECTION_CHOICES = [(1, ALL_SECTION_NAME)] + zip(range(2, 2 + len(SECTIONS)), SECTIONS)
+    SECTION_CHOICES = [(1, ALL_SECTION_NAME)] + zip(range(2, 2 + len(SECTIONS)), ig(SECTIONS, 1))
     
     section = models.IntegerField(choices=SECTION_CHOICES)
     
@@ -42,6 +48,25 @@ class Post(models.Model):
     published = models.DateTimeField(null=True, blank=True, editable=False) # when last published
     
     view_count = models.IntegerField(default=0, editable=False)
+    
+    @staticmethod
+    def section_idx(slug):
+        """
+        given a slug return the index for it
+        """
+        if slug == ALL_SECTION_NAME:
+            return 1
+        return dict(zip(ig(SECTIONS, 0), range(2, 2 + len(SECTIONS))))[slug]
+    
+    @property
+    def section_slug(self):
+        """
+        an IntegerField is used for storing sections in the database so we
+        need a property to turn them back into their slug form
+        """
+        if self.section == 1:
+            return ALL_SECTION_NAME
+        return dict(zip(range(2, 2 + len(SECTIONS)), ig(SECTIONS, 0)))[self.section]
     
     def rev(self, rev_id):
         return self.revisions.get(pk=rev_id)
