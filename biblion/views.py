@@ -11,6 +11,7 @@ from django.contrib.sites.models import Site
 
 from biblion.exceptions import InvalidSection
 from biblion.models import Post, FeedHit
+from biblion.settings import ALL_SECTION_NAME
 
 
 def blog_index(request):
@@ -81,7 +82,7 @@ def blog_feed(request, section=None):
         raise Http404()
     
     if section is None:
-        section = "combined"
+        section = ALL_SECTION_NAME
     
     current_site = Site.objects.get_current()
     
@@ -89,12 +90,7 @@ def blog_feed(request, section=None):
     
     blog_url = "http://%s%s" % (current_site.domain, reverse("blog"))
     
-    if section == "combined":
-        url_name = "blog_feed_combined"
-        kwargs = {}
-    else:
-        url_name = "blog_feed"
-        kwargs = {"section": section}
+    url_name, kwargs = "blog_feed", {"section": section}
     feed_url = "http://%s%s" % (current_site.domain, reverse(url_name, kwargs=kwargs))
     
     if posts:
