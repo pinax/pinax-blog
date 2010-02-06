@@ -83,9 +83,10 @@ def blog_feed(request, section=None):
     if section is None:
         section = "combined"
     
-    feed_title = "Eldarion Blog: %s" % (section[0].upper() + section[1:])
-    
     current_site = Site.objects.get_current()
+    
+    feed_title = "%s Blog: %s" % (current_site.name, section[0].upper() + section[1:])
+    
     blog_url = "http://%s%s" % (current_site.domain, reverse("blog"))
     
     if section == "combined":
