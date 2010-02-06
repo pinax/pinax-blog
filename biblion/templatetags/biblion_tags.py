@@ -1,6 +1,7 @@
 from django import template
 
 from biblion.models import Post
+from biblion.settings import ALL_SECTION_NAME, SECTIONS
 
 
 register = template.Library()
@@ -67,4 +68,23 @@ def latest_section_post(parser, token):
     """
     bits = token.split_contents()
     return LatestSectionPostNode(bits[1], bits[3])
+
+
+class BlogSectionsNode(template.Node):
     
+    def __init__(self, context_var):
+        self.context_var = context_var
+    
+    def render(self, context):
+        sections = [(ALL_SECTION_NAME, "All")] + SECTIONS
+        context[self.context_var] = sections
+        return u""
+
+
+@register.tag
+def blog_sections(parser, token):
+    """
+        {% blog_sections as blog_sections %}
+    """
+    bits = token.split_contents()
+    return BlogSectionsNode(bits[2])
