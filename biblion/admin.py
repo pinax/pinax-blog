@@ -21,9 +21,12 @@ class PostAdmin(admin.ModelAdmin):
         "content_html",
         "published",
     ]
+    
     if can_tweet():
         fields.append("tweet")
+    
     prepopulated_fields = {"slug": ("title",)}
+    
     inlines = [
         ImageInline,
     ]
