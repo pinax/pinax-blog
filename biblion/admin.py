@@ -17,8 +17,8 @@ class PostAdmin(admin.ModelAdmin):
         "title",
         "slug",
         "author",
-        "teaser",
-        "content",
+        "teaser_html",
+        "content_html",
         "publish",
     ]
     if can_tweet():
