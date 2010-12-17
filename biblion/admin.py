@@ -10,7 +10,7 @@ class ImageInline(admin.TabularInline):
 
 
 class PostAdmin(admin.ModelAdmin):  
-    list_display = ["title", "published_flag", "section"]
+    list_display = ["title", "published", "section"]
     list_filter = ["section"]
     fields = [
         "section",
@@ -19,7 +19,7 @@ class PostAdmin(admin.ModelAdmin):
         "author",
         "teaser_html",
         "content_html",
-        "publish",
+        "published",
     ]
     if can_tweet():
         fields.append("tweet")
@@ -27,12 +27,6 @@ class PostAdmin(admin.ModelAdmin):
     inlines = [
         ImageInline,
     ]
-    
-    def published_flag(self, obj):
-        return bool(obj.published)
-    published_flag.short_description = "Published"
-    published_flag.boolean = True
-
 
 admin.site.register(Post, PostAdmin)
 admin.site.register(Image)
