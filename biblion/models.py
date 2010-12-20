@@ -45,7 +45,7 @@ class Post(models.Model):
     
     created = models.DateTimeField(default=datetime.now, editable=False) # when first revision was created
     updated = models.DateTimeField(null=True, blank=True, editable=False) # when last revision was create (even if not published)
-    published = models.DateTimeField(null=True, blank=True, editable=False) # when last published
+    published = models.DateTimeField(null=True, blank=True, default=datetime.now) # when last published
     
     view_count = models.IntegerField(default=0, editable=False)
     
