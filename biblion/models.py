@@ -73,6 +73,7 @@ class Post(models.Model):
     
     def current(self):
         "the currently visible (latest published) revision"
+        
         return self.revisions.exclude(published=None).order_by("-published")[0]
     
     def latest(self):
@@ -142,7 +143,7 @@ class Post(models.Model):
     def inc_views(self):
         self.view_count += 1
         self.save()
-        self.current().inc_views()
+        #self.current().inc_views()
 
 
 class Revision(models.Model):
