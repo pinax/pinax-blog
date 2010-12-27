@@ -1,5 +1,5 @@
 # required
-creole==1.0.1
+creole==1.2
 Pygments==1.2.2
 
 # optional
