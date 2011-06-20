@@ -1,0 +1,41 @@
+=========
+CHANGELOG
+=========
+
+Summary of Changes
+==================
+
+0.2.dev1
+--------
+
+* Added a support for multiple blogs
+
+
+Schema Changes
+==============
+
+0.2.dev1
+--------
+
+::
+
+    ### New Model: biblion.Blog
+    CREATE TABLE "biblion_blog" (
+        "id" serial NOT NULL PRIMARY KEY,
+        "title" varchar(128) NOT NULL,
+        "subtitle" varchar(256)
+    )
+    ;
+
+    INSERT INTO "biblion_blog" ("title", "subtitle") 
+        VALUES ('Default title', 'Default subtitle');
+
+    ALTER TABLE "biblion_post" ADD COLUMN "blog_id" integer 
+        REFERENCES "biblion_blog" ("id") DEFERRABLE INITIALLY DEFERRED;
+
+    UPDATE "biblion_post" SET "blog_id" = (SELECT max("id") FROM "biblion_blog");
+
+    COMMIT;BEGIN;
+
+    ALTER TABLE "biblion_post" ALTER COLUMN "blog_id" SET NOT NULL;
+
