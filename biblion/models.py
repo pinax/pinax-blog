@@ -28,10 +28,20 @@ def ig(L, i):
         yield x[i]
 
 
+class Blog(models.Model):
+    
+    title = models.CharField(max_length=128)
+    subtitle = models.CharField(max_length=256, null=True, blank=True)
+    
+    def __unicode__(self):
+        return unicode(self.title)
+
+
 class Post(models.Model):
     
     SECTION_CHOICES = [(1, ALL_SECTION_NAME)] + zip(range(2, 2 + len(SECTIONS)), ig(SECTIONS, 1))
     
+    blog = models.ForeignKey(Blog)
     section = models.IntegerField(choices=SECTION_CHOICES)
     
     title = models.CharField(max_length=90)
