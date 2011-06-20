@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.functional import curry
 
-from biblion.models import Post, Image
+from biblion.models import Blog, Post, Image
 from biblion.forms import AdminPostForm
 from biblion.utils import can_tweet
 
@@ -12,10 +12,11 @@ class ImageInline(admin.TabularInline):
 
 
 class PostAdmin(admin.ModelAdmin):  
-    list_display = ["title", "published_flag", "section"]
-    list_filter = ["section"]
+    list_display = ["blog", "title", "published_flag", "section"]
+    list_filter = ["blog", "section"]
     form = AdminPostForm
     fields = [
+        "blog",
         "section",
         "title",
         "slug",
@@ -58,3 +59,5 @@ class PostAdmin(admin.ModelAdmin):
 
 admin.site.register(Post, PostAdmin)
 admin.site.register(Image)
+admin.site.register(Blog)
+
