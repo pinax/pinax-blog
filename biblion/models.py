@@ -2,6 +2,7 @@
 import urllib2
 
 from datetime import datetime
+from operator import itemgetter
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
@@ -22,12 +23,6 @@ from biblion.settings import ALL_SECTION_NAME, SECTIONS
 from biblion.utils import can_tweet
 
 
-
-def ig(L, i):
-    for x in L:
-        yield x[i]
-
-
 class Blog(models.Model):
     
     title = models.CharField(max_length=128)
@@ -39,7 +34,7 @@ class Blog(models.Model):
 
 class Post(models.Model):
     
-    SECTION_CHOICES = [(1, ALL_SECTION_NAME)] + zip(range(2, 2 + len(SECTIONS)), ig(SECTIONS, 1))
+    SECTION_CHOICES = [(1, ALL_SECTION_NAME)] + zip(range(2, 2 + len(SECTIONS)), map(itemgetter(1), SECTIONS))
     
     blog = models.ForeignKey(Blog)
     section = models.IntegerField(choices=SECTION_CHOICES)
@@ -66,7 +61,7 @@ class Post(models.Model):
         """
         if slug == ALL_SECTION_NAME:
             return 1
-        return dict(zip(ig(SECTIONS, 0), range(2, 2 + len(SECTIONS))))[slug]
+        return dict(zip(map(itemgetter(0), SECTIONS), range(2, 2 + len(SECTIONS))))[slug]
     
     @property
     def section_slug(self):
@@ -76,7 +71,7 @@ class Post(models.Model):
         """
         if self.section == 1:
             return ALL_SECTION_NAME
-        return dict(zip(range(2, 2 + len(SECTIONS)), ig(SECTIONS, 0)))[self.section]
+        return dict(zip(range(2, 2 + len(SECTIONS)), map(itemgetter(0), SECTIONS)))[self.section]
     
     def rev(self, rev_id):
         return self.revisions.get(pk=rev_id)
