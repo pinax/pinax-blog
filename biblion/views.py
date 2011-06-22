@@ -10,23 +10,26 @@ from django.utils import simplejson as json
 from django.contrib.sites.models import Site
 
 from biblion.exceptions import InvalidSection
-from biblion.models import Post, FeedHit
+from biblion.models import Blog, Post, FeedHit
 from biblion.settings import ALL_SECTION_NAME
 
 
-def blog_index(request):
+def blog_index(request, blog_slug):
     
-    posts = Post.objects.current()
+    blog = get_object_or_404(Blog, slug=blog_slug)
+    posts = blog.posts.current()
     
     return render_to_response("biblion/blog_list.html", {
         "posts": posts,
     }, context_instance=RequestContext(request))
 
 
-def blog_section_list(request, section):
+def blog_section_list(request, blog_slug, section):
+    
+    blog = get_object_or_404(Blog, slug=blog_slug)
     
     try:
-        posts = Post.objects.section(section)
+        posts = blogs.posts.section(section)
     except InvalidSection:
         raise Http404()
     
@@ -39,14 +42,16 @@ def blog_section_list(request, section):
 
 def blog_post_detail(request, **kwargs):
     
+    blog = get_object_or_404(Blog, slug=kwargs["blog_slug"])
+    
     if "post_pk" in kwargs:
         if request.user.is_authenticated() and request.user.is_staff:
-            queryset = Post.objects.all()
+            queryset = blog.posts.all()
             post = get_object_or_404(queryset, pk=kwargs["post_pk"])
         else:
             raise Http404()
     else:
-        queryset = Post.objects.current()
+        queryset = blog.posts.current()
         queryset = queryset.filter(
             published__year = int(kwargs["year"]),
             published__month = int(kwargs["month"]),
@@ -74,10 +79,12 @@ def serialize_request(request):
     return json.dumps(data)
 
 
-def blog_feed(request, section=None):
+def blog_feed(request, blog_slug, section=None):
+    
+    blog = get_object_or_404(Blog, slug=blog_slug)
     
     try:
-        posts = Post.objects.section(section)
+        posts = blog.posts.section(section)
     except InvalidSection:
         raise Http404()
     

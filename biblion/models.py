@@ -27,6 +27,7 @@ class Blog(models.Model):
     
     title = models.CharField(max_length=128)
     subtitle = models.CharField(max_length=256, null=True, blank=True)
+    slug = models.SlugField()
     
     def __unicode__(self):
         return unicode(self.title)
@@ -36,7 +37,7 @@ class Post(models.Model):
     
     SECTION_CHOICES = [(1, ALL_SECTION_NAME)] + zip(range(2, 2 + len(SECTIONS)), map(itemgetter(1), SECTIONS))
     
-    blog = models.ForeignKey(Blog)
+    blog = models.ForeignKey(Blog, related_name="posts")
     section = models.IntegerField(choices=SECTION_CHOICES)
     
     title = models.CharField(max_length=90)
@@ -159,7 +160,7 @@ class Revision(models.Model):
     
     content = models.TextField()
     
-    author = models.ForeignKey(User, related_name="revisions")
+    author = models.ForeignKey(User, related_name="post_revisions")
     
     updated = models.DateTimeField(default=datetime.now)
     published = models.DateTimeField(null=True, blank=True)
