@@ -6,7 +6,7 @@ from distutils.core import setup
 
 setup(
     name = "biblion",
-    version = "0.1.dev10",
+    version = "0.1.dev11",
     author = "Eldarion",
     author_email = "development@eldarion.com",
     description = "the eldarion.com blog app intended to be suitable for site-level company and project blogs",
