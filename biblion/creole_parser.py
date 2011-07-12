@@ -186,7 +186,7 @@ class BiblionHtmlEmitter(PygmentsHtmlEmitter, ImageLookupHtmlEmitter):
     pass
 
 
-def parse(text, emitter=HtmlEmitter):
+def parse(text, emitter=BiblionHtmlEmitter):
     return emitter(Parser(text).parse()).emit()
 
 

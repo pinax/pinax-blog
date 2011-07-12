@@ -2,9 +2,12 @@ from datetime import datetime
 
 from django import forms
 
-from biblion.creole_parser import parse, BiblionHtmlEmitter
+from django.core.exceptions import ImproperlyConfigured
+from django.utils.functional import curry
+
 from biblion.models import Post, Revision
-from biblion.utils import can_tweet
+from biblion.settings import PARSER
+from biblion.utils import can_tweet, load_path_attr
 
 
 class AdminPostForm(forms.ModelForm):
@@ -72,8 +75,10 @@ class AdminPostForm(forms.ModelForm):
                 if self.cleaned_data["publish"]:
                     post.published = datetime.now()
         
-        post.teaser_html = parse(self.cleaned_data["teaser"], emitter=BiblionHtmlEmitter)
-        post.content_html = parse(self.cleaned_data["content"], emitter=BiblionHtmlEmitter)
+        render_func = curry(load_path_attr(PARSER[0], **PARSER[1]))
+        
+        post.teaser_html = render_func(self.cleaned_data["teaser"])
+        post.content_html = render_func(self.cleaned_data["content"])
         post.updated = datetime.now()
         post.save()
         
