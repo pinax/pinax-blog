@@ -2,9 +2,24 @@ from datetime import datetime
 
 from django import forms
 
-from biblion.creole_parser import parse, BiblionHtmlEmitter
+from django.core.exceptions import ImproperlyConfigured
+from django.utils.functional import curry
+
 from biblion.models import Post, Revision
+from biblion.settings import PARSER
 from biblion.utils import can_tweet
+
+
+def _get_render_func(dotted_path, **kwargs):
+    (module, func) = dotted_path.rsplit('.', 1)
+    func = getattr(__import__(module, {}, {}, [func]), func)
+    return curry(func, **kwargs)
+
+try:
+    render_func = _get_render_func(PARSER[0], **PARSER[1])
+except ImportError, e:
+    raise ImproperlyConfigured("Could not import BIBLION_PARSER %s: %s" %
+                               (PARSER, e))
 
 
 class AdminPostForm(forms.ModelForm):
@@ -72,8 +87,8 @@ class AdminPostForm(forms.ModelForm):
                 if self.cleaned_data["publish"]:
                     post.published = datetime.now()
         
-        post.teaser_html = parse(self.cleaned_data["teaser"], emitter=BiblionHtmlEmitter)
-        post.content_html = parse(self.cleaned_data["content"], emitter=BiblionHtmlEmitter)
+        post.teaser_html = render_func(self.cleaned_data["teaser"])
+        post.content_html = render_func(self.cleaned_data["content"])
         post.updated = datetime.now()
         post.save()
         
