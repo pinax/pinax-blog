@@ -7,19 +7,7 @@ from django.utils.functional import curry
 
 from biblion.models import Post, Revision
 from biblion.settings import PARSER
-from biblion.utils import can_tweet
-
-
-def _get_render_func(dotted_path, **kwargs):
-    (module, func) = dotted_path.rsplit('.', 1)
-    func = getattr(__import__(module, {}, {}, [func]), func)
-    return curry(func, **kwargs)
-
-try:
-    render_func = _get_render_func(PARSER[0], **PARSER[1])
-except ImportError, e:
-    raise ImproperlyConfigured("Could not import BIBLION_PARSER %s: %s" %
-                               (PARSER, e))
+from biblion.utils import can_tweet, load_path_attr
 
 
 class AdminPostForm(forms.ModelForm):
@@ -86,6 +74,8 @@ class AdminPostForm(forms.ModelForm):
             if Post.objects.filter(pk=post.pk, published=None).count():
                 if self.cleaned_data["publish"]:
                     post.published = datetime.now()
+        
+        render_func = curry(load_path_attr(PARSER[0], **PARSER[1])
         
         post.teaser_html = render_func(self.cleaned_data["teaser"])
         post.content_html = render_func(self.cleaned_data["content"])
