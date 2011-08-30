@@ -9,9 +9,7 @@ from django.utils import simplejson as json
 
 from django.contrib.sites.models import Site
 
-from biblion.exceptions import InvalidSection
-from biblion.models import Blog, Post, FeedHit
-from biblion.settings import ALL_SECTION_NAME
+from biblion.models import Blog, FeedHit, Section
 
 
 def blog_index(request, blog_slug):
@@ -24,18 +22,15 @@ def blog_index(request, blog_slug):
     }, context_instance=RequestContext(request))
 
 
-def blog_section_list(request, blog_slug, section):
+def blog_section_list(request, blog_slug, section_slug):
     
     blog = get_object_or_404(Blog, slug=blog_slug)
-    
-    try:
-        posts = blogs.posts.section(section)
-    except InvalidSection:
-        raise Http404()
+    section = get_object_or_404(Section, slug=section_slug)
+    posts = blog.posts.filter(section=section)
     
     return render_to_response("biblion/blog_section_list.html", {
-        "section_slug": section,
-        "section_name": dict(Post.SECTION_CHOICES)[Post.section_idx(section)],
+        "section_slug": section_slug,
+        "section_name": section.name,
         "posts": posts,
     }, context_instance=RequestContext(request))
 
@@ -79,25 +74,24 @@ def serialize_request(request):
     return json.dumps(data)
 
 
-def blog_feed(request, blog_slug, section=None):
+def blog_feed(request, blog_slug, section_slug=None):
     
     blog = get_object_or_404(Blog, slug=blog_slug)
     
-    try:
-        posts = blog.posts.section(section)
-    except InvalidSection:
-        raise Http404()
-    
-    if section is None:
-        section = ALL_SECTION_NAME
+    if section_slug:
+        section = get_object_or_404(Section, slug=section_slug)
+        posts = blog.posts.filter(section=section)
+    else:
+        section = Section.objects.get(slug="all")
+        posts = blog.posts()
     
     current_site = Site.objects.get_current()
     
-    feed_title = "%s Blog: %s" % (current_site.name, section[0].upper() + section[1:])
+    feed_title = "%s Blog: %s" % (current_site.name, section.blog.title.upper() + section.name)
     
     blog_url = "http://%s%s" % (current_site.domain, reverse("blog"))
     
-    url_name, kwargs = "blog_feed", {"section": section}
+    url_name, kwargs = "blog_feed", {"section": section.slug}
     feed_url = "http://%s%s" % (current_site.domain, reverse(url_name, kwargs=kwargs))
     
     if posts:

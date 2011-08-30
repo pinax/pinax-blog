@@ -2,7 +2,6 @@
 import urllib2
 
 from datetime import datetime
-from operator import itemgetter
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
@@ -19,7 +18,6 @@ except ImportError:
     twitter = None
 
 from biblion.managers import PostManager
-from biblion.settings import ALL_SECTION_NAME, SECTIONS
 from biblion.utils import can_tweet
 
 
@@ -33,12 +31,17 @@ class Blog(models.Model):
         return unicode(self.title)
 
 
+class Section(models.Model):
+
+    blog = models.ForeignKey(Blog)
+    name = models.CharField(max_length=128)
+    slug = models.SlugField()
+
+
 class Post(models.Model):
     
-    SECTION_CHOICES = [(1, ALL_SECTION_NAME)] + zip(range(2, 2 + len(SECTIONS)), map(itemgetter(1), SECTIONS))
-    
     blog = models.ForeignKey(Blog, related_name="posts")
-    section = models.IntegerField(choices=SECTION_CHOICES)
+    section = models.ForeignKey(Section, related_name="posts")
     
     title = models.CharField(max_length=90)
     slug = models.SlugField()
@@ -54,25 +57,6 @@ class Post(models.Model):
     published = models.DateTimeField(null=True, blank=True, editable=False) # when last published
     
     view_count = models.IntegerField(default=0, editable=False)
-    
-    @staticmethod
-    def section_idx(slug):
-        """
-        given a slug return the index for it
-        """
-        if slug == ALL_SECTION_NAME:
-            return 1
-        return dict(zip(map(itemgetter(0), SECTIONS), range(2, 2 + len(SECTIONS))))[slug]
-    
-    @property
-    def section_slug(self):
-        """
-        an IntegerField is used for storing sections in the database so we
-        need a property to turn them back into their slug form
-        """
-        if self.section == 1:
-            return ALL_SECTION_NAME
-        return dict(zip(range(2, 2 + len(SECTIONS)), map(itemgetter(0), SECTIONS)))[self.section]
     
     def rev(self, rev_id):
         return self.revisions.get(pk=rev_id)

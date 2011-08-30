@@ -1,7 +1,6 @@
 from django import template
 
-from biblion.models import Post
-from biblion.settings import ALL_SECTION_NAME, SECTIONS
+from biblion.models import Post, Section
 
 
 register = template.Library()
@@ -52,10 +51,9 @@ class LatestSectionPostNode(template.Node):
     
     def render(self, context):
         section = self.section.resolve(context)
-        post = Post.objects.section(section, queryset=Post.objects.current())
         try:
-            post = post[0]
-        except IndexError:
+            post = Post.objects.filter(section__slug=section).latest("published")
+        except Post.DoesNotExist:
             post = None
         context[self.context_var] = post
         return u""
@@ -76,8 +74,7 @@ class BlogSectionsNode(template.Node):
         self.context_var = context_var
     
     def render(self, context):
-        sections = [(ALL_SECTION_NAME, "All")] + SECTIONS
-        context[self.context_var] = sections
+        context[self.context_var] = Section.objects.all()
         return u""
 
 

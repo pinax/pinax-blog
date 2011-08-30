@@ -1,3 +1,0 @@
-
-class InvalidSection(Exception):
-    pass

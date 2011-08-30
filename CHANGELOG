@@ -5,6 +5,65 @@ CHANGELOG
 Summary of Changes
 ==================
 
+0.2.dev2
+--------
+
+* Made sections model based instead of configured through settings.
+
+
+Backward Incompatible Changes
+=============================
+
+Basically anywhere where your app might have been relying on interacting with
+sections, there is risk for breakage. All URLs that had section names in them
+will be fine as soon as you populate the Section model with the same data.
+
+It is recommended that you do this locally, and then create a fixture to aide
+in deployment with minimal downtime.
+
+The changes:
+
+* removed biblion.exceptions
+* removed biblion.settings
+* removed Post.objects.section()
+* changed Post.section from an IntegerField to an ForeignKey to the new Section model
+* removed Post.section_idx static method
+* removed Post().section_slug property
+* changed the blog_section url's first kwarg from section to section_slug
+* changed the blog_feed view's section kwarg parameter to section_slug
+
+
+Schema Changes
+==============
+
+::
+
+    ### New Model: biblion.Section
+    CREATE TABLE "biblion_section" (
+        "id" serial NOT NULL PRIMARY KEY,
+        "blog_id" integer NOT NULL REFERENCES "biblion_blog" ("id") DEFERRABLE INITIALLY DEFERRED,
+        "name" varchar(128) NOT NULL,
+        "slug" varchar(50) NOT NULL
+    )
+    ;
+    CREATE INDEX "biblion_section_blog_id" ON "biblion_section" ("blog_id");
+    CREATE INDEX "biblion_section_slug" ON "biblion_section" ("slug");
+    CREATE INDEX "biblion_section_slug_like" ON "biblion_section" ("slug" varchar_pattern_ops);
+    
+    INSERT INTO "biblion_section" ("blog_id", "name", "slug")
+        VALUES (1, 'All', 'all');
+    
+    ALTER TABLE "biblion_post" ADD COLUMN "section_id" integer
+        REFERENCES "biblion_section" ("id") DEFERRABLE INITIALLY DEFERRED;
+    
+    UPDATE "biblion_post" SET "section_id" = (SELECT max("id") FROM "biblion_section");
+    
+    COMMIT; BEGIN;
+    
+    ALTER TABLE "biblion_post" ALTER COLUMN "section_id" SET NOT NULL;
+
+
+
 0.2.dev1
 --------
 
