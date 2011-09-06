@@ -32,8 +32,8 @@ class Blog(models.Model):
 
 
 class Section(models.Model):
-
-    blog = models.ForeignKey(Blog)
+    
+    blog = models.ForeignKey(Blog, related_name="sections")
     name = models.CharField(max_length=128)
     slug = models.SlugField()
 
