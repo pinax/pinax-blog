@@ -36,6 +36,9 @@ class Section(models.Model):
     blog = models.ForeignKey(Blog, related_name="sections")
     name = models.CharField(max_length=128)
     slug = models.SlugField()
+    
+    def __unicode__(self):
+        return u"%s - %s" % (self.blog, self.name)
 
 
 class Post(models.Model):

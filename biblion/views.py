@@ -22,14 +22,14 @@ def blog_index(request, blog_slug):
     }, context_instance=RequestContext(request))
 
 
-def blog_section_list(request, blog_slug, section_slug):
+def blog_section_list(request, blog_slug, slug):
     
     blog = get_object_or_404(Blog, slug=blog_slug)
-    section = get_object_or_404(Section, slug=section_slug)
+    section = get_object_or_404(Section, slug=slug)
     posts = blog.posts.filter(section=section)
     
     return render_to_response("biblion/blog_section_list.html", {
-        "section_slug": section_slug,
+        "section_slug": slug,
         "section_name": section.name,
         "posts": posts,
     }, context_instance=RequestContext(request))
@@ -74,12 +74,12 @@ def serialize_request(request):
     return json.dumps(data)
 
 
-def blog_feed(request, blog_slug, section_slug=None):
+def blog_feed(request, blog_slug, slug=None):
     
     blog = get_object_or_404(Blog, slug=blog_slug)
     
-    if section_slug:
-        section = get_object_or_404(Section, slug=section_slug)
+    if slug:
+        section = get_object_or_404(Section, slug=slug)
         posts = blog.posts.filter(section=section)
     else:
         section = Section.objects.get(slug="all")
