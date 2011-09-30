@@ -28,7 +28,7 @@ class Biblion(models.Model):
     title = models.CharField(_("title"), max_length=128)
     subtitle = models.CharField(_("subtitle"), max_length=256, blank=True)
     slug = models.SlugField(_("slug"), unique=True)
-    description = models.TextField(_("description"), verbose_name)
+    description = models.TextField(_("description"))
     logo = models.FileField(_("logo"), upload_to="biblion_biblion_logo")
     sites = models.ManyToManyField(Site, verbose_name=_("list of sites"))
     
