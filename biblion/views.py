@@ -2,14 +2,15 @@ from datetime import datetime
 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, Http404
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import redirect, render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils import simplejson as json
-from django.views.generic.list import ListView
+from django.views.generic import ListView, CreateView
 
 from django.contrib.sites.models import Site
 
+from biblion.forms import BlogForm
 from biblion.models import Blog, FeedHit, Section
 
 
@@ -26,7 +27,13 @@ from biblion.models import Blog, FeedHit, Section
 
 class BlogList(ListView):
     
-    queryset = Blog.objects.all()
+    model = Blog
+
+
+class BlogCreate(CreateView):
+    
+    model = Blog
+    form_class = BlogForm
 
 
 def blog_section_list(request, blog_slug, slug):
