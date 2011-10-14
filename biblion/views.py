@@ -26,9 +26,7 @@ from biblion.models import Blog, FeedHit, Section
 
 class BlogList(ListView):
     
-    template_name = "biblion/blog_list.html"
     queryset = Blog.objects.all()
-    context_object_name = "blogs"
 
 
 def blog_section_list(request, blog_slug, slug):
