@@ -6,10 +6,12 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils import simplejson as json
+from django.views.generic.list import ListView
 
 from django.contrib.sites.models import Site
 
 from biblion.models import Blog, FeedHit, Section
+
 
 
 # def blog_index(request, blog_slug):
@@ -22,13 +24,11 @@ from biblion.models import Blog, FeedHit, Section
 #     }, context_instance=RequestContext(request))
 
 
-def blog_list(request):
+class BlogList(ListView):
     
-    blogs = Blog.objects.all()
-    
-    return render_to_response("biblion/blog_list.html", {
-        "blogs": blogs,
-    }, context_instance=RequestContext(request))
+    template_name = "biblion/blog_list.html"
+    queryset = Blog.objects.all()
+    context_object_name = "blogs"
 
 
 def blog_section_list(request, blog_slug, slug):
