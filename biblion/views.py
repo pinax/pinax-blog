@@ -12,13 +12,22 @@ from django.contrib.sites.models import Site
 from biblion.models import Blog, FeedHit, Section
 
 
-def blog_index(request, blog_slug):
+# def blog_index(request, blog_slug):
+#     
+#     blog = get_object_or_404(Blog, slug=blog_slug)
+#     posts = blog.posts.current()
+#     
+#     return render_to_response("biblion/blog_list.html", {
+#         "posts": posts,
+#     }, context_instance=RequestContext(request))
+
+
+def blog_list(request):
     
-    blog = get_object_or_404(Blog, slug=blog_slug)
-    posts = blog.posts.current()
+    blogs = Blog.objects.all()
     
     return render_to_response("biblion/blog_list.html", {
-        "posts": posts,
+        "blogs": blogs,
     }, context_instance=RequestContext(request))
 
 

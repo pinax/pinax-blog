@@ -57,7 +57,12 @@ class PostAdmin(admin.ModelAdmin):
         return form.save()
 
 
+class BlogAdmin(admin.ModelAdmin):
+    prepopulated_fields = {
+        "slug": ["title"],
+    }
+
 admin.site.register(Post, PostAdmin)
 admin.site.register(Image)
-admin.site.register(Blog)
+admin.site.register(Blog, BlogAdmin)
 
