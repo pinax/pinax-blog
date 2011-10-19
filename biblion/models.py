@@ -21,7 +21,7 @@ from biblion.managers import PostManager
 from biblion.utils import can_tweet
 
 
-class Blog(models.Model):
+class Biblion(models.Model):
     
     title = models.CharField(max_length=128)
     subtitle = models.CharField(max_length=256, null=True, blank=True)
@@ -31,23 +31,12 @@ class Blog(models.Model):
         return unicode(self.title)
     
     def get_absolute_url(self):
-        return reverse("blog_detail", kwargs={"slug": self.slug})
-
-
-class Section(models.Model):
-    
-    blog = models.ForeignKey(Blog, related_name="sections")
-    name = models.CharField(max_length=128)
-    slug = models.SlugField()
-    
-    def __unicode__(self):
-        return u"%s - %s" % (self.blog, self.name)
+        return reverse("biblion_detail", kwargs={"slug": self.slug})
 
 
 class Post(models.Model):
     
-    blog = models.ForeignKey(Blog, related_name="posts")
-    section = models.ForeignKey(Section, related_name="posts")
+    biblion = models.ForeignKey(Blog, related_name="posts")
     
     title = models.CharField(max_length=90)
     slug = models.SlugField()
@@ -180,8 +169,8 @@ class Image(models.Model):
         else:
             return "deleted image"
 
+
 class FeedHit(models.Model):
     
     request_data = models.TextField()
     created = models.DateTimeField(default=datetime.now)
-

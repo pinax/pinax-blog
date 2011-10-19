@@ -11,56 +11,43 @@ from django.views.generic import ListView, CreateView
 from django.contrib.sites.models import Site
 
 from biblion.forms import BlogForm
-from biblion.models import Blog, FeedHit, Section
+from biblion.models import Biblion, FeedHit, Section
 
 
 
-# def blog_index(request, blog_slug):
+# def blog_index(request, biblion_slug):
 #     
-#     blog = get_object_or_404(Blog, slug=blog_slug)
-#     posts = blog.posts.current()
+#     biblion = get_object_or_404(Biblion, slug=biblion_slug)
+#     posts = biblion.posts.current()
 #     
 #     return render_to_response("biblion/blog_list.html", {
 #         "posts": posts,
 #     }, context_instance=RequestContext(request))
 
 
-class BlogList(ListView):
+class BiblionList(ListView):
     
-    model = Blog
+    model = Biblion
 
 
 class BlogCreate(CreateView):
     
-    model = Blog
-    form_class = BlogForm
-
-
-def blog_section_list(request, blog_slug, slug):
-    
-    blog = get_object_or_404(Blog, slug=blog_slug)
-    section = get_object_or_404(Section, slug=slug)
-    posts = blog.posts.filter(section=section)
-    
-    return render_to_response("biblion/blog_section_list.html", {
-        "section_slug": slug,
-        "section_name": section.name,
-        "posts": posts,
-    }, context_instance=RequestContext(request))
+    model = Biblion
+    form_class = BiblionForm
 
 
 def blog_post_detail(request, **kwargs):
     
-    blog = get_object_or_404(Blog, slug=kwargs["blog_slug"])
+    biblion = get_object_or_404(Biblion, slug=kwargs["biblion_slug"])
     
     if "post_pk" in kwargs:
         if request.user.is_authenticated() and request.user.is_staff:
-            queryset = blog.posts.all()
+            queryset = biblion.posts.all()
             post = get_object_or_404(queryset, pk=kwargs["post_pk"])
         else:
             raise Http404()
     else:
-        queryset = blog.posts.current()
+        queryset = biblion.posts.current()
         queryset = queryset.filter(
             published__year = int(kwargs["year"]),
             published__month = int(kwargs["month"]),
@@ -88,24 +75,18 @@ def serialize_request(request):
     return json.dumps(data)
 
 
-def blog_feed(request, blog_slug, slug=None):
+def blog_feed(request, biblion_slug):
     
-    blog = get_object_or_404(Blog, slug=blog_slug)
-    
-    if slug:
-        section = get_object_or_404(Section, slug=slug)
-        posts = blog.posts.filter(section=section)
-    else:
-        section = Section.objects.get(slug="all")
-        posts = blog.posts()
+    biblion = get_object_or_404(Biblion, slug=biblion_slug)
+    posts = biblion.posts()
     
     current_site = Site.objects.get_current()
     
-    feed_title = "%s Blog: %s" % (current_site.name, section.blog.title.upper() + section.name)
+    feed_title = "%s Blog" % current_site.name
     
     blog_url = "http://%s%s" % (current_site.domain, reverse("blog"))
     
-    url_name, kwargs = "blog_feed", {"section": section.slug}
+    url_name, kwargs = "blog_feed", {}
     feed_url = "http://%s%s" % (current_site.domain, reverse(url_name, kwargs=kwargs))
     
     if posts:
