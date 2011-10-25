@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import redirect, render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.template.loader import render_to_string
@@ -10,19 +10,19 @@ from django.views.generic import ListView, CreateView
 
 from django.contrib.sites.models import Site
 
-from biblion.forms import BlogForm
+from biblion.forms import BlogForm, PostForm
 from biblion.models import Blog, FeedHit, Section
 
 
 
-# def blog_index(request, blog_slug):
-#     
-#     blog = get_object_or_404(Blog, slug=blog_slug)
-#     posts = blog.posts.current()
-#     
-#     return render_to_response("biblion/blog_list.html", {
-#         "posts": posts,
-#     }, context_instance=RequestContext(request))
+def blog_index(request, blog_slug):
+    
+    blog = get_object_or_404(Blog, slug=blog_slug)
+    posts = blog.posts.current()
+    
+    return render_to_response("biblion/blog_list.html", {
+        "posts": posts,
+    }, context_instance=RequestContext(request))
 
 
 class BlogList(ListView):
@@ -34,6 +34,28 @@ class BlogCreate(CreateView):
     
     model = Blog
     form_class = BlogForm
+
+
+def blog_post_add(request, blog_slug, **kwargs):
+
+    blog = get_object_or_404(Blog, slug=blog_slug)
+    if "slug" in kwargs:
+        section = get_object_or_404(Section, slug=slug)
+    else:
+        section = None
+
+    if request.method == "POST":
+        form = PostForm(request.POST, blog=blog, section=section)
+        if form.is_valid():
+            post = form.save(request.user)
+            return HttpResponseRedirect(post.get_absolute_url())
+
+    else:
+        form = PostForm(blog=blog, section=section)
+
+    return render_to_response("biblion/blog_post_add.html", {
+        "form": form,
+    }, context_instance=RequestContext(request))
 
 
 def blog_section_list(request, blog_slug, slug):

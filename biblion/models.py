@@ -47,7 +47,7 @@ class Section(models.Model):
 class Post(models.Model):
     
     blog = models.ForeignKey(Blog, related_name="posts")
-    section = models.ForeignKey(Section, related_name="posts")
+    section = models.ForeignKey(Section, related_name="posts", blank=True, null=True)
     
     title = models.CharField(max_length=90)
     slug = models.SlugField()
