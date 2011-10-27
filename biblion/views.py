@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import redirect, render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.template.loader import render_to_string
@@ -10,19 +10,21 @@ from django.views.generic import ListView, CreateView
 
 from django.contrib.sites.models import Site
 
-from biblion.forms import BlogForm
+from biblion.forms import BlogForm, ImageForm, PostForm
 from biblion.models import Blog, FeedHit, Section
 
+import json
 
 
-# def blog_index(request, blog_slug):
-#     
-#     blog = get_object_or_404(Blog, slug=blog_slug)
-#     posts = blog.posts.current()
-#     
-#     return render_to_response("biblion/blog_list.html", {
-#         "posts": posts,
-#     }, context_instance=RequestContext(request))
+
+def blog_index(request, blog_slug):
+    
+    blog = get_object_or_404(Blog, slug=blog_slug)
+    posts = blog.posts.current()
+    
+    return render_to_response("biblion/blog_list.html", {
+        "posts": posts,
+    }, context_instance=RequestContext(request))
 
 
 class BlogList(ListView):
@@ -34,6 +36,89 @@ class BlogCreate(CreateView):
     
     model = Blog
     form_class = BlogForm
+
+
+def blog_post_add(request, blog_slug, **kwargs):
+
+    blog = get_object_or_404(Blog, slug=blog_slug)
+    if "slug" in kwargs:
+        section = get_object_or_404(Section, slug=slug)
+    else:
+        section = None
+
+    if request.method == "POST":
+        form = PostForm(request.POST, blog=blog, section=section)
+        if form.is_valid():
+            post = form.save(request.user)
+            
+            if request.POST.get("next"):
+                return HttpResponseRedirect(request.POST["next"])
+
+            return HttpResponseRedirect("../%d" % post.pk)
+
+    else:
+        form = PostForm(blog=blog, section=section)
+
+    image_form = ImageForm()
+
+    return render_to_response("biblion/blog_post_add.html", {
+        "form": form,
+        "image_form": image_form,
+    }, context_instance=RequestContext(request))
+
+
+def blog_post_edit(request, blog_slug, post_pk, **kwargs):
+
+    blog = get_object_or_404(Blog, slug=blog_slug)
+    if "slug" in kwargs:
+        section = get_object_or_404(Section, slug=slug)
+    else:
+        section = None
+
+    post = get_object_or_404(blog.posts, pk=post_pk)
+
+    if request.method == "POST":
+        form = PostForm(request.POST, instance=post, blog=blog, section=section)
+        if form.is_valid():
+            post = form.save(request.user)
+
+            if request.POST.get("next"):
+                return HttpResponseRedirect(request.POST["next"])
+            
+            return HttpResponseRedirect(post.get_absolute_url())
+
+    else:
+        form = PostForm(instance=post, blog=blog, section=section)
+
+    image_form = ImageForm()
+
+    return render_to_response("biblion/blog_post_edit.html", {
+        "form": form,
+        "image_form": image_form,
+        "post": post,
+    }, context_instance=RequestContext(request))
+
+
+def blog_image_upload(request, **kwargs):
+
+    if request.method == "POST":
+        form = ImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            image = form.save()
+            response = {
+                "status": "success", 
+                "height": image.image_path.height,
+                "width": image.image_path.width,
+                "src": image.image_path.url,
+                "pk": image.pk,
+            }
+        else:
+            response = {
+                "status": "error",
+            }
+        return HttpResponse(json.dumps(response), mimetype="application/json")
+    
+    return Http404
 
 
 def blog_section_list(request, blog_slug, slug):
