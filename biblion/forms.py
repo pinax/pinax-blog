@@ -5,7 +5,7 @@ from django import forms
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.functional import curry
 
-from biblion.models import Blog, Post, Revision
+from biblion.models import Blog, Image, Post, Revision
 from biblion.settings import PARSER
 from biblion.utils import can_tweet, load_path_attr
 
@@ -14,6 +14,13 @@ class BlogForm(forms.ModelForm):
     
     class Meta:
         model = Blog
+
+
+class ImageForm(forms.ModelForm):
+
+    class Meta:
+        model = Image
+        exclude = ["post","url"]
 
 
 class PostForm(forms.ModelForm):

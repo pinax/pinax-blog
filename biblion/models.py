@@ -167,7 +167,7 @@ class Revision(models.Model):
 
 class Image(models.Model):
     
-    post = models.ForeignKey(Post, related_name="images")
+    post = models.ForeignKey(Post, related_name="images", blank=True, null=True)
     
     image_path = models.ImageField(upload_to="images/%Y/%m/%d")
     url = models.CharField(max_length=150, blank=True)
@@ -179,6 +179,7 @@ class Image(models.Model):
             return "{{ %d }}" % self.pk
         else:
             return "deleted image"
+
 
 class FeedHit(models.Model):
     
