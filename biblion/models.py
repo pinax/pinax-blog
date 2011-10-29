@@ -47,7 +47,7 @@ class Section(models.Model):
 class Post(models.Model):
     
     blog = models.ForeignKey(Blog, related_name="posts")
-    section = models.ForeignKey(Section, related_name="posts")
+    section = models.ForeignKey(Section, related_name="posts", blank=True, null=True)
     
     title = models.CharField(max_length=90)
     slug = models.SlugField()
@@ -167,7 +167,7 @@ class Revision(models.Model):
 
 class Image(models.Model):
     
-    post = models.ForeignKey(Post, related_name="images")
+    post = models.ForeignKey(Post, related_name="images", blank=True, null=True)
     
     image_path = models.ImageField(upload_to="images/%Y/%m/%d")
     url = models.CharField(max_length=150, blank=True)
@@ -179,6 +179,7 @@ class Image(models.Model):
             return "{{ %d }}" % self.pk
         else:
             return "deleted image"
+
 
 class FeedHit(models.Model):
     
