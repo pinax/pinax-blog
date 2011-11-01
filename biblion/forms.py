@@ -40,8 +40,8 @@ class PostForm(forms.ModelForm):
     )
     publish = forms.BooleanField(
         required = False,
-        help_text = u"Checking this will publish this articles on the site",
-    )
+        help_text = u"Checking this will publish this article on the site",
+        )
     
     if can_tweet():
         tweet = forms.BooleanField(
@@ -51,17 +51,20 @@ class PostForm(forms.ModelForm):
     
     class Meta:
         model = Post
-        exclude = ("author",)
     
     def __init__(self, *args, **kwargs):
 
         blog = kwargs.pop("blog")
+        user = kwargs.pop("user")
         if "section" in kwargs:
             section = kwargs.pop("section")
         else:
             section = None
 
         super(PostForm, self).__init__(*args, **kwargs)
+
+        self.fields["author"].initial = user
+        self.fields["author"].widget = forms.HiddenInput()
 
         self.fields["section"].initial = section
         if not blog.sections.count():
@@ -83,7 +86,7 @@ class PostForm(forms.ModelForm):
             # from latest revision maybe?
             self.fields["publish"].initial = bool(post.published)
         
-    def save(self, user):
+    def save(self):
         post = super(PostForm, self).save(commit=False)
         
         if post.pk is None:
@@ -99,7 +102,6 @@ class PostForm(forms.ModelForm):
         post.teaser_html = render_func(self.cleaned_data["teaser"])
         post.content_html = render_func(self.cleaned_data["content"])
         post.updated = datetime.now()
-        post.author = user
         post.save()
         
         r = Revision()

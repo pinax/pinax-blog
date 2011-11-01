@@ -12,4 +12,5 @@ urlpatterns = patterns("",
     url(r"^(?P<slug>[-\w]+)/$", "biblion.views.blog_section_list", name="blog_section"),
     url(r"post/add/$", "biblion.views.blog_post_add", name="blog_post_add"),
     url(r"^post/(?P<post_pk>\d+)/edit/$", "biblion.views.blog_post_edit", name="blog_post_edit"),
+    url(r"^post/(?P<post_pk>\d+)/delete/$", "biblion.views.blog_post_delete", name="blog_post_delete"),
 )
