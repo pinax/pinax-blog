@@ -22,7 +22,8 @@ def blog_index(request, blog_slug):
     blog = get_object_or_404(Blog, slug=blog_slug)
     posts = blog.posts.current()
     
-    return render_to_response("biblion/blog_list.html", {
+    return render_to_response("biblion/blog_index.html", {
+        "blog": blog,
         "posts": posts,
     }, context_instance=RequestContext(request))
 
@@ -62,6 +63,7 @@ def blog_post_add(request, blog_slug, post_form=PostForm, **kwargs):
     image_form = ImageForm()
 
     return render_to_response("biblion/blog_post_add.html", {
+        "blog": blog,
         "form": form,
         "image_form": image_form,
     }, context_instance=RequestContext(request))
@@ -94,6 +96,7 @@ def blog_post_edit(request, blog_slug, post_pk, post_form=PostForm, **kwargs):
     image_form = ImageForm()
 
     return render_to_response("biblion/blog_post_edit.html", {
+        "blog": blog,
         "form": form,
         "image_form": image_form,
         "post": post,
@@ -145,6 +148,7 @@ def blog_section_list(request, blog_slug, slug):
     posts = blog.posts.filter(section=section)
     
     return render_to_response("biblion/blog_section_list.html", {
+        "blog": blog,
         "section_slug": slug,
         "section_name": section.name,
         "posts": posts,
@@ -170,6 +174,7 @@ def blog_post_detail(request, **kwargs):
         post.inc_views()
     
     return render_to_response("biblion/blog_post.html", {
+        "blog": blog,
         "post": post,
     }, context_instance=RequestContext(request))
 
