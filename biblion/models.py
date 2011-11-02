@@ -31,7 +31,7 @@ class Blog(models.Model):
         return unicode(self.title)
     
     def get_absolute_url(self):
-        return reverse("blog_detail", kwargs={"slug": self.slug})
+        return reverse("blog", kwargs={"blog_slug": self.slug})
 
 
 class Section(models.Model):
