@@ -22,7 +22,8 @@ def blog_index(request, blog_slug):
     blog = get_object_or_404(Blog, slug=blog_slug)
     posts = blog.posts.current()
     
-    return render_to_response("biblion/blog_list.html", {
+    return render_to_response("biblion/blog_index.html", {
+        "blog": blog,
         "posts": posts,
     }, context_instance=RequestContext(request))
 
@@ -38,7 +39,7 @@ class BlogCreate(CreateView):
     form_class = BlogForm
 
 
-def blog_post_add(request, blog_slug, **kwargs):
+def blog_post_add(request, blog_slug, post_form=PostForm, **kwargs):
 
     blog = get_object_or_404(Blog, slug=blog_slug)
     if "slug" in kwargs:
@@ -47,27 +48,28 @@ def blog_post_add(request, blog_slug, **kwargs):
         section = None
 
     if request.method == "POST":
-        form = PostForm(request.POST, blog=blog, section=section)
+        form = post_form(request.POST, blog=blog, section=section, user=request.user)
         if form.is_valid():
-            post = form.save(request.user)
+            post = form.save()
             
             if request.POST.get("next"):
                 return HttpResponseRedirect(request.POST["next"])
 
-            return HttpResponseRedirect("../%d" % post.pk)
+            return HttpResponseRedirect(post.get_absolute_url())
 
     else:
-        form = PostForm(blog=blog, section=section)
+        form = post_form(blog=blog, section=section, user=request.user)
 
     image_form = ImageForm()
 
     return render_to_response("biblion/blog_post_add.html", {
+        "blog": blog,
         "form": form,
         "image_form": image_form,
     }, context_instance=RequestContext(request))
 
 
-def blog_post_edit(request, blog_slug, post_pk, **kwargs):
+def blog_post_edit(request, blog_slug, post_pk, post_form=PostForm, **kwargs):
 
     blog = get_object_or_404(Blog, slug=blog_slug)
     if "slug" in kwargs:
@@ -78,9 +80,10 @@ def blog_post_edit(request, blog_slug, post_pk, **kwargs):
     post = get_object_or_404(blog.posts, pk=post_pk)
 
     if request.method == "POST":
-        form = PostForm(request.POST, instance=post, blog=blog, section=section)
+
+        form = post_form(request.POST, instance=post, blog=blog, section=section, user=request.user)
         if form.is_valid():
-            post = form.save(request.user)
+            post = form.save()
 
             if request.POST.get("next"):
                 return HttpResponseRedirect(request.POST["next"])
@@ -88,13 +91,30 @@ def blog_post_edit(request, blog_slug, post_pk, **kwargs):
             return HttpResponseRedirect(post.get_absolute_url())
 
     else:
-        form = PostForm(instance=post, blog=blog, section=section)
+        form = post_form(instance=post, blog=blog, section=section, user=request.user)
 
     image_form = ImageForm()
 
     return render_to_response("biblion/blog_post_edit.html", {
+        "blog": blog,
         "form": form,
         "image_form": image_form,
+        "post": post,
+    }, context_instance=RequestContext(request))
+
+
+def blog_post_delete(request, blog_slug, post_pk, **kwargs):
+
+    blog = get_object_or_404(Blog, slug=blog_slug)
+
+    post = get_object_or_404(blog.posts, pk=post_pk)
+
+    if request.method == "POST":
+        post.delete()
+
+        return HttpResponseRedirect(request.POST.get("next") or "/")
+    
+    return render_to_response("biblion/blog_post_delete.html", {
         "post": post,
     }, context_instance=RequestContext(request))
 
@@ -128,6 +148,7 @@ def blog_section_list(request, blog_slug, slug):
     posts = blog.posts.filter(section=section)
     
     return render_to_response("biblion/blog_section_list.html", {
+        "blog": blog,
         "section_slug": slug,
         "section_name": section.name,
         "posts": posts,
@@ -139,10 +160,8 @@ def blog_post_detail(request, **kwargs):
     blog = get_object_or_404(Blog, slug=kwargs["blog_slug"])
     
     if "post_pk" in kwargs:
-        if request.user.is_authenticated() and request.user.is_staff:
-            queryset = blog.posts.all()
-            post = get_object_or_404(queryset, pk=kwargs["post_pk"])
-        else:
+        post = get_object_or_404(blog.posts, pk=kwargs["post_pk"])
+        if not (request.user.is_authenticated() and request.user.is_staff) and post.author != request.user:
             raise Http404()
     else:
         queryset = blog.posts.current()
@@ -155,6 +174,7 @@ def blog_post_detail(request, **kwargs):
         post.inc_views()
     
     return render_to_response("biblion/blog_post.html", {
+        "blog": blog,
         "post": post,
     }, context_instance=RequestContext(request))
 
