@@ -2,7 +2,7 @@ from datetime import datetime
 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import redirect, render_to_response, get_object_or_404
+from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils import simplejson as json
@@ -12,9 +12,6 @@ from django.contrib.sites.models import Site
 
 from biblion.forms import BlogForm, ImageForm, PostForm
 from biblion.models import Blog, FeedHit, Section
-
-import json
-
 
 
 def blog_index(request, blog_slug):
