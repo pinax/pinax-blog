@@ -6,8 +6,10 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils import simplejson as json
+from django.utils.translation import ugettext
 from django.views.generic import ListView, CreateView
 
+from django.contrib import messages
 from django.contrib.sites.models import Site
 
 from biblion.forms import BlogForm, ImageForm, PostForm
@@ -48,7 +50,11 @@ def blog_post_add(request, blog_slug, post_form=PostForm, **kwargs):
         form = post_form(request.POST, blog=blog, section=section, user=request.user)
         if form.is_valid():
             post = form.save()
-            
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                ugettext("The post '%s' was successfully created." % post.title)
+            )
             if request.POST.get("next"):
                 return HttpResponseRedirect(request.POST["next"])
             
@@ -81,7 +87,11 @@ def blog_post_edit(request, blog_slug, post_pk, post_form=PostForm, **kwargs):
         form = post_form(request.POST, instance=post, blog=blog, section=section, user=request.user)
         if form.is_valid():
             post = form.save()
-
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                ugettext("The post '%s' was successfully updated." % post.title)
+            )
             if request.POST.get("next"):
                 return HttpResponseRedirect(request.POST["next"])
             
