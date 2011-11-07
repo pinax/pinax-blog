@@ -40,7 +40,7 @@ def blog_post_add(request, blog_slug, post_form=PostForm, **kwargs):
     
     blog = get_object_or_404(Blog, slug=blog_slug)
     if "slug" in kwargs:
-        section = get_object_or_404(Section, slug=slug)
+        section = get_object_or_404(Section, slug=kwargs.get("slug"))
     else:
         section = None
     
@@ -70,7 +70,7 @@ def blog_post_edit(request, blog_slug, post_pk, post_form=PostForm, **kwargs):
     
     blog = get_object_or_404(Blog, slug=blog_slug)
     if "slug" in kwargs:
-        section = get_object_or_404(Section, slug=slug)
+        section = get_object_or_404(Section, kwargs.get("slug"))
     else:
         section = None
     
