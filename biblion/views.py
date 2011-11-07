@@ -37,13 +37,13 @@ class BlogCreate(CreateView):
 
 
 def blog_post_add(request, blog_slug, post_form=PostForm, **kwargs):
-
+    
     blog = get_object_or_404(Blog, slug=blog_slug)
     if "slug" in kwargs:
         section = get_object_or_404(Section, slug=slug)
     else:
         section = None
-
+    
     if request.method == "POST":
         form = post_form(request.POST, blog=blog, section=section, user=request.user)
         if form.is_valid():
@@ -51,14 +51,14 @@ def blog_post_add(request, blog_slug, post_form=PostForm, **kwargs):
             
             if request.POST.get("next"):
                 return HttpResponseRedirect(request.POST["next"])
-
+            
             return HttpResponseRedirect(post.get_absolute_url())
-
+    
     else:
         form = post_form(blog=blog, section=section, user=request.user)
-
+    
     image_form = ImageForm()
-
+    
     return render_to_response("biblion/blog_post_add.html", {
         "blog": blog,
         "form": form,
@@ -67,17 +67,17 @@ def blog_post_add(request, blog_slug, post_form=PostForm, **kwargs):
 
 
 def blog_post_edit(request, blog_slug, post_pk, post_form=PostForm, **kwargs):
-
+    
     blog = get_object_or_404(Blog, slug=blog_slug)
     if "slug" in kwargs:
         section = get_object_or_404(Section, slug=slug)
     else:
         section = None
-
+    
     post = get_object_or_404(blog.posts, pk=post_pk)
-
+    
     if request.method == "POST":
-
+        
         form = post_form(request.POST, instance=post, blog=blog, section=section, user=request.user)
         if form.is_valid():
             post = form.save()
@@ -86,12 +86,12 @@ def blog_post_edit(request, blog_slug, post_pk, post_form=PostForm, **kwargs):
                 return HttpResponseRedirect(request.POST["next"])
             
             return HttpResponseRedirect(post.get_absolute_url())
-
+    
     else:
         form = post_form(instance=post, blog=blog, section=section, user=request.user)
-
+    
     image_form = ImageForm()
-
+    
     return render_to_response("biblion/blog_post_edit.html", {
         "blog": blog,
         "form": form,
