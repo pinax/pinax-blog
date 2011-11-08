@@ -120,7 +120,7 @@ class Post(models.Model):
         super(Post, self).save(**kwargs)
     
     def get_absolute_url(self):
-        if self.published:
+        if self.published and datetime.now() > self.published:
             name = "blog_post"
             kwargs = {
                 "year": self.published.strftime("%Y"),
