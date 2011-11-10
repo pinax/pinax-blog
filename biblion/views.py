@@ -6,10 +6,12 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils import simplejson as json
+from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext
 from django.views.generic import ListView, CreateView
 
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
 
 from biblion.forms import BiblionForm, ImageForm, PostForm
@@ -35,6 +37,10 @@ class BiblionCreate(CreateView):
     
     model = Biblion
     form_class = BiblionForm
+    
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(BiblionCreate, self).dispatch(*args, **kwargs)
 
 
 def blog_post_add(request, blog_slug, post_form=PostForm, **kwargs):
