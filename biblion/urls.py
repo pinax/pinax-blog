@@ -1,8 +1,9 @@
 from django.conf.urls.defaults import patterns, url
 
-from biblion.views import BiblionList
+import biblion.views
 
 
 urlpatterns = patterns("",
-    url(r"^$", BiblionList.as_view(), name="biblion_list"),
+    url(r"^$", biblion.views.BiblionList.as_view(), name="biblion_list"),
+    url(r"^create/$", biblion.views.BiblionCreate.as_view(), name="biblion_create"),
 )

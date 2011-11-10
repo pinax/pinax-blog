@@ -31,7 +31,7 @@ class BiblionList(ListView):
     model = Biblion
 
 
-class BlogCreate(CreateView):
+class BiblionCreate(CreateView):
     
     model = Biblion
     form_class = BiblionForm
