@@ -12,8 +12,8 @@ from django.views.generic import ListView, CreateView
 from django.contrib import messages
 from django.contrib.sites.models import Site
 
-from biblion.forms import BlogForm, ImageForm, PostForm
-from biblion.models import Biblion, FeedHit, Section
+from biblion.forms import BiblionForm, ImageForm, PostForm
+from biblion.models import Biblion, FeedHit
 
 
 def blog_index(request, biblion_slug):
