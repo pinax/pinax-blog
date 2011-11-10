@@ -19,8 +19,8 @@ class BiblionAdmin(admin.ModelAdmin):
 
 
 class PostAdmin(admin.ModelAdmin):  
-    list_display = ["blog", "title", "published_flag", "section"]
-    list_filter = ["blog", "section"]
+    list_display = ["biblion", "title", "published_flag"]
+    list_filter = ["biblion"]
     form = AdminPostForm
     fields = [
         "biblion",
