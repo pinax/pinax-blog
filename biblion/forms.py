@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 
 from django import forms
 
@@ -17,7 +17,7 @@ class BiblionForm(forms.ModelForm):
 
 
 class ImageForm(forms.ModelForm):
-
+    
     class Meta:
         model = Image
         exclude = ["post","url"]
@@ -53,25 +53,25 @@ class PostForm(forms.ModelForm):
         model = Post
     
     def __init__(self, *args, **kwargs):
-
+        
         blog = kwargs.pop("blog")
         user = kwargs.pop("user")
         if "section" in kwargs:
             section = kwargs.pop("section")
         else:
             section = None
-
+        
         super(PostForm, self).__init__(*args, **kwargs)
-
+        
         self.fields["author"].initial = user
         self.fields["author"].widget = forms.HiddenInput()
-
+        
         self.fields["section"].initial = section
         if not blog.sections.count():
             del self.fields["section"]
         
         post = self.instance
-
+        
         self.fields["blog"].initial = blog
         
         # grab the latest revision of the Post instance
@@ -81,27 +81,27 @@ class PostForm(forms.ModelForm):
             # set initial data from the latest revision
             self.fields["teaser"].initial = latest_revision.teaser
             self.fields["content"].initial = latest_revision.content
-        
+            
             # @@@ can a post be unpublished then re-published? should be pulled
             # from latest revision maybe?
             self.fields["publish"].initial = bool(post.published)
-        
+    
     def save(self):
         post = super(PostForm, self).save(commit=False)
         
         if post.pk is None:
             if self.cleaned_data["publish"]:
-                post.published = datetime.now()
+                post.published = datetime.datetime.now()
         else:
             if Post.objects.filter(pk=post.pk, published=None).count():
                 if self.cleaned_data["publish"]:
-                    post.published = datetime.now()
+                    post.published = datetime.datetime.now()
         
         render_func = curry(load_path_attr(PARSER[0], **PARSER[1]))
         
         post.teaser_html = render_func(self.cleaned_data["teaser"])
         post.content_html = render_func(self.cleaned_data["content"])
-        post.updated = datetime.now()
+        post.updated = datetime.datetime.now()
         post.save()
         
         r = Revision()
@@ -118,7 +118,6 @@ class PostForm(forms.ModelForm):
             post.tweet()
         
         return post
-
 
 
 class AdminPostForm(forms.ModelForm):
@@ -170,27 +169,27 @@ class AdminPostForm(forms.ModelForm):
             # set initial data from the latest revision
             self.fields["teaser"].initial = latest_revision.teaser
             self.fields["content"].initial = latest_revision.content
-        
+            
             # @@@ can a post be unpublished then re-published? should be pulled
             # from latest revision maybe?
             self.fields["publish"].initial = bool(post.published)
-        
+    
     def save(self):
         post = super(AdminPostForm, self).save(commit=False)
         
         if post.pk is None:
             if self.cleaned_data["publish"]:
-                post.published = datetime.now()
+                post.published = datetime.datetime.now()
         else:
             if Post.objects.filter(pk=post.pk, published=None).count():
                 if self.cleaned_data["publish"]:
-                    post.published = datetime.now()
+                    post.published = datetime.datetime.now()
         
         render_func = curry(load_path_attr(PARSER[0], **PARSER[1]))
         
         post.teaser_html = render_func(self.cleaned_data["teaser"])
         post.content_html = render_func(self.cleaned_data["content"])
-        post.updated = datetime.now()
+        post.updated = datetime.datetime.now()
         post.save()
         
         r = Revision()

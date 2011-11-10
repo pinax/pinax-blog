@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
@@ -110,14 +110,12 @@ def blog_post_edit(request, blog_slug, post_pk, post_form=PostForm, **kwargs):
 
 
 def blog_post_delete(request, blog_slug, post_pk, **kwargs):
-
+    
     blog = get_object_or_404(Blog, slug=blog_slug)
-
     post = get_object_or_404(blog.posts, pk=post_pk)
-
+    
     if request.method == "POST":
         post.delete()
-
         return HttpResponseRedirect(request.POST.get("next") or "/")
     
     return render_to_response("biblion/blog_post_delete.html", {
@@ -126,7 +124,7 @@ def blog_post_delete(request, blog_slug, post_pk, **kwargs):
 
 
 def blog_image_upload(request, **kwargs):
-
+    
     if request.method == "POST":
         form = ImageForm(request.POST, request.FILES)
         if form.is_valid():
@@ -204,7 +202,7 @@ def blog_feed(request, biblion_slug):
     if posts:
         feed_updated = posts[0].published
     else:
-        feed_updated = datetime(2009, 8, 1, 0, 0, 0)
+        feed_updated = datetime.datetime(2009, 8, 1, 0, 0, 0)
     
     # create a feed hit
     hit = FeedHit()
