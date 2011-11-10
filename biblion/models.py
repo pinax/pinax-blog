@@ -109,7 +109,7 @@ class Post(models.Model):
         super(Post, self).save(**kwargs)
     
     def get_absolute_url(self):
-        if self.published:
+        if self.published and datetime.now() > self.published:
             name = "blog_post"
             kwargs = {
                 "year": self.published.strftime("%Y"),
@@ -122,6 +122,7 @@ class Post(models.Model):
             kwargs = {
                 "post_pk": self.pk,
             }
+        kwargs.update({"blog_slug": self.blog.slug})
         return reverse(name, kwargs=kwargs)
     
     def inc_views(self):
@@ -156,7 +157,7 @@ class Revision(models.Model):
 
 class Image(models.Model):
     
-    post = models.ForeignKey(Post, related_name="images")
+    post = models.ForeignKey(Post, related_name="images", blank=True, null=True)
     
     image_path = models.ImageField(upload_to="images/%Y/%m/%d")
     url = models.CharField(max_length=150, blank=True)
