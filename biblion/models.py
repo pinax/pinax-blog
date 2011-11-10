@@ -36,7 +36,7 @@ class Biblion(models.Model):
 
 class Post(models.Model):
     
-    biblion = models.ForeignKey(Blog, related_name="posts")
+    biblion = models.ForeignKey(Biblion, related_name="posts")
     
     title = models.CharField(max_length=90)
     slug = models.SlugField()
