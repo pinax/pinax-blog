@@ -6,10 +6,10 @@ from datetime import datetime
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models
-from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.utils import simplejson as json
 
+from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 
 try:
@@ -26,12 +26,21 @@ class Biblion(models.Model):
     title = models.CharField(max_length=128)
     subtitle = models.CharField(max_length=256, null=True, blank=True)
     slug = models.SlugField()
+    description = models.TextField()
+    logo = models.FileField(upload_to="biblion_biblion_logo")
     
     def __unicode__(self):
         return unicode(self.title)
     
     def get_absolute_url(self):
         return reverse("biblion_detail", kwargs={"slug": self.slug})
+
+
+class BiblionContributor(models.Model):
+    
+    biblion = models.ForeignKey(Biblion)
+    user = models.ForeignKey(User)
+    role = models.CharField(max_length=25)
 
 
 class Post(models.Model):
