@@ -25,7 +25,7 @@ class Biblion(models.Model):
     
     title = models.CharField(max_length=128)
     subtitle = models.CharField(max_length=256, null=True, blank=True)
-    slug = models.SlugField()
+    slug = models.SlugField(unique=True)
     description = models.TextField()
     logo = models.FileField(upload_to="biblion_biblion_logo")
     
