@@ -82,9 +82,6 @@ class Post(models.Model):
     
     objects = PostManager()
     
-    def get_absolute_url(self):
-        return reverse("biblion_post_detail", kwargs={"slug": self.slug})
-    
     def __unicode__(self):
         return self.title
     
@@ -136,6 +133,9 @@ class Post(models.Model):
             }
         kwargs.update({"blog_slug": self.blog.slug})
         return reverse(name, kwargs=kwargs)
+    
+    def get_absolute_url(self):
+        return reverse("biblion_post_detail", kwargs={"slug": self.slug})
     
     def inc_views(self):
         self.view_count += 1
