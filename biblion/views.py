@@ -56,6 +56,11 @@ class BiblionUpdate(UpdateView):
 class BiblionDetail(DetailView):
     
     model = Biblion
+    
+    def get_context_data(self, **kwargs):
+        context = super(BiblionDetail, self).get_context_data(**kwargs)
+        context["posts"] = self.object.posts.current()
+        return context
 
 
 def blog_post_add(request, blog_slug, post_form=PostForm, **kwargs):
