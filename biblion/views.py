@@ -71,6 +71,13 @@ class PostCreate(CreateView):
         })
         return kwargs
     
+    def get_context_data(self, **kwargs):
+        ctx = super(PostCreate, self).get_context_data(**kwargs)
+        ctx.update({
+            "biblion": self.biblion,
+        })
+        return ctx
+    
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         self.biblion = get_object_or_404(Biblion, slug=kwargs["slug"])
