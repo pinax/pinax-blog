@@ -5,6 +5,8 @@ from django import forms
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.functional import curry
 
+from django.contrib.auth.models import User
+
 from biblion.models import Biblion, Post, Revision, Image
 from biblion.settings import PARSER
 from biblion.utils import can_tweet, load_path_attr
@@ -12,8 +14,17 @@ from biblion.utils import can_tweet, load_path_attr
 
 class BiblionForm(forms.ModelForm):
     
+    contributors = forms.ModelMultipleChoiceField(queryset=User.objects.none())
+    
     class Meta:
         model = Biblion
+    
+    def __init__(self, *args, **kwargs):
+        super(BiblionForm, self).__init__(*args, **kwargs)
+        self.fields["contributors"].queryset = self.contributor_queryset()
+    
+    def contributor_queryset(self):
+        return User.objects.all()
 
 
 class ImageForm(forms.ModelForm):
