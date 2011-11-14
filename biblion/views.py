@@ -15,7 +15,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
 
 from biblion.forms import BiblionForm, ImageForm, PostForm
-from biblion.models import Biblion, FeedHit
+from biblion.models import Biblion, Post, FeedHit
 
 
 def blog_index(request, biblion_slug):
@@ -56,6 +56,25 @@ class BiblionUpdate(UpdateView):
 class BiblionDetail(DetailView):
     
     model = Biblion
+
+
+class PostCreate(CreateView):
+    
+    model = Post
+    form_class = PostForm
+    
+    def get_form_kwargs(self):
+        kwargs = super(PostCreate, self).get_form_kwargs()
+        kwargs.update({
+            "biblion": self.biblion,
+            "user": self.request.user,
+        })
+        return kwargs
+    
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        self.biblion = get_object_or_404(Biblion, slug=kwargs["slug"])
+        return super(PostCreate, self).dispatch(*args, **kwargs)
 
 
 def blog_post_add(request, blog_slug, post_form=PostForm, **kwargs):

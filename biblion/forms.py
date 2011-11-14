@@ -65,25 +65,17 @@ class PostForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         
-        blog = kwargs.pop("blog")
+        biblion = kwargs.pop("biblion")
         user = kwargs.pop("user")
-        if "section" in kwargs:
-            section = kwargs.pop("section")
-        else:
-            section = None
         
         super(PostForm, self).__init__(*args, **kwargs)
         
         self.fields["author"].initial = user
         self.fields["author"].widget = forms.HiddenInput()
         
-        self.fields["section"].initial = section
-        if not blog.sections.count():
-            del self.fields["section"]
-        
         post = self.instance
         
-        self.fields["blog"].initial = blog
+        self.fields["biblion"].initial = biblion
         
         # grab the latest revision of the Post instance
         latest_revision = post.latest()

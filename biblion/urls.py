@@ -8,4 +8,5 @@ urlpatterns = patterns("",
     url(r"^create/$", biblion.views.BiblionCreate.as_view(), name="biblion_create"),
     url(r"^blog/(?P<slug>[\w-]+)/$", biblion.views.BiblionDetail.as_view(), name="biblion_detail"),
     url(r"^blog/(?P<slug>[\w-]+)/update/$", biblion.views.BiblionUpdate.as_view(), name="biblion_update"),
+    url(r"^blog/(?P<slug>[\w-]+)/post/$", biblion.views.PostCreate.as_view(), name="biblion_post_create"),
 )
