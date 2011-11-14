@@ -84,6 +84,11 @@ class PostCreate(CreateView):
         return super(PostCreate, self).dispatch(*args, **kwargs)
 
 
+class PostDetail(DetailView):
+    
+    model = Post
+
+
 def blog_post_add(request, blog_slug, post_form=PostForm, **kwargs):
     
     blog = get_object_or_404(Blog, slug=blog_slug)

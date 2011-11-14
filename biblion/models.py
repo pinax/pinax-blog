@@ -82,6 +82,9 @@ class Post(models.Model):
     
     objects = PostManager()
     
+    def get_absolute_url(self):
+        return reverse("biblion_post_detail", kwargs={"slug": self.slug})
+    
     def __unicode__(self):
         return self.title
     
