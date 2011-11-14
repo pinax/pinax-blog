@@ -8,7 +8,7 @@ from django.template.loader import render_to_string
 from django.utils import simplejson as json
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext
-from django.views.generic import ListView, CreateView, DetailView
+from django.views.generic import ListView, CreateView, DetailView, UpdateView
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -41,6 +41,16 @@ class BiblionCreate(CreateView):
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(BiblionCreate, self).dispatch(*args, **kwargs)
+
+
+class BiblionUpdate(UpdateView):
+    
+    model = Biblion
+    form_class = BiblionForm
+    
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(BiblionUpdate, self).dispatch(*args, **kwargs)
 
 
 class BiblionDetail(DetailView):
