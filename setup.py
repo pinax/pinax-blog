@@ -15,7 +15,6 @@ setup(
     url = "http://github.com/eldarion/biblion",
     packages = [
         "biblion",
-        "biblion.templatetags",
     ],
     package_data = {
         "biblion": [
