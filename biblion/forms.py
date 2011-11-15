@@ -75,7 +75,7 @@ class AdminPostForm(forms.ModelForm):
                 if self.cleaned_data["publish"]:
                     post.published = datetime.now()
         
-        render_func = curry(load_path_attr(PARSER[0], **PARSER[1]))
+        render_func = curry(load_path_attr(PARSER[0]), **PARSER[1])
         
         post.teaser_html = render_func(self.cleaned_data["teaser"])
         post.content_html = render_func(self.cleaned_data["content"])
