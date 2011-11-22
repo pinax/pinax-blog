@@ -21,8 +21,12 @@ class BiblionForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super(BiblionForm, self).__init__(*args, **kwargs)
+        
         self.fields["contributors"].queryset = self.contributor_queryset()
         self.fields["contributors"].initial = self.instance.biblioncontributor_set.values_list("user", flat=True)
+        
+        if self.instance.pk is not None:
+            del self.fields["slug"]
     
     def contributor_queryset(self):
         return User.objects.all()
