@@ -37,6 +37,7 @@ class BiblionCreate(CreateView):
     
     model = Biblion
     form_class = BiblionForm
+    template_name_suffix = "_create"
     
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
@@ -47,6 +48,7 @@ class BiblionUpdate(UpdateView):
     
     model = Biblion
     form_class = BiblionForm
+    template_name_suffix = "_update"
     
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
