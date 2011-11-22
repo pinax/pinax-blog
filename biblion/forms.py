@@ -22,9 +22,22 @@ class BiblionForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(BiblionForm, self).__init__(*args, **kwargs)
         self.fields["contributors"].queryset = self.contributor_queryset()
+        self.fields["contributors"].initial = self.instance.biblioncontributor_set.values_list("user", flat=True)
     
     def contributor_queryset(self):
         return User.objects.all()
+    
+    def save(self, commit=True):
+        instance = super(BiblionForm, self).save(commit=commit)
+        if not commit:
+            raise NotImplementedError("commit=False is not supported")
+        self.save_contributors(instance)
+        return instance
+    
+    def save_contributors(self, instance):
+        instance.biblioncontributor_set.all().delete()
+        for user in self.cleaned_data["contributors"]:
+            instance.biblioncontributor_set.create(user=user)
 
 
 class ImageForm(forms.ModelForm):
