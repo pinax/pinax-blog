@@ -31,7 +31,7 @@ class ImageForm(forms.ModelForm):
     
     class Meta:
         model = Image
-        exclude = ["post","url"]
+        exclude = ["post", "url"]
 
 
 class PostForm(forms.ModelForm):
