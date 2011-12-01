@@ -14,6 +14,7 @@ from django.contrib.sites.models import Site
 
 from biblion.forms import BlogForm, ImageForm, PostForm
 from biblion.models import Blog, FeedHit, Section
+from biblion.signals import post_created, post_updated, post_deleted
 
 
 def blog_index(request, blog_slug):
@@ -50,10 +51,10 @@ def blog_post_add(request, blog_slug, post_form=PostForm, **kwargs):
         form = post_form(request.POST, blog=blog, section=section, user=request.user)
         if form.is_valid():
             post = form.save()
-            messages.add_message(
-                request,
-                messages.SUCCESS,
-                ugettext("The post '%s' was successfully created." % post.title)
+            post_created.send(
+                sender=post,
+                post=post,
+                request=request
             )
             if request.POST.get("next"):
                 return HttpResponseRedirect(request.POST["next"])
@@ -87,10 +88,10 @@ def blog_post_edit(request, blog_slug, post_pk, post_form=PostForm, **kwargs):
         form = post_form(request.POST, instance=post, blog=blog, section=section, user=request.user)
         if form.is_valid():
             post = form.save()
-            messages.add_message(
-                request,
-                messages.SUCCESS,
-                ugettext("The post '%s' was successfully updated." % post.title)
+            post_updated.send(
+                sender=post,
+                post=post,
+                request=request
             )
             if request.POST.get("next"):
                 return HttpResponseRedirect(request.POST["next"])
@@ -118,7 +119,11 @@ def blog_post_delete(request, blog_slug, post_pk, **kwargs):
 
     if request.method == "POST":
         post.delete()
-
+        post_deleted.send(
+            sender=post,
+            post=post,
+            request=request
+        )
         return HttpResponseRedirect(request.POST.get("next") or "/")
     
     return render_to_response("biblion/blog_post_delete.html", {
