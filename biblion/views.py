@@ -106,7 +106,6 @@ class PostUpdate(UpdateView):
         
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
-        import pdb; pdb.set_trace()
         post = get_object_or_404(Post, slug=kwargs["slug"])
         self.biblion = post.biblion
         return super(PostUpdate, self).dispatch(*args, **kwargs)
