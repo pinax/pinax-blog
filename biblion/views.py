@@ -88,6 +88,7 @@ class PostUpdate(UpdateView):
     
     model = Post
     form_class = PostForm
+    template_name = "biblion/post_update.html"
     
     def get_form_kwargs(self):
         kwargs = super(PostUpdate, self).get_form_kwargs()
