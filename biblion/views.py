@@ -88,8 +88,36 @@ class PostCreate(CreateView):
     def dispatch(self, *args, **kwargs):
         self.biblion = get_object_or_404(Biblion, slug=kwargs["slug"])
         return super(PostCreate, self).dispatch(*args, **kwargs)
-
-
+        
+        
+class PostUpdate(UpdateView):
+    
+    model = Post
+    form_class = PostForm
+    template_name = "biblion/post_update.html"
+    
+    def get_form_kwargs(self):
+        kwargs = super(PostUpdate, self).get_form_kwargs()
+        kwargs.update({
+            "biblion": self.biblion,
+            "user": self.request.user,
+        })
+        return kwargs
+        
+    def get_context_data(self, **kwargs):
+        ctx = super(PostUpdate, self).get_context_data(**kwargs)
+        ctx.update({
+            "biblion": self.biblion,
+        })
+        return ctx
+        
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        post = get_object_or_404(Post, slug=kwargs["slug"])
+        self.biblion = post.biblion
+        return super(PostUpdate, self).dispatch(*args, **kwargs)
+        
+        
 class PostDetail(DetailView):
     
     model = Post
