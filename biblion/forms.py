@@ -70,7 +70,7 @@ class PostForm(forms.ModelForm):
     publish = forms.BooleanField(
         required = False,
         help_text = u"Checking this will publish this article on the site",
-        )
+    )
     
     if can_tweet():
         tweet = forms.BooleanField(
@@ -110,6 +110,9 @@ class PostForm(forms.ModelForm):
             # @@@ can a post be unpublished then re-published? should be pulled
             # from latest revision maybe?
             self.fields["publish"].initial = bool(post.published)
+            # @@@ remove it for now when editing
+            if self.instance is not None:
+                del self.fields["publish"]
     
     def save(self):
         post = super(PostForm, self).save(commit=False)
