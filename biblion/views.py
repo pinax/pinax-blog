@@ -93,6 +93,11 @@ class PostCreate(CreateView):
 class PostDetail(DetailView):
     
     model = Post
+    
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return Post.objects.all()
+        return Post.objects.current()
 
 
 def blog_post_add(request, blog_slug, post_form=PostForm, **kwargs):
