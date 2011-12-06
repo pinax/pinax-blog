@@ -96,7 +96,7 @@ class PostDetail(DetailView):
     
     def get_queryset(self):
         if self.request.user.is_staff:
-            return Post.objects.all()
+            return Post.objects.filter(sites=settings.SITE_ID)
         return Post.objects.current()
 
 
