@@ -16,6 +16,9 @@ from biblion.utils import can_tweet, load_path_attr
 class BiblionForm(forms.ModelForm):
     
     contributors = forms.ModelMultipleChoiceField(queryset=User.objects.none())
+    slug = forms.CharField(
+        widget = forms.HiddenInput()
+    )
     
     class Meta:
         model = Biblion
@@ -59,7 +62,7 @@ class PostForm(forms.ModelForm):
         widget = forms.TextInput(),
     )
     slug = forms.CharField(
-        widget = forms.TextInput()
+        widget = forms.HiddenInput()
     )
     teaser = forms.CharField(
         widget = forms.Textarea(),
