@@ -1,16 +1,15 @@
 import datetime
 
+from django.conf import settings
 from django.db import models
 
 
 class PostManager(models.Manager):
     
     def published(self):
-        return self.exclude(
-            published=None
-        ).exclude(
-            published__gt=datetime.datetime.now()
-        )
+        qs = self.exclude(published=None, published__gt=datetime.datetime.now())
+        #qs = qs.filter(sites=settings.SITE_ID)
+        return qs
     
     def current(self):
         return self.published().order_by("-published")

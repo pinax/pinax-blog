@@ -6,6 +6,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.utils.functional import curry
 
 from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
 
 from biblion.models import Biblion, Post, Revision, Image
 from biblion.settings import PARSER
@@ -90,6 +91,10 @@ class PostForm(forms.ModelForm):
         self.fields["author"].initial = user
         self.fields["author"].widget = forms.HiddenInput()
         
+        # filter sites this post can appear based on what sites are selected
+        # for the biblion
+        self.fields["sites"].queryset = biblion.sites.all()
+        
         post = self.instance
         
         self.fields["biblion"].initial = biblion
@@ -123,6 +128,8 @@ class PostForm(forms.ModelForm):
         post.content_html = render_func(self.cleaned_data["content"])
         post.updated = datetime.datetime.now()
         post.save()
+        
+        post.sites = self.cleaned_data["sites"]
         
         r = Revision()
         r.post = post

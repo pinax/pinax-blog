@@ -1,5 +1,6 @@
 import datetime
 
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, get_object_or_404
@@ -31,6 +32,9 @@ def blog_index(request, biblion_slug):
 class BiblionList(ListView):
     
     model = Biblion
+    
+    def get_queryset(self):
+        return Biblion.objects.filter(sites=settings.SITE_ID)
 
 
 class BiblionCreate(CreateView):

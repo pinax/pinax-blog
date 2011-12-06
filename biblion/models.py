@@ -28,6 +28,7 @@ class Biblion(models.Model):
     slug = models.SlugField(unique=True)
     description = models.TextField()
     logo = models.FileField(upload_to="biblion_biblion_logo")
+    sites = models.ManyToManyField(Site)
     
     def __unicode__(self):
         return unicode(self.title)
@@ -46,6 +47,7 @@ class BiblionContributor(models.Model):
 class Post(models.Model):
     
     biblion = models.ForeignKey(Biblion, related_name="posts")
+    sites = models.ManyToManyField(Site)
     
     title = models.CharField(max_length=90)
     slug = models.SlugField()
