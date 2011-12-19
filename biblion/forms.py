@@ -68,6 +68,10 @@ class PostForm(forms.ModelForm):
         required = False,
         help_text = u"Checking this will publish this article on the site",
     )
+    publish_date = forms.DateTimeField(
+        required = False,
+        help_text = u"Posts will not appear on the site until the publish date.",
+    )
     
     if can_tweet():
         tweet = forms.BooleanField(
@@ -108,9 +112,11 @@ class PostForm(forms.ModelForm):
             # @@@ can a post be unpublished then re-published? should be pulled
             # from latest revision maybe?
             self.fields["publish"].initial = bool(post.published)
+            self.fields["publish_date"].initial = post.published
             # @@@ remove it for now when editing
             if self.instance is not None:
                 del self.fields["publish"]
+                del self.fields["publish_date"]
     
     def save(self):
         post = super(PostForm, self).save(commit=False)
@@ -125,7 +131,10 @@ class PostForm(forms.ModelForm):
             if Post.objects.filter(pk=post.pk, published=None).count():
                 if self.cleaned_data["publish"]:
                     post.published = datetime.datetime.now()
-        
+                    
+        if self.cleaned_data["publish_date"]:
+            post.published = self.cleaned_data["publish_date"]
+            
         render_func = curry(load_path_attr(PARSER[0]), **PARSER[1])
         
         post.teaser_html = render_func(self.cleaned_data["teaser"])
@@ -178,7 +187,11 @@ class AdminPostForm(forms.ModelForm):
         required = False,
         help_text = u"Checking this will publish this articles on the site",
     )
-    
+    publish_date = forms.DateTimeField(
+        required = False,
+        help_text = u"Posts will not appear on the site until the publish date."
+    )
+   
     if can_tweet():
         tweet = forms.BooleanField(
             required = False,
@@ -204,6 +217,7 @@ class AdminPostForm(forms.ModelForm):
             # @@@ can a post be unpublished then re-published? should be pulled
             # from latest revision maybe?
             self.fields["publish"].initial = bool(post.published)
+            self.fields["publish_date"].initial = post.published
     
     def save(self):
         post = super(AdminPostForm, self).save(commit=False)
@@ -215,7 +229,10 @@ class AdminPostForm(forms.ModelForm):
             if Post.objects.filter(pk=post.pk, published=None).count():
                 if self.cleaned_data["publish"]:
                     post.published = datetime.datetime.now()
-        
+                    
+        if self.cleaned_data["publish_date"]:
+            post.published = self.cleaned_data["publish_date"]
+            
         render_func = curry(load_path_attr(PARSER[0]), **PARSER[1])
         
         post.teaser_html = render_func(self.cleaned_data["teaser"])
