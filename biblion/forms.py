@@ -10,7 +10,7 @@ from django.contrib.sites.models import Site
 
 from biblion.models import Biblion, Post, Revision, Image
 from biblion.settings import PARSER
-from biblion.utils import can_tweet, load_path_attr
+from biblion.utils import can_tweet, load_path_attr, slugify_unique
 
 
 class BiblionForm(forms.ModelForm):
@@ -19,20 +19,20 @@ class BiblionForm(forms.ModelForm):
     
     class Meta:
         model = Biblion
+        exclude = ("slug",)
     
     def __init__(self, *args, **kwargs):
         super(BiblionForm, self).__init__(*args, **kwargs)
         
         self.fields["contributors"].queryset = self.contributor_queryset()
         self.fields["contributors"].initial = self.instance.biblioncontributor_set.values_list("user", flat=True)
-        
-        if self.instance.pk is not None:
-            del self.fields["slug"]
     
     def contributor_queryset(self):
         return User.objects.all()
     
     def save(self, commit=True):
+        if not self.instance.slug:
+            self.instance.slug = slugify_unique(self.cleaned_data["title"], self.Meta.model)
         instance = super(BiblionForm, self).save(commit=commit)
         if not commit:
             raise NotImplementedError("commit=False is not supported")
@@ -58,9 +58,6 @@ class PostForm(forms.ModelForm):
         max_length = 90,
         widget = forms.TextInput(),
     )
-    slug = forms.CharField(
-        widget = forms.TextInput()
-    )
     teaser = forms.CharField(
         widget = forms.Textarea(),
     )
@@ -80,6 +77,7 @@ class PostForm(forms.ModelForm):
     
     class Meta:
         model = Post
+        exclude = ("slug",)
     
     def __init__(self, *args, **kwargs):
         
@@ -116,6 +114,9 @@ class PostForm(forms.ModelForm):
     
     def save(self):
         post = super(PostForm, self).save(commit=False)
+        
+        if not post.slug:
+            post.slug = slugify_unique(self.cleaned_data["title"], self.Meta.model)
         
         if post.pk is None:
             if self.cleaned_data["publish"]:

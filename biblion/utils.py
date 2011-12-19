@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
+from django.template.defaultfilters import slugify
 try:
     from django.utils.importlib import import_module
 except ImportError:
@@ -16,6 +17,18 @@ def can_tweet():
         hasattr(settings, "TWITTER_USERNAME") and hasattr(settings, "TWITTER_PASSWORD")
     )
     return twitter and creds_available
+
+
+def slugify_unique(value, model, slugfield="slug"):
+        suffix = 0
+        potential = base = slugify(value)
+        while True:
+            if suffix:
+                potential = "-".join([base, str(suffix)])
+            if not model.objects.filter(**{slugfield: potential}).count():
+                print model.objects.filter(**{slugfield: potential})
+                return potential
+            suffix += 1
 
 
 def load_path_attr(path):
