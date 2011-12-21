@@ -6,15 +6,13 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils import simplejson as json
-from django.utils.translation import ugettext
 from django.views.generic import ListView, CreateView
 
-from django.contrib import messages
 from django.contrib.sites.models import Site
 
 from biblion.forms import BlogForm, ImageForm, PostForm
 from biblion.models import Blog, FeedHit, Section
-from biblion.signals import post_created, post_updated, post_deleted
+from biblion.signals import post_created, post_updated, post_deleted, post_viewed
 
 
 def blog_index(request, blog_slug):
@@ -184,6 +182,11 @@ def blog_post_detail(request, **kwargs):
         )
         post = get_object_or_404(queryset, slug=kwargs["slug"])
         post.inc_views()
+        post_viewed.send(
+            sender=post,
+            post=post,
+            request=request
+        )
     
     return render_to_response("biblion/blog_post.html", {
         "blog": blog,
