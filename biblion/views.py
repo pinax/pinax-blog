@@ -12,6 +12,7 @@ from django.contrib.sites.models import Site
 from biblion.exceptions import InvalidSection
 from biblion.models import Post, FeedHit
 from biblion.settings import ALL_SECTION_NAME
+from biblion.signals import post_viewed
 
 
 def blog_index(request):
@@ -53,7 +54,7 @@ def blog_post_detail(request, **kwargs):
             published__day = int(kwargs["day"]),
         )
         post = get_object_or_404(queryset, slug=kwargs["slug"])
-        post.inc_views()
+        post_viewed.send(sender=post, post=post, request=request)
     
     return render_to_response("biblion/blog_post.html", {
         "post": post,
