@@ -3,14 +3,13 @@ import datetime
 from django import forms
 
 from django.core.exceptions import ImproperlyConfigured
-from django.utils.functional import curry
 
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 
 from biblion.models import Biblion, Post, Revision, Image
-from biblion.settings import PARSER
-from biblion.utils import can_tweet, load_path_attr, slugify_unique
+from biblion.utils.twitter import can_tweet
+from biblion.utils.slugify import slugify_unique
 
 
 class BiblionForm(forms.ModelForm):
@@ -131,14 +130,12 @@ class PostForm(forms.ModelForm):
             if Post.objects.filter(pk=post.pk, published=None).count():
                 if self.cleaned_data["publish"]:
                     post.published = datetime.datetime.now()
-                    
+        
         if self.cleaned_data["publish_date"]:
             post.published = self.cleaned_data["publish_date"]
-            
-        render_func = curry(load_path_attr(PARSER[0]), **PARSER[1])
         
-        post.teaser_html = render_func(self.cleaned_data["teaser"])
-        post.content_html = render_func(self.cleaned_data["content"])
+        post.teaser = self.cleaned_data["teaser"]
+        post.content = self.cleaned_data["content"]
         post.updated = datetime.datetime.now()
         post.save()
         
@@ -211,6 +208,7 @@ class AdminPostForm(forms.ModelForm):
         
         if latest_revision:
             # set initial data from the latest revision
+            self.fields["markup_type"].initial = latest_revision.markup_type
             self.fields["teaser"].initial = latest_revision.teaser
             self.fields["content"].initial = latest_revision.content
             
@@ -229,20 +227,20 @@ class AdminPostForm(forms.ModelForm):
             if Post.objects.filter(pk=post.pk, published=None).count():
                 if self.cleaned_data["publish"]:
                     post.published = datetime.datetime.now()
-                    
+        
         if self.cleaned_data["publish_date"]:
             post.published = self.cleaned_data["publish_date"]
-            
-        render_func = curry(load_path_attr(PARSER[0]), **PARSER[1])
-        
-        post.teaser_html = render_func(self.cleaned_data["teaser"])
-        post.content_html = render_func(self.cleaned_data["content"])
+
+        post.markup_type = self.cleaned_data["markup_type"]
+        post.teaser = self.cleaned_data["teaser"]
+        post.content = self.cleaned_data["content"]
         post.updated = datetime.datetime.now()
         post.save()
         
         r = Revision()
         r.post = post
         r.title = post.title
+        r.markup_type = self.cleaned_data["markup_type"]
         r.teaser = self.cleaned_data["teaser"]
         r.content = self.cleaned_data["content"]
         r.author = post.author

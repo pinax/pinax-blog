@@ -4,7 +4,7 @@ from django.contrib import admin
 
 from biblion.models import Biblion, Post, Image
 from biblion.forms import AdminPostForm
-from biblion.utils import can_tweet
+from biblion.utils.twitter import can_tweet
 
 
 class ImageInline(admin.TabularInline):
@@ -18,7 +18,7 @@ class BiblionAdmin(admin.ModelAdmin):
     }
 
 
-class PostAdmin(admin.ModelAdmin):  
+class PostAdmin(admin.ModelAdmin):
     list_display = ["biblion", "title", "published_flag"]
     list_filter = ["biblion"]
     form = AdminPostForm
@@ -27,6 +27,7 @@ class PostAdmin(admin.ModelAdmin):
         "title",
         "slug",
         "author",
+        "markup_type",
         "teaser",
         "content",
         "publish",

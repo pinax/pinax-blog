@@ -18,7 +18,7 @@ except ImportError:
     twitter = None
 
 from biblion.managers import PostManager
-from biblion.utils import can_tweet
+from biblion.utils.twitter import can_tweet
 
 
 class Biblion(models.Model):
@@ -53,13 +53,17 @@ class Post(models.Model):
     slug = models.SlugField()
     author = models.ForeignKey(User, related_name="posts")
     
-    teaser_html = models.TextField(editable=False)
-    content_html = models.TextField(editable=False)
+    markup_types = ["HTML", "Creole", "Markdown", "reStructuredText", "Textile"]
+    MARKUP_CHOICES = zip(range(1, 1 + len(markup_types)), markup_types)
+    markup_type = models.IntegerField(choices=MARKUP_CHOICES, default=1)
+    
+    teaser = models.TextField(editable=False)
+    content = models.TextField(editable=False)
     
     tweet_text = models.CharField(max_length=140, editable=False)
     
     created = models.DateTimeField(default=datetime.now, editable=False) # when first revision was created
-    updated = models.DateTimeField(null=True, blank=True, editable=False) # when last revision was create (even if not published)
+    updated = models.DateTimeField(null=True, blank=True, editable=False) # when last revision was created (even if not published)
     published = models.DateTimeField(null=True, blank=True, editable=False) # when last published
     
     view_count = models.IntegerField(default=0, editable=False)
@@ -150,8 +154,9 @@ class Revision(models.Model):
     post = models.ForeignKey(Post, related_name="revisions")
     
     title = models.CharField(max_length=90)
-    teaser = models.TextField()
     
+    markup_type = models.IntegerField()
+    teaser = models.TextField()
     content = models.TextField()
     
     author = models.ForeignKey(User, related_name="post_revisions")
@@ -162,7 +167,7 @@ class Revision(models.Model):
     view_count = models.IntegerField(default=0, editable=False)
     
     def __unicode__(self):
-        return 'Revision %s for %s' % (self.updated.strftime('%Y%m%d-%H%M'), self.post.slug)
+        return "Revision %s for %s" % (self.updated.strftime("%Y%m%d-%H%M"), self.post.slug)
     
     def inc_views(self):
         self.view_count += 1
