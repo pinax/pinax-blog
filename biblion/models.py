@@ -70,18 +70,18 @@ class Post(models.Model):
         _("Textile")
     ]
     MARKUP_CHOICES = zip(range(1, 1 + len(markup_types)), markup_types)
-    markup_type = models.IntegerField(_("markup_type"), choices=MARKUP_CHOICES, default=1)
+    markup_type = models.IntegerField(_("markup type"), choices=MARKUP_CHOICES, default=1)
     
     teaser = models.TextField(_("teaser"), editable=False)
     content = models.TextField(_("content"), editable=False)
     
-    tweet_text = models.CharField(_("tweet_text"), max_length=140, editable=False)
+    tweet_text = models.CharField(_("tweet text"), max_length=140, editable=False)
     
     created = models.DateTimeField(_("created"), default=datetime.now, editable=False) # when first revision was created
     updated = models.DateTimeField(_("updated"), null=True, blank=True, editable=False) # when last revision was created (even if not published)
     published = models.DateTimeField(_("published"), null=True, blank=True, editable=False) # when last published
     
-    view_count = models.IntegerField(_("view_count"), default=0, editable=False)
+    view_count = models.IntegerField(_("view count"), default=0, editable=False)
     
     def rev(self, rev_id):
         return self.revisions.get(pk=rev_id)
@@ -172,16 +172,16 @@ class Revision(models.Model):
     
     title = models.CharField(_("title"), max_length=90)
     
-    markup_type = models.IntegerField(_("markup_type"))
+    markup_type = models.IntegerField(_("markup type"))
     teaser = models.TextField(_("teaser"))
     content = models.TextField(_("content"))
     
-    author = models.ForeignKey(User, related_name="post_revisions", verbose_name=_("author"))
+    author = models.ForeignKey(User, related_name="post revisions", verbose_name=_("author"))
     
     updated = models.DateTimeField(_("updated"), default=datetime.now)
     published = models.DateTimeField(_("published"), null=True, blank=True)
     
-    view_count = models.IntegerField(_("view_count"), default=0, editable=False)
+    view_count = models.IntegerField(_("view count"), default=0, editable=False)
     
     class Meta:
         verbose_name = _("revision")
@@ -201,7 +201,7 @@ class Image(models.Model):
     
     post = models.ForeignKey(Post, related_name="images", blank=True, null=True)
     
-    image_path = models.ImageField(_("image_path"), upload_to="images/%Y/%m/%d")
+    image_path = models.ImageField(_("image path"), upload_to="images/%Y/%m/%d")
     url = models.CharField(_("url"), max_length=150, blank=True)
     
     timestamp = models.DateTimeField(_("timestamp"), default=datetime.now, editable=False)
@@ -219,5 +219,5 @@ class Image(models.Model):
 
 class FeedHit(models.Model):
     
-    request_data = models.TextField(_("request_data"))
+    request_data = models.TextField(_("request data"))
     created = models.DateTimeField(_("created"), default=datetime.now)
