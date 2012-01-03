@@ -7,6 +7,7 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 from django.core.urlresolvers import reverse
+from django.utils import formats
 from django.utils import simplejson as json
 from django.utils.translation import ugettext as _
 
@@ -189,7 +190,7 @@ class Revision(models.Model):
     
     def __unicode__(self):
         return _("Revision %(datetime)s for %(slug)s") % {
-                     "datetime": self.updated.strftime("%Y%m%d-%H%M"),
+                     "datetime": formats.localize("%Y%m%d-%H%M"),
                      "slug": self.post.slug}
     
     def inc_views(self):
