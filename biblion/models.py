@@ -8,6 +8,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.utils import simplejson as json
+from django.utils.translation import ugettext as _
 
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
@@ -23,12 +24,16 @@ from biblion.utils.twitter import can_tweet
 
 class Biblion(models.Model):
     
-    title = models.CharField(max_length=128)
-    subtitle = models.CharField(max_length=256, null=True, blank=True)
-    slug = models.SlugField(unique=True)
-    description = models.TextField()
-    logo = models.FileField(upload_to="biblion_biblion_logo")
-    sites = models.ManyToManyField(Site)
+    title = models.CharField(_("title"), max_length=128)
+    subtitle = models.CharField(_("subtitle"), max_length=256, blank=True)
+    slug = models.SlugField(_("slug"), unique=True)
+    description = models.TextField(_("description"), verbose_name)
+    logo = models.FileField(_("logo"), upload_to="biblion_biblion_logo")
+    sites = models.ManyToManyField(Site, verbose_name=_("list of sites"))
+    
+    class Meta:
+        verbose_name = _("biblion")
+        verbose_name_plural = _("biblia")
     
     def __unicode__(self):
         return unicode(self.title)
@@ -39,34 +44,44 @@ class Biblion(models.Model):
 
 class BiblionContributor(models.Model):
     
-    biblion = models.ForeignKey(Biblion)
-    user = models.ForeignKey(User)
-    role = models.CharField(max_length=25)
+    biblion = models.ForeignKey(Biblion, verbose_name=_("biblion"))
+    user = models.ForeignKey(User, related_name="contributors", verbose_name=_("user"))
+    role = models.CharField(_("role"), max_length=25)
+    
+    class Meta:
+        verbose_name = _("biblion contributor")
+        verbose_name_plural = _("biblion contributors")
 
 
 class Post(models.Model):
     
-    biblion = models.ForeignKey(Biblion, related_name="posts")
-    sites = models.ManyToManyField(Site)
+    biblion = models.ForeignKey(Biblion, related_name="posts", verbose_name=_("biblion"))
+    sites = models.ManyToManyField(Site, verbose_name=_("list of sites"))
     
-    title = models.CharField(max_length=90)
-    slug = models.SlugField()
-    author = models.ForeignKey(User, related_name="posts")
+    title = models.CharField(_("title"), max_length=90)
+    slug = models.SlugField(_("slug"))
+    author = models.ForeignKey(User, related_name="posts", verbose_name=_("author"))
     
-    markup_types = ["HTML", "Creole", "Markdown", "reStructuredText", "Textile"]
+    markup_types = [
+        _("HTML"),
+        _("Creole"),
+        _("Markdown"),
+        _("reStructuredText")
+        _("Textile")
+    ]
     MARKUP_CHOICES = zip(range(1, 1 + len(markup_types)), markup_types)
-    markup_type = models.IntegerField(choices=MARKUP_CHOICES, default=1)
+    markup_type = models.IntegerField(_("markup_type"), choices=MARKUP_CHOICES, default=1)
     
-    teaser = models.TextField(editable=False)
-    content = models.TextField(editable=False)
+    teaser = models.TextField(_("teaser"), editable=False)
+    content = models.TextField(_("content"), editable=False)
     
-    tweet_text = models.CharField(max_length=140, editable=False)
+    tweet_text = models.CharField(_("tweet_text"), max_length=140, editable=False)
     
-    created = models.DateTimeField(default=datetime.now, editable=False) # when first revision was created
-    updated = models.DateTimeField(null=True, blank=True, editable=False) # when last revision was created (even if not published)
-    published = models.DateTimeField(null=True, blank=True, editable=False) # when last published
+    created = models.DateTimeField(_("created"), default=datetime.now, editable=False) # when first revision was created
+    updated = models.DateTimeField(_("updated"), null=True, blank=True, editable=False) # when last revision was created (even if not published)
+    published = models.DateTimeField(_("published"), null=True, blank=True, editable=False) # when last published
     
-    view_count = models.IntegerField(default=0, editable=False)
+    view_count = models.IntegerField(_("view_count"), default=0, editable=False)
     
     def rev(self, rev_id):
         return self.revisions.get(pk=rev_id)
@@ -83,6 +98,8 @@ class Post(models.Model):
             return None
     
     class Meta:
+        verbose_name = _("post")
+        verbose_name_plural = _("posts")
         ordering = ("-published",)
         get_latest_by = "published"
     
@@ -111,13 +128,13 @@ class Post(models.Model):
     def tweet(self):
         if can_tweet():
             account = twitter.Api(
-                username = settings.TWITTER_USERNAME,
-                password = settings.TWITTER_PASSWORD,
+                username=settings.TWITTER_USERNAME,
+                password=settings.TWITTER_PASSWORD,
             )
             account.PostUpdate(self.as_tweet())
         else:
-            raise ImproperlyConfigured("Unable to send tweet due to either "
-                "missing python-twitter or required settings.")
+            raise ImproperlyConfigured(_("Unable to send tweet due to either \
+                missing python-twitter or required settings."))
     
     def save(self, **kwargs):
         self.updated_at = datetime.now()
@@ -151,23 +168,29 @@ class Post(models.Model):
 
 class Revision(models.Model):
     
-    post = models.ForeignKey(Post, related_name="revisions")
+    post = models.ForeignKey(Post, related_name="revisions", verbose_name=_("post"))
     
-    title = models.CharField(max_length=90)
+    title = models.CharField(_("title"), max_length=90)
     
-    markup_type = models.IntegerField()
-    teaser = models.TextField()
-    content = models.TextField()
+    markup_type = models.IntegerField(_("markup_type"))
+    teaser = models.TextField(_("teaser"))
+    content = models.TextField(_("content"))
     
-    author = models.ForeignKey(User, related_name="post_revisions")
+    author = models.ForeignKey(User, related_name="post_revisions", verbose_name=_("author"))
     
-    updated = models.DateTimeField(default=datetime.now)
-    published = models.DateTimeField(null=True, blank=True)
+    updated = models.DateTimeField(_("updated"), default=datetime.now)
+    published = models.DateTimeField(_("published"), null=True, blank=True)
     
-    view_count = models.IntegerField(default=0, editable=False)
+    view_count = models.IntegerField(_("view_count"), default=0, editable=False)
+    
+    class Meta:
+        verbose_name = _("revision")
+        verbose_name_plural = _("revisions")
     
     def __unicode__(self):
-        return "Revision %s for %s" % (self.updated.strftime("%Y%m%d-%H%M"), self.post.slug)
+        return _("Revision %(datetime)s for %(slug)s") % {
+                     "datetime": self.updated.strftime("%Y%m%d-%H%M"),
+                     "slug": self.post.slug}
     
     def inc_views(self):
         self.view_count += 1
@@ -178,19 +201,23 @@ class Image(models.Model):
     
     post = models.ForeignKey(Post, related_name="images", blank=True, null=True)
     
-    image_path = models.ImageField(upload_to="images/%Y/%m/%d")
-    url = models.CharField(max_length=150, blank=True)
+    image_path = models.ImageField(_("image_path"), upload_to="images/%Y/%m/%d")
+    url = models.CharField(_("url"), max_length=150, blank=True)
     
-    timestamp = models.DateTimeField(default=datetime.now, editable=False)
+    timestamp = models.DateTimeField(_("timestamp"), default=datetime.now, editable=False)
+    
+    class Meta:
+        verbose_name = _("image")
+        verbose_name_plural = _("images")
     
     def __unicode__(self):
         if self.pk is not None:
-            return "{{ %d }}" % self.pk
+            return u"{{ %d }}" % self.pk
         else:
-            return "deleted image"
+            return _("deleted image")
 
 
 class FeedHit(models.Model):
     
-    request_data = models.TextField()
-    created = models.DateTimeField(default=datetime.now)
+    request_data = models.TextField(_("request_data"))
+    created = models.DateTimeField(_("created"), default=datetime.now)
