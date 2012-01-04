@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 
 from biblion.models import Biblion, Post, Revision, Image
+from biblion.signals import post_published
 from biblion.utils.twitter import can_tweet
 from biblion.utils.slugify import slugify_unique
 
@@ -219,23 +220,22 @@ class AdminPostForm(forms.ModelForm):
     
     def save(self):
         post = super(AdminPostForm, self).save(commit=False)
-        
-        if post.pk is None:
-            if self.cleaned_data["publish"]:
-                post.published = datetime.datetime.now()
-        else:
-            if Post.objects.filter(pk=post.pk, published=None).count():
-                if self.cleaned_data["publish"]:
-                    post.published = datetime.datetime.now()
+        # only publish the first time publish has been checked
+        if (post.pk is None or Post.objects.filter(pk=post.pk, published=None).count()) and self.cleaned_data["publish"]:
+            post.published = datetime.datetime.now()
+            send_published_signal = True
         
         if self.cleaned_data["publish_date"]:
             post.published = self.cleaned_data["publish_date"]
-
+        
         post.markup_type = self.cleaned_data["markup_type"]
         post.teaser = self.cleaned_data["teaser"]
         post.content = self.cleaned_data["content"]
         post.updated = datetime.datetime.now()
         post.save()
+        
+        if send_published_signal:
+            post_published.send(sender=self, pk=post.pk)
         
         r = Revision()
         r.post = post
