@@ -32,6 +32,7 @@ class PostAdmin(admin.ModelAdmin):
         "content",
         "publish",
         "publish_date",
+        "sites",
     ]
     if can_tweet():
         fields.append("tweet")
