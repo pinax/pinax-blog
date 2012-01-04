@@ -67,8 +67,8 @@ class Post(models.Model):
         _("HTML"),
         _("Creole"),
         _("Markdown"),
-        _("reStructuredText")
-        _("Textile")
+        _("reStructuredText"),
+        _("Textile"),
     ]
     MARKUP_CHOICES = zip(range(1, 1 + len(markup_types)), markup_types)
     markup_type = models.IntegerField(_("markup type"), choices=MARKUP_CHOICES, default=1)
