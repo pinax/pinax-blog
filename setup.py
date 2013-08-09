@@ -3,10 +3,9 @@ from distutils.core import setup
 # see requirements.txt for dependencies
 
 
-
 setup(
     name = "biblion",
-    version = "1.0",
+    version = "1.0.1",
     author = "Eldarion",
     author_email = "development@eldarion.com",
     description = "the eldarion.com blog app intended to be suitable for site-level company and project blogs",
