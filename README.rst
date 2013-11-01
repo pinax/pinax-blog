@@ -19,10 +19,10 @@ Current features include:
 
 Setup Biblion in your project:
 
-# add to your ``INSTALLED_APPS``: ``'biblion',``
-# add to your ``urlpatterns`` something like: ``url(r'^blog/', include('biblion.urls')),``
-# run ``$ python manage.py syncdb``
-# run ``$ python manage.py runserver``
-# go to http://127.0.0.1:8000/admin/ and add some posts in the "biblion" section
-# go to http://127.0.0.1:8000/blog/ and enjoy!
+1. add to your ``INSTALLED_APPS``: ``'biblion',``
+2. add to your ``urlpatterns`` something like: ``url(r'^blog/', include('biblion.urls')),``
+3. run ``$ python manage.py syncdb``
+4. run ``$ python manage.py runserver``
+5. go to http://127.0.0.1:8000/admin/ and add some posts in the "biblion" section
+6. go to http://127.0.0.1:8000/blog/ and enjoy!
 
