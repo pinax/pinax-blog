@@ -14,6 +14,7 @@ setup(
     url = "http://github.com/eldarion/biblion",
     packages = [
         "biblion",
+        "biblion.parsers",
         "biblion.templatetags",
     ],
     package_data = {

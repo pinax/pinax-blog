@@ -2,12 +2,11 @@ from datetime import datetime
 
 from django import forms
 
-from django.core.exceptions import ImproperlyConfigured
 from django.utils.functional import curry
 
 from biblion.models import Post, Revision
-from biblion.settings import PARSER
 from biblion.utils import can_tweet, load_path_attr
+from biblion.settings import MARKUP_CHOICE_MAP
 
 
 class AdminPostForm(forms.ModelForm):
@@ -75,7 +74,7 @@ class AdminPostForm(forms.ModelForm):
                 if self.cleaned_data["publish"]:
                     post.published = datetime.now()
         
-        render_func = curry(load_path_attr(PARSER[0], **PARSER[1]))
+        render_func = curry(load_path_attr(MARKUP_CHOICE_MAP[self.cleaned_data["markup"]]["parser"]))
         
         post.teaser_html = render_func(self.cleaned_data["teaser"])
         post.content_html = render_func(self.cleaned_data["content"])

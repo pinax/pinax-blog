@@ -18,7 +18,7 @@ except ImportError:
     twitter = None
 
 from biblion.managers import PostManager
-from biblion.settings import ALL_SECTION_NAME, SECTIONS
+from biblion.settings import ALL_SECTION_NAME, SECTIONS, MARKUP_CHOICES
 from biblion.utils import can_tweet
 
 
@@ -37,6 +37,8 @@ class Post(models.Model):
     title = models.CharField(max_length=90)
     slug = models.SlugField()
     author = models.ForeignKey(User, related_name="posts")
+    
+    markup = models.CharField(max_length=25, choices=MARKUP_CHOICES)
     
     teaser_html = models.TextField(editable=False)
     content_html = models.TextField(editable=False)
