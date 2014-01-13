@@ -35,7 +35,7 @@ class LatestBlogPostNode(template.Node):
         except IndexError:
             latest_post = None
         context[self.context_var] = latest_post
-        return u""
+        return ""
 
 
 @register.tag
