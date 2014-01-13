@@ -58,7 +58,7 @@ class LatestSectionPostNode(template.Node):
         except IndexError:
             post = None
         context[self.context_var] = post
-        return u""
+        return ""
 
 
 @register.tag
@@ -78,7 +78,7 @@ class BlogSectionsNode(template.Node):
     def render(self, context):
         sections = [(ALL_SECTION_NAME, "All")] + SECTIONS
         context[self.context_var] = sections
-        return u""
+        return ""
 
 
 @register.tag
