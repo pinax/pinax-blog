@@ -2,6 +2,14 @@
 Biblion README
 ==============
 
+
+.. iamge:: https://travis-ci.org/eldarion/biblion.png
+  :target: https://travis-ci.org/eldarion/biblion
+
+.. image:: https://coveralls.io/repos/eldarion/biblion/badge.png
+  :target: https://coveralls.io/r/eldarion/biblion
+
+
 Biblion was the eldarion.com blog which we've extracted and open sourced. It
 is currently positioned as being used for site/project blogs such as
 eldarion.com and pinaxproject.com. We intend for this app to replace the
