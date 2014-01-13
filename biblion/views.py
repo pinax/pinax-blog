@@ -16,21 +16,21 @@ from biblion.signals import post_viewed
 
 
 def blog_index(request):
-    
+
     posts = Post.objects.current()
-    
+
     return render_to_response("biblion/blog_list.html", {
         "posts": posts,
     }, context_instance=RequestContext(request))
 
 
 def blog_section_list(request, section):
-    
+
     try:
         posts = Post.objects.section(section)
     except InvalidSection:
         raise Http404()
-    
+
     return render_to_response("biblion/blog_section_list.html", {
         "section_slug": section,
         "section_name": dict(Post.SECTION_CHOICES)[Post.section_idx(section)],
@@ -39,7 +39,7 @@ def blog_section_list(request, section):
 
 
 def blog_post_detail(request, **kwargs):
-    
+
     if "post_pk" in kwargs:
         if request.user.is_authenticated() and request.user.is_staff:
             queryset = Post.objects.all()
@@ -49,13 +49,13 @@ def blog_post_detail(request, **kwargs):
     else:
         queryset = Post.objects.current()
         queryset = queryset.filter(
-            published__year = int(kwargs["year"]),
-            published__month = int(kwargs["month"]),
-            published__day = int(kwargs["day"]),
+            published__year=int(kwargs["year"]),
+            published__month=int(kwargs["month"]),
+            published__day=int(kwargs["day"]),
         )
         post = get_object_or_404(queryset, slug=kwargs["slug"])
         post_viewed.send(sender=post, post=post, request=request)
-    
+
     return render_to_response("biblion/blog_post.html", {
         "post": post,
     }, context_instance=RequestContext(request))
@@ -76,34 +76,34 @@ def serialize_request(request):
 
 
 def blog_feed(request, section=None):
-    
+
     try:
         posts = Post.objects.section(section)
     except InvalidSection:
         raise Http404()
-    
+
     if section is None:
         section = ALL_SECTION_NAME
-    
+
     current_site = Site.objects.get_current()
-    
+
     feed_title = "%s Blog: %s" % (current_site.name, section[0].upper() + section[1:])
-    
+
     blog_url = "http://%s%s" % (current_site.domain, reverse("blog"))
-    
+
     url_name, kwargs = "blog_feed", {"section": section}
     feed_url = "http://%s%s" % (current_site.domain, reverse(url_name, kwargs=kwargs))
-    
+
     if posts:
         feed_updated = posts[0].published
     else:
         feed_updated = datetime(2009, 8, 1, 0, 0, 0)
-    
+
     # create a feed hit
     hit = FeedHit()
     hit.request_data = serialize_request(request)
     hit.save()
-    
+
     atom = render_to_string("biblion/atom_feed.xml", {
         "feed_id": feed_url,
         "feed_title": feed_title,

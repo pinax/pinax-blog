@@ -19,7 +19,7 @@ def can_tweet():
 
 def load_path_attr(path):
     i = path.rfind(".")
-    module, attr = path[:i], path[i+1:]
+    module, attr = path[:i], path[i + 1:]
     try:
         mod = import_module(module)
     except ImportError, e:

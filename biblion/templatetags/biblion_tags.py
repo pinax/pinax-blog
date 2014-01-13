@@ -8,10 +8,10 @@ register = template.Library()
 
 
 class LatestBlogPostsNode(template.Node):
-    
+
     def __init__(self, context_var):
         self.context_var = context_var
-    
+
     def render(self, context):
         latest_posts = Post.objects.current()[:5]
         context[self.context_var] = latest_posts
@@ -25,10 +25,10 @@ def latest_blog_posts(parser, token):
 
 
 class LatestBlogPostNode(template.Node):
-    
+
     def __init__(self, context_var):
         self.context_var = context_var
-    
+
     def render(self, context):
         try:
             latest_post = Post.objects.current()[0]
@@ -45,11 +45,11 @@ def latest_blog_post(parser, token):
 
 
 class LatestSectionPostNode(template.Node):
-    
+
     def __init__(self, section, context_var):
         self.section = template.Variable(section)
         self.context_var = context_var
-    
+
     def render(self, context):
         section = self.section.resolve(context)
         post = Post.objects.section(section, queryset=Post.objects.current())
@@ -71,10 +71,10 @@ def latest_section_post(parser, token):
 
 
 class BlogSectionsNode(template.Node):
-    
+
     def __init__(self, context_var):
         self.context_var = context_var
-    
+
     def render(self, context):
         sections = [(ALL_SECTION_NAME, "All")] + SECTIONS
         context[self.context_var] = sections
