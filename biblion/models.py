@@ -1,9 +1,9 @@
 # -*- coding: utf8 -*-
 import json
 try:
-    import urllib2 as urllib  # noqa
+    from urllib2 import urlopen  # noqa
 except ImportError:
-    import urllib  # noqa
+    from urllib.request import urlopen  # noqa
 
 from datetime import datetime
 
@@ -99,7 +99,7 @@ class Post(models.Model):
         if not self.tweet_text:
             current_site = Site.objects.get_current()
             api_url = "http://api.tr.im/api/trim_url.json"
-            u = urllib.urlopen("%s?url=http://%s%s" % (
+            u = urlopen("%s?url=http://%s%s" % (
                 api_url,
                 current_site.domain,
                 self.get_absolute_url(),
