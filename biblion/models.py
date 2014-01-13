@@ -102,7 +102,7 @@ class Post(models.Model):
                 self.get_absolute_url(),
             ))
             result = json.loads(u.read())
-            self.tweet_text = u"%s %s — %s" % (
+            self.tweet_text = "%s %s — %s" % (
                 settings.TWITTER_TWEET_PREFIX,
                 self.title,
                 result["url"],
@@ -165,7 +165,7 @@ class Revision(models.Model):
     view_count = models.IntegerField(default=0, editable=False)
 
     def __unicode__(self):
-        return 'Revision %s for %s' % (self.updated.strftime('%Y%m%d-%H%M'), self.post.slug)
+        return "Revision %s for %s" % (self.updated.strftime('%Y%m%d-%H%M'), self.post.slug)
 
     def inc_views(self):
         self.view_count += 1

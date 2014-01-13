@@ -15,7 +15,7 @@ class LatestBlogPostsNode(template.Node):
     def render(self, context):
         latest_posts = Post.objects.current()[:5]
         context[self.context_var] = latest_posts
-        return u""
+        return ""
 
 
 @register.tag

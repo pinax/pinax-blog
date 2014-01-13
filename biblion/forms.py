@@ -26,13 +26,13 @@ class AdminPostForm(forms.ModelForm):
     )
     publish = forms.BooleanField(
         required=False,
-        help_text=u"Checking this will publish this articles on the site",
+        help_text="Checking this will publish this articles on the site",
     )
 
     if can_tweet():
         tweet = forms.BooleanField(
             required=False,
-            help_text=u"Checking this will send out a tweet for this post",
+            help_text="Checking this will send out a tweet for this post",
         )
 
     class Meta:

@@ -22,7 +22,7 @@ def load_path_attr(path):
     module, attr = path[:i], path[i + 1:]
     try:
         mod = import_module(module)
-    except ImportError, e:
+    except ImportError as e:
         raise ImproperlyConfigured("Error importing %s: '%s'" % (module, e))
     try:
         attr = getattr(mod, attr)
