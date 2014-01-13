@@ -3,8 +3,8 @@ Biblion README
 ==============
 
 
-.. iamge:: https://travis-ci.org/eldarion/biblion.png
-  :target: https://travis-ci.org/eldarion/biblion
+.. image:: https://travis-ci.org/eldarion/biblion.png?branch=master
+   :target: https://travis-ci.org/eldarion/biblion
 
 .. image:: https://coveralls.io/repos/eldarion/biblion/badge.png
   :target: https://coveralls.io/r/eldarion/biblion
