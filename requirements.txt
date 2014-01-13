@@ -3,4 +3,4 @@ creole==1.2
 Pygments==1.6
 
 # optional
-python-twitter==0.8.1
+python-twitter==1.10.2
