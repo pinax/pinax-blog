@@ -7,6 +7,7 @@ from django.utils.functional import curry
 from biblion.models import Post, Revision
 from biblion.utils import can_tweet, load_path_attr
 from biblion.settings import MARKUP_CHOICE_MAP
+from biblion.signals import post_published
 
 
 class AdminPostForm(forms.ModelForm):
@@ -56,6 +57,7 @@ class AdminPostForm(forms.ModelForm):
             self.fields["publish"].initial = bool(post.published)
 
     def save(self):
+        published = False
         post = super(AdminPostForm, self).save(commit=False)
 
         if post.pk is None:
@@ -65,6 +67,7 @@ class AdminPostForm(forms.ModelForm):
             if Post.objects.filter(pk=post.pk, published=None).count():
                 if self.cleaned_data["publish"]:
                     post.published = datetime.now()
+                    published = True
 
         render_func = curry(load_path_attr(MARKUP_CHOICE_MAP[self.cleaned_data["markup"]]["parser"]))
 
@@ -85,5 +88,8 @@ class AdminPostForm(forms.ModelForm):
 
         if can_tweet() and self.cleaned_data["tweet"]:
             post.tweet()
+
+        if published:
+            post_published.send(sender=Post, post=post)
 
         return post
