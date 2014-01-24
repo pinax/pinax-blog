@@ -63,6 +63,7 @@ class AdminPostForm(forms.ModelForm):
         if post.pk is None:
             if self.cleaned_data["publish"]:
                 post.published = datetime.now()
+                published = True
         else:
             if Post.objects.filter(pk=post.pk, published=None).count():
                 if self.cleaned_data["publish"]:
