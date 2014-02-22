@@ -195,3 +195,14 @@ class FeedHit(models.Model):
 
     request_data = models.TextField()
     created = models.DateTimeField(default=datetime.now)
+
+
+class ReviewComment(models.Model):
+   
+    post = models.ForeignKey(Post, related_name="review_comments") 
+        
+    review_text = models.TextField()
+    timestamp = models.DateTimeField(default=datetime.now)
+    addressed = models.BooleanField(default=False)
+
+
