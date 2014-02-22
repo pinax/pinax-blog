@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.functional import curry
 
-from biblion.models import Post, Image
+from biblion.models import Post, Image, ReviewComment
 from biblion.forms import AdminPostForm
 from biblion.utils import can_tweet
 
@@ -10,6 +10,9 @@ class ImageInline(admin.TabularInline):
     model = Image
     fields = ["image_path"]
 
+class ReviewInline(admin.TabularInline):
+    model = ReviewComment
+    
 
 class PostAdmin(admin.ModelAdmin):
     list_display = ["title", "published_flag", "section"]
@@ -30,6 +33,7 @@ class PostAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
     inlines = [
         ImageInline,
+        ReviewInline,
     ]
 
     def published_flag(self, obj):
