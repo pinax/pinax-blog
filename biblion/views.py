@@ -47,8 +47,7 @@ def blog_post_detail(request, **kwargs):
         else:
             raise Http404()
     elif "post_secret_key" in kwargs:
-        queryset = Post.objects.all()
-        post = get_object_or_404(queryset, secret_key=kwargs["post_secret_key"])
+        post = get_object_or_404(Post, secret_key=kwargs["post_secret_key"])
     else:
         queryset = Post.objects.current()
         queryset = queryset.filter(

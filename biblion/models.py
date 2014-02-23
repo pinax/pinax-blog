@@ -32,7 +32,6 @@ def ig(L, i):
         yield x[i]
 
 
-
 class Post(models.Model):
 
     SECTION_CHOICES = [(1, settings.BIBLION_ALL_SECTION_NAME)] + \
@@ -58,7 +57,12 @@ class Post(models.Model):
     updated = models.DateTimeField(null=True, blank=True, editable=False)  # when last revision was created (even if not published)
     published = models.DateTimeField(null=True, blank=True, editable=False)  # when last published
 
-    secret_key = models.CharField(max_length=8, blank=True) # allows url for sharing unpublished posts to unauthenticated users
+    secret_key = models.CharField(
+        max_length=8,
+        blank=True,
+        unique=True,
+        help="allows url for sharing unpublished posts to unauthenticated users"
+    )
 
     view_count = models.IntegerField(default=0, editable=False)
 
@@ -98,7 +102,6 @@ class Post(models.Model):
     class Meta:
         ordering = ("-published",)
         get_latest_by = "published"
-        unique_together = ("secret_key",)
 
     objects = PostManager()
 
@@ -139,12 +142,14 @@ class Post(models.Model):
         self.updated_at = datetime.now()
         if not self.secret_key:
             # Generate a random secret key
-            self.secret_key = ''.join(choice(letters) for _ in xrange(8))
+            self.secret_key = "".join(choice(letters) for _ in xrange(8))
         super(Post, self).save(**kwargs)
 
     @property
     def sharable_url(self):
-        """ An url to reach this post (there is a secret url for sharing unpublished posts to outside users).
+        """
+        An url to reach this post (there is a secret url for sharing unpublished
+        posts to outside users).
         """
         if not self.published:
             if self.secret_key:
