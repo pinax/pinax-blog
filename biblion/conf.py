@@ -10,6 +10,7 @@ DEFAULT_MARKUP_CHOICE_MAP = {
     "markdown": {"label": "Markdown", "parser": "biblion.parsers.markdown_parser.parse"}
 }
 
+
 class BiblionAppConf(AppConf):
 
     ALL_SECTION_NAME = "all"
@@ -18,7 +19,7 @@ class BiblionAppConf(AppConf):
     MARKUP_CHOICES = DEFAULT_MARKUP_CHOICE_MAP
 
     def configure_markup_choices(self, value):
-        return  [
+        return [
             (key, value[key]["label"])
             for key in value.keys()
         ]

@@ -10,6 +10,7 @@ class ImageInline(admin.TabularInline):
     model = Image
     fields = ["image_path"]
 
+
 class ReviewInline(admin.TabularInline):
     model = ReviewComment
 

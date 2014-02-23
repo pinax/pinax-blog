@@ -19,7 +19,7 @@ install:
   - pip install -e . --use-mirrors
 
 script:
-  - flake8 --max-line-length=100 --max-complexity=10 --statistics --benchmark biblion
+  - flake8 --max-line-length=135 --max-complexity=10 --statistics --benchmark biblion
   - coverage run setup.py test
   - coverage report
 

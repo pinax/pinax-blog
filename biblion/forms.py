@@ -69,7 +69,11 @@ class AdminPostForm(forms.ModelForm):
                     post.published = datetime.now()
                     published = True
 
-        render_func = curry(load_path_attr(settings.BIBLION_MARKUP_CHOICE_MAP[self.cleaned_data["markup"]]["parser"]))
+        render_func = curry(
+            load_path_attr(
+                settings.BIBLION_MARKUP_CHOICE_MAP[self.cleaned_data["markup"]]["parser"]
+            )
+        )
 
         post.teaser_html = render_func(self.cleaned_data["teaser"])
         post.content_html = render_func(self.cleaned_data["content"])

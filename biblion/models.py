@@ -51,7 +51,7 @@ class Post(models.Model):
     tweet_text = models.CharField(max_length=140, editable=False)
 
     created = models.DateTimeField(default=datetime.now, editable=False)  # when first revision was created
-    updated = models.DateTimeField(null=True, blank=True, editable=False)  # when last revision was create (even if not published)
+    updated = models.DateTimeField(null=True, blank=True, editable=False)  # when last revision was created (even if not published)
     published = models.DateTimeField(null=True, blank=True, editable=False)  # when last published
 
     view_count = models.IntegerField(default=0, editable=False)
@@ -207,5 +207,3 @@ class ReviewComment(models.Model):
     review_text = models.TextField()
     timestamp = models.DateTimeField(default=datetime.now)
     addressed = models.BooleanField(default=False)
-
-
