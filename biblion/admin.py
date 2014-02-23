@@ -16,7 +16,7 @@ class ReviewInline(admin.TabularInline):
 
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ["title", "published_flag", "section"]
+    list_display = ["title", "published_flag", "section", "show_secret_share_url"]
     list_filter = ["section"]
     form = AdminPostForm
     fields = [
@@ -27,8 +27,11 @@ class PostAdmin(admin.ModelAdmin):
         "markup",
         "teaser",
         "content",
+        "sharable_url",
         "publish",
     ]
+    readonly_fields = ["sharable_url"]
+
     if can_tweet():
         fields.append("tweet")
     prepopulated_fields = {"slug": ("title",)}
@@ -36,6 +39,11 @@ class PostAdmin(admin.ModelAdmin):
         ImageInline,
         ReviewInline,
     ]
+
+    def show_secret_share_url(self, obj):
+        return '<a href="%s">%s</a>' % (obj.sharable_url, obj.sharable_url)
+    show_secret_share_url.short_description = "Share this url"
+    show_secret_share_url.allow_tags = True
 
     def published_flag(self, obj):
         return bool(obj.published)
