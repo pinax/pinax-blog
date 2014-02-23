@@ -61,7 +61,7 @@ class Post(models.Model):
         max_length=8,
         blank=True,
         unique=True,
-        help="allows url for sharing unpublished posts to unauthenticated users"
+        help_text="allows url for sharing unpublished posts to unauthenticated users"
     )
 
     view_count = models.IntegerField(default=0, editable=False)
