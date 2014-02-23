@@ -24,10 +24,14 @@ from biblion.managers import PostManager
 from biblion.settings import ALL_SECTION_NAME, SECTIONS, MARKUP_CHOICES
 from biblion.utils import can_tweet
 
+from string import letters
+from random import choice
+
 
 def ig(L, i):
     for x in L:
         yield x[i]
+
 
 
 class Post(models.Model):
@@ -50,6 +54,8 @@ class Post(models.Model):
     created = models.DateTimeField(default=datetime.now, editable=False)  # when first revision was created
     updated = models.DateTimeField(null=True, blank=True, editable=False)  # when last revision was create (even if not published)
     published = models.DateTimeField(null=True, blank=True, editable=False)  # when last published
+
+    secret_key = models.CharField(max_length=8, blank=True) # allows url for sharing unpublished posts to unauthenticated users
 
     view_count = models.IntegerField(default=0, editable=False)
 
@@ -89,6 +95,7 @@ class Post(models.Model):
     class Meta:
         ordering = ("-published",)
         get_latest_by = "published"
+        unique_together = ("secret_key",)
 
     objects = PostManager()
 
@@ -127,7 +134,22 @@ class Post(models.Model):
 
     def save(self, **kwargs):
         self.updated_at = datetime.now()
+        if not self.secret_key:
+            # Generate a random secret key
+            self.secret_key = ''.join(choice(letters) for _ in xrange(8))
         super(Post, self).save(**kwargs)
+
+    @property
+    def sharable_url(self):
+        """ An url to reach this post (there is a secret url for sharing unpublished posts to outside users).
+        """
+        if not self.published:
+            if self.secret_key:
+                return reverse("blog_post_secret", kwargs={"post_secret_key": self.secret_key})
+            else:
+                return "A secret sharable url for non-authenticated users is generated when you save this post."
+        else:
+            return self.get_absolute_url()
 
     def get_absolute_url(self):
         if self.published:
