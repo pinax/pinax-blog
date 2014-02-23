@@ -1,8 +1,8 @@
 from django.contrib import admin
 from django.utils.functional import curry
 
-from biblion.models import Post, Image, ReviewComment
 from biblion.forms import AdminPostForm
+from biblion.models import Post, Image, ReviewComment
 from biblion.utils import can_tweet
 
 
@@ -12,7 +12,7 @@ class ImageInline(admin.TabularInline):
 
 class ReviewInline(admin.TabularInline):
     model = ReviewComment
-    
+
 
 class PostAdmin(admin.ModelAdmin):
     list_display = ["title", "published_flag", "section"]

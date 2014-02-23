@@ -1,0 +1,4 @@
+[run]
+source = biblion
+omit = biblion/tests/*
+branch = 1

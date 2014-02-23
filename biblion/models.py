@@ -7,7 +7,6 @@ except ImportError:
 
 from datetime import datetime
 
-from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 from django.contrib.auth.models import User
@@ -20,8 +19,8 @@ try:
 except ImportError:
     twitter = None
 
+from biblion.conf import settings
 from biblion.managers import PostManager
-from biblion.settings import ALL_SECTION_NAME, SECTIONS, MARKUP_CHOICES
 from biblion.utils import can_tweet
 
 
@@ -32,7 +31,11 @@ def ig(L, i):
 
 class Post(models.Model):
 
-    SECTION_CHOICES = [(1, ALL_SECTION_NAME)] + zip(range(2, 2 + len(SECTIONS)), ig(SECTIONS, 1))
+    SECTION_CHOICES = [(1, settings.BIBLION_ALL_SECTION_NAME)] + \
+        zip(
+            range(2, 2 + len(settings.BIBLION_SECTIONS)),
+            ig(settings.BIBLION_SECTIONS, 1)
+        )
 
     section = models.IntegerField(choices=SECTION_CHOICES)
 
@@ -40,7 +43,7 @@ class Post(models.Model):
     slug = models.SlugField()
     author = models.ForeignKey(User, related_name="posts")
 
-    markup = models.CharField(max_length=25, choices=MARKUP_CHOICES)
+    markup = models.CharField(max_length=25, choices=settings.BIBLION_MARKUP_CHOICES)
 
     teaser_html = models.TextField(editable=False)
     content_html = models.TextField(editable=False)
@@ -58,9 +61,9 @@ class Post(models.Model):
         """
         given a slug return the index for it
         """
-        if slug == ALL_SECTION_NAME:
+        if slug == settings.BIBLION_ALL_SECTION_NAME:
             return 1
-        return dict(zip(ig(SECTIONS, 0), range(2, 2 + len(SECTIONS))))[slug]
+        return dict(zip(ig(settings.BIBLION_SECTIONS, 0), range(2, 2 + len(settings.BIBLION_SECTIONS))))[slug]
 
     @property
     def section_slug(self):
@@ -69,8 +72,8 @@ class Post(models.Model):
         need a property to turn them back into their slug form
         """
         if self.section == 1:
-            return ALL_SECTION_NAME
-        return dict(zip(range(2, 2 + len(SECTIONS)), ig(SECTIONS, 0)))[self.section]
+            return settings.BIBLION_ALL_SECTION_NAME
+        return dict(zip(range(2, 2 + len(settings.BIBLION_SECTIONS)), ig(settings.BIBLION_SECTIONS, 0)))[self.section]
 
     def rev(self, rev_id):
         return self.revisions.get(pk=rev_id)
@@ -198,9 +201,9 @@ class FeedHit(models.Model):
 
 
 class ReviewComment(models.Model):
-   
-    post = models.ForeignKey(Post, related_name="review_comments") 
-        
+
+    post = models.ForeignKey(Post, related_name="review_comments")
+
     review_text = models.TextField()
     timestamp = models.DateTimeField(default=datetime.now)
     addressed = models.BooleanField(default=False)

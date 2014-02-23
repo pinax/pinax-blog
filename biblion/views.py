@@ -9,9 +9,9 @@ from django.utils import simplejson as json
 
 from django.contrib.sites.models import Site
 
+from biblion.conf import settings
 from biblion.exceptions import InvalidSection
 from biblion.models import Post, FeedHit
-from biblion.settings import ALL_SECTION_NAME
 from biblion.signals import post_viewed
 
 
@@ -83,7 +83,7 @@ def blog_feed(request, section=None):
         raise Http404()
 
     if section is None:
-        section = ALL_SECTION_NAME
+        section = settings.BIBLION_ALL_SECTION_NAME
 
     current_site = Site.objects.get_current()
 

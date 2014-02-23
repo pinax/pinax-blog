@@ -1,12 +1,11 @@
 from datetime import datetime
 
 from django import forms
-
 from django.utils.functional import curry
 
+from biblion.conf import settings
 from biblion.models import Post, Revision
 from biblion.utils import can_tweet, load_path_attr
-from biblion.settings import MARKUP_CHOICE_MAP
 from biblion.signals import post_published
 
 
@@ -70,7 +69,7 @@ class AdminPostForm(forms.ModelForm):
                     post.published = datetime.now()
                     published = True
 
-        render_func = curry(load_path_attr(MARKUP_CHOICE_MAP[self.cleaned_data["markup"]]["parser"]))
+        render_func = curry(load_path_attr(settings.BIBLION_MARKUP_CHOICE_MAP[self.cleaned_data["markup"]]["parser"]))
 
         post.teaser_html = render_func(self.cleaned_data["teaser"])
         post.content_html = render_func(self.cleaned_data["content"])

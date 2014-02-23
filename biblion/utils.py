@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 try:
     from django.utils.importlib import import_module
@@ -9,6 +8,9 @@ try:
     import twitter
 except ImportError:
     twitter = None
+
+
+from biblion.conf import settings
 
 
 def can_tweet():

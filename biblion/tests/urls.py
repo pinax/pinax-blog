@@ -6,5 +6,5 @@ except ImportError:
 
 urlpatterns = patterns(
     "",
-    (r"^blog/", include("biblion.urls")),
+    (r"^", include("biblion.urls")),
 )

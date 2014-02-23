@@ -1,8 +1,8 @@
 from django.db import models
 from django.db.models.query import Q
 
+from biblion.conf import settings
 from biblion.exceptions import InvalidSection
-from biblion.settings import ALL_SECTION_NAME
 
 
 class PostManager(models.Manager):
@@ -25,5 +25,5 @@ class PostManager(models.Manager):
                 section_idx = self.model.section_idx(value)
             except KeyError:
                 raise InvalidSection
-            all_sections = Q(section=self.model.section_idx(ALL_SECTION_NAME))
+            all_sections = Q(section=self.model.section_idx(settings.BIBLION_ALL_SECTION_NAME))
             return queryset.filter(all_sections | Q(section=section_idx))
