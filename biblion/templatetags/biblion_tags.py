@@ -76,7 +76,8 @@ class BlogSectionsNode(template.Node):
         self.context_var = context_var
 
     def render(self, context):
-        sections = [(settings.ALL_SECTION_NAME, "All")] + settings.SECTIONS
+        sections = [(settings.BIBLION_ALL_SECTION_NAME, "All")]
+        sections += settings.BIBLION_SECTIONS
         context[self.context_var] = sections
         return ""
 
