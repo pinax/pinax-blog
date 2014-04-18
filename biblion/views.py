@@ -1,3 +1,5 @@
+import json
+
 from datetime import datetime
 
 from django.core.urlresolvers import reverse
@@ -5,7 +7,6 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.template.loader import render_to_string
-from django.utils import simplejson as json
 
 from django.contrib.sites.models import Site
 
@@ -115,4 +116,4 @@ def blog_feed(request, section=None):
         "entries": posts,
         "current_site": current_site,
     })
-    return HttpResponse(atom, mimetype="application/atom+xml")
+    return HttpResponse(atom, content_type="application/atom+xml")
