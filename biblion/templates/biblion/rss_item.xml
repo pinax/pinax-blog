@@ -1,0 +1,12 @@
+<item>
+    <title>{{ entry.title }}</title>
+    <link>http://{{ current_site.domain }}{{ entry.get_absolute_url }}</link>
+    <description>{{ entry.teaser_html|safe }}</description>
+    <content:encoded>
+        {{ entry.teaser_html|safe }}
+        {{ entry.content_html|safe }}
+    </content:encoded>
+    <pubDate>{{ entry.published|date:"Y-m-d\TH:i:s\Z" }}</pubDate>
+    <lastBuildDate>{{ entry.updated|date:"Y-m-d\TH:i:s\Z" }}</lastBuildDate>
+    <author>{{ entry.author.get_full_name }}</author>
+</item>

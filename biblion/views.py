@@ -78,7 +78,7 @@ def serialize_request(request):
     return json.dumps(data)
 
 
-def blog_feed(request, section=None):
+def blog_feed(request, section=None, feed_type=None):
 
     try:
         posts = Post.objects.section(section)
@@ -88,13 +88,22 @@ def blog_feed(request, section=None):
     if section is None:
         section = settings.BIBLION_ALL_SECTION_NAME
 
+    if feed_type == "atom":
+        feed_template = "biblion/atom_feed.xml"
+        feed_mimetype = "application/atom+xml"
+    elif feed_type == "rss":
+        feed_template = "biblion/rss_feed.xml"
+        feed_mimetype = "application/rss+xml"
+    else:
+        raise Http404()
+
     current_site = Site.objects.get_current()
 
     feed_title = "%s Blog: %s" % (current_site.name, section[0].upper() + section[1:])
 
     blog_url = "http://%s%s" % (current_site.domain, reverse("blog"))
 
-    url_name, kwargs = "blog_feed", {"section": section}
+    url_name, kwargs = "blog_feed", {"section": section, "feed_type": feed_type}
     feed_url = "http://%s%s" % (current_site.domain, reverse(url_name, kwargs=kwargs))
 
     if posts:
@@ -107,7 +116,7 @@ def blog_feed(request, section=None):
     hit.request_data = serialize_request(request)
     hit.save()
 
-    atom = render_to_string("biblion/atom_feed.xml", {
+    feed = render_to_string(feed_template, {
         "feed_id": feed_url,
         "feed_title": feed_title,
         "blog_url": blog_url,
@@ -116,4 +125,4 @@ def blog_feed(request, section=None):
         "entries": posts,
         "current_site": current_site,
     })
-    return HttpResponse(atom, content_type="application/atom+xml")
+    return HttpResponse(feed, content_type=feed_mimetype)
