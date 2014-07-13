@@ -20,6 +20,6 @@ Current features include:
 
  * support for multiple channels (e.g. technical vs business)
  * use of Creole as markup format
- * Atom feeds
+ * Atom and RSS feeds
  * previewing of blog posts before publishing
  * optional ability to announce new posts on twitter
