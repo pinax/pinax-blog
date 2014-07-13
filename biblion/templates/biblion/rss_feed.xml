@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+
+<channel>
+  <title>{{ feed_title }}</title>
+  <link>{{ blog_url }}</link>
+  <lastBuildDate>{{ feed_updated }}</lastBuildDate>
+  <description>Free web building tutorials</description>
+    {% for entry in entries %}
+        {% include "biblion/rss_item.xml" %}
+    {% endfor %}
+</channel>
+
+</rss>

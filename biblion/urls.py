@@ -8,4 +8,5 @@ urlpatterns = patterns(
     url(r'^post/(?P<post_pk>\d+)/$', "biblion.views.blog_post_detail", name="blog_post_pk"),
     url(r'^post/(?P<post_secret_key>\w+)/$', "biblion.views.blog_post_detail", name="blog_post_secret"),
     url(r'^(?P<section>[-\w]+)/$', "biblion.views.blog_section_list", name="blog_section"),
+    url(r'^feed/(?P<section>[-\w]+)/(?P<feed_type>[-\w]+)/$', "biblion.views.blog_feed", name="blog_feed"),
 )
