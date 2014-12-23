@@ -17,6 +17,7 @@ class BiblionAppConf(AppConf):
     SECTIONS = []
     MARKUP_CHOICE_MAP = DEFAULT_MARKUP_CHOICE_MAP
     MARKUP_CHOICES = DEFAULT_MARKUP_CHOICE_MAP
+    SLUG_UNIQUE = False
 
     def configure_markup_choices(self, value):
         return [

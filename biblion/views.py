@@ -4,7 +4,7 @@ from datetime import datetime
 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, Http404
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import redirect, render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.template.loader import render_to_string
 
@@ -51,12 +51,19 @@ def blog_post_detail(request, **kwargs):
         post = get_object_or_404(Post, secret_key=kwargs["post_secret_key"])
     else:
         queryset = Post.objects.current()
-        queryset = queryset.filter(
-            published__year=int(kwargs["year"]),
-            published__month=int(kwargs["month"]),
-            published__day=int(kwargs["day"]),
-        )
-        post = get_object_or_404(queryset, slug=kwargs["slug"])
+        if "post_slug" in kwargs:
+            if not settings.BIBLION_SLUG_UNIQUE:
+                raise Http404()
+            post = get_object_or_404(queryset, slug=kwargs["post_slug"])
+        else:
+            queryset = queryset.filter(
+                published__year=int(kwargs["year"]),
+                published__month=int(kwargs["month"]),
+                published__day=int(kwargs["day"]),
+            )
+            post = get_object_or_404(queryset, slug=kwargs["slug"])
+            if settings.BIBLION_SLUG_UNIQUE:
+                return redirect(post.get_absolute_url(), permanent=True)
         post_viewed.send(sender=post, post=post, request=request)
 
     return render_to_response("biblion/blog_post.html", {

@@ -43,7 +43,7 @@ class Post(models.Model):
     section = models.IntegerField(choices=SECTION_CHOICES)
 
     title = models.CharField(max_length=90)
-    slug = models.SlugField()
+    slug = models.SlugField(unique=settings.BIBLION_SLUG_UNIQUE)
     author = models.ForeignKey(User, related_name="posts")
 
     markup = models.CharField(max_length=25, choices=settings.BIBLION_MARKUP_CHOICES)
@@ -161,13 +161,19 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         if self.published:
-            name = "blog_post"
-            kwargs = {
-                "year": self.published.strftime("%Y"),
-                "month": self.published.strftime("%m"),
-                "day": self.published.strftime("%d"),
-                "slug": self.slug,
-            }
+            if settings.BIBLION_SLUG_UNIQUE:
+                name = "blog_post_slug"
+                kwargs = {
+                    "post_slug": self.slug
+                }
+            else:
+                name = "blog_post"
+                kwargs = {
+                    "year": self.published.strftime("%Y"),
+                    "month": self.published.strftime("%m"),
+                    "day": self.published.strftime("%d"),
+                    "slug": self.slug,
+                }
         else:
             name = "blog_post_pk"
             kwargs = {
