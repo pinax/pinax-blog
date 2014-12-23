@@ -2,6 +2,7 @@ import json
 
 from datetime import datetime
 
+from django.db.models import Q
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, Http404
 from django.shortcuts import redirect, render_to_response, get_object_or_404
@@ -20,8 +21,18 @@ def blog_index(request):
 
     posts = Post.objects.current()
 
+    if request.GET.get("q"):
+        posts = posts.filter(
+            Q(title__icontains=request.GET.get("q")) |
+            Q(teaser_html__icontains=request.GET.get("q")) |
+            Q(content_html__icontains=request.GET.get("q"))
+        )
+        if posts.count() == 1:
+            return redirect(posts.get().get_absolute_url())
+
     return render_to_response("biblion/blog_list.html", {
         "posts": posts,
+        "search_term": request.GET.get("q")
     }, context_instance=RequestContext(request))
 
 
