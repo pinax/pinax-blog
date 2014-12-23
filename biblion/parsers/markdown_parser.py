@@ -15,6 +15,8 @@ class ImageLookupImagePattern(ImagePattern):
                 return image.image_path.url
             except Image.DoesNotExist:
                 pass
+            except ValueError:
+                return url
         return ""
 
 
