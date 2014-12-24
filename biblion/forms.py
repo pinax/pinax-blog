@@ -9,6 +9,21 @@ from biblion.utils import can_tweet, load_path_attr
 from biblion.signals import post_published
 
 
+FIELDS = [
+    "section",
+    "author",
+    "markup",
+    "title",
+    "slug",
+    "teaser",
+    "content",
+    "publish",
+]
+
+if can_tweet():
+    FIELDS.append("tweet")
+
+
 class AdminPostForm(forms.ModelForm):
 
     title = forms.CharField(
@@ -37,6 +52,7 @@ class AdminPostForm(forms.ModelForm):
 
     class Meta:
         model = Post
+        fields = FIELDS
 
     def __init__(self, *args, **kwargs):
         super(AdminPostForm, self).__init__(*args, **kwargs)
