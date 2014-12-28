@@ -11,6 +11,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.utils.html import strip_tags
 
 from django.contrib.sites.models import Site
 
@@ -51,6 +52,8 @@ class Post(models.Model):
     teaser_html = models.TextField(editable=False)
     content_html = models.TextField(editable=False)
 
+    description = models.TextField(blank=True)
+    primary_image = models.ForeignKey("Image", null=True, blank=True, related_name="+")
     tweet_text = models.CharField(max_length=140, editable=False)
 
     created = models.DateTimeField(default=datetime.now, editable=False)  # when first revision was created
@@ -65,6 +68,18 @@ class Post(models.Model):
     )
 
     view_count = models.IntegerField(default=0, editable=False)
+
+    @property
+    def meta_description(self):
+        if self.description:
+            return self.description
+        else:
+            return strip_tags(self.teaser_html)
+
+    @property
+    def meta_image(self):
+        if self.primary_image:
+            return self.primary_image.image_path.url
 
     @staticmethod
     def section_idx(slug):

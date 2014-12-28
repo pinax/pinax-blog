@@ -27,6 +27,8 @@ class PostAdmin(admin.ModelAdmin):
         "markup",
         "teaser",
         "content",
+        "description",
+        "primary_image",
         "sharable_url",
         "publish",
     ]

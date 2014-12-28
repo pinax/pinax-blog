@@ -17,6 +17,8 @@ FIELDS = [
     "slug",
     "teaser",
     "content",
+    "description",
+    "primary_image",
     "publish",
 ]
 
@@ -38,6 +40,9 @@ class AdminPostForm(forms.ModelForm):
     )
     content = forms.CharField(
         widget=forms.Textarea(attrs={"style": "width: 80%; height: 300px;"})
+    )
+    description = forms.CharField(
+        widget=forms.Textarea(attrs={"style": "width: 80%;"}),
     )
     publish = forms.BooleanField(
         required=False,
