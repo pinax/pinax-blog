@@ -14,7 +14,7 @@ from django.contrib.sites.models import Site
 from biblion.conf import settings
 from biblion.exceptions import InvalidSection
 from biblion.models import Post, FeedHit
-from biblion.signals import post_viewed
+from biblion.signals import post_viewed, post_redirected
 
 
 def blog_index(request):
@@ -74,6 +74,7 @@ def blog_post_detail(request, **kwargs):
             )
             post = get_object_or_404(queryset, slug=kwargs["slug"])
             if settings.BIBLION_SLUG_UNIQUE:
+                post_redirected.send(sender=post, post=post, request=request)
                 return redirect(post.get_absolute_url(), permanent=True)
         post_viewed.send(sender=post, post=post, request=request)
 
