@@ -1,3 +1,6 @@
+{% load biblion_tags %}
+
+
 <entry xml:base="http://{{ current_site.domain }}/">
     <id>http://{{ current_site.domain }}{{ entry.get_absolute_url }}</id>
     <title>{{ entry.title }}</title>
@@ -12,14 +15,14 @@
     
     <summary type="xhtml">
         <div xmlns="http://www.w3.org/1999/xhtml">
-            {{ entry.teaser_html|safe }}
+            {{ entry.teaser|to_html }}
         </div>
     </summary>
     
     <content type="xhtml" xml:lang="en">
         <div xmlns="http://www.w3.org/1999/xhtml">
-            {{ entry.teaser_html|safe }}
-            {{ entry.content_html|safe }}
+            {{ entry.teaser|to_html }}
+            {{ entry.content|to_html }}
         </div>
     </content>
 </entry>

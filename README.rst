@@ -11,7 +11,7 @@ internal Pinax blog app once we've made it feature complete.
 Current features include:
 
  * support for multiple channels (e.g. technical vs business)
- * use of Creole as markup format
+ * use HTML, Creole, Markdown, reStructuredText or Textile as markup formats
  * Atom feeds
  * previewing of blog posts before publishing
  * optional ability to announce new posts on twitter
