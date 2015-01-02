@@ -29,5 +29,5 @@ man_pages = [(
     1
 ),]
 
-version = pkg_resources.get_distribution("django-{{ app_name }}").version
+version = pkg_resources.get_distribution("biblion").version
 release = version
