@@ -16,7 +16,7 @@ Biblion README
 .. image:: https://img.shields.io/pypi/v/biblion.svg
     :target:  https://pypi.python.org/pypi/biblion/
 
-.. image:: https://img.shields.io/badge/license-BSD-blue.svg
+.. image:: https://img.shields.io/badge/license-MIT-blue.svg
     :target:  https://pypi.python.org/pypi/biblion/
 
 
