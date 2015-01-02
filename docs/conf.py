@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 
-import os
-import sys
+import pkg_resources
 
 
 extensions = []
@@ -10,7 +9,7 @@ source_suffix = ".rst"
 master_doc = "index"
 project = "biblion"
 copyright_holder = "Eldarion, Inc."
-copyright = "2014, {0}".format(copyright_holder)
+copyright = "2015, {0}".format(copyright_holder)
 exclude_patterns = ["_build"]
 pygments_style = "sphinx"
 html_theme = "default"
@@ -30,8 +29,5 @@ man_pages = [(
     1
 ),]
 
-sys.path.insert(0, os.pardir)
-m = __import__("biblion")
-
-version = m.__version__
+version = pkg_resources.get_distribution("django-{{ app_name }}").version
 release = version

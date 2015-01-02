@@ -4,11 +4,11 @@ Biblion README
 
 
 
-.. image:: https://img.shields.io/travis/eldarion/biblion.svg
-    :target: https://travis-ci.org/eldarion/biblion
+.. image:: https://img.shields.io/travis/pinax/biblion.svg
+    :target: https://travis-ci.org/pinax/biblion
 
-.. image:: https://img.shields.io/coveralls/eldarion/biblion.svg
-    :target: https://coveralls.io/r/eldarion/biblion
+.. image:: https://img.shields.io/coveralls/pinax/biblion.svg
+    :target: https://coveralls.io/r/pinax/biblion
 
 .. image:: https://img.shields.io/pypi/dm/biblion.svg
     :target:  https://pypi.python.org/pypi/biblion/
@@ -21,16 +21,17 @@ Biblion README
 
 
 
-Biblion was the eldarion.com blog which we've extracted and open sourced. It
-is currently positioned as being used for site/project blogs such as
-eldarion.com and eldarionproject.com. We intend for this app to replace the
-internal eldarion blog app once we've made it feature complete.
+Biblion was the eldarion.com blog which we've extracted and open sourced.
 
 
 Current features include:
 
  * support for multiple channels (e.g. technical vs business)
- * use of Creole as markup format
+ * use of Creole and Markdown as markup format
  * Atom and RSS feeds
  * previewing of blog posts before publishing
  * optional ability to announce new posts on twitter
+ * Traditional date based urls or simpler slug-only urls, via configuration
+ * Control over opengraph and twitter card meta data per post
+ * Review comments per post for multi-author workflows
+

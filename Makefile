@@ -2,11 +2,11 @@ all: init docs test
 
 init:
 	python setup.py develop
-	pip install tox coverage Sphinx
+	pip install detox coverage Sphinx
 
 test:
 	coverage erase
-	tox
+	detox
 	coverage html
 
 docs: documentation

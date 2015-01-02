@@ -1,4 +1,7 @@
 [run]
 source = biblion
-omit = biblion/tests/*
+omit = biblion/tests/*,biblion/admin.py
 branch = 1
+
+[report]
+omit = biblion/tests/*,biblion/admin.py

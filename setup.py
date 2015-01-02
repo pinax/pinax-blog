@@ -12,22 +12,21 @@ def read(*parts):
 
 PACKAGE = "biblion"
 NAME = "biblion"
-DESCRIPTION = "the eldarion.com blog app intended to be suitable for site-level company and project blogs"
-AUTHOR = "Eldarion"
-AUTHOR_EMAIL = "paltman@eldarion.com"
-URL = "http://github.com/eldarion/biblion"
-VERSION = __import__(PACKAGE).__version__
+DESCRIPTION = "a Django blog app"
+AUTHOR = "Pinax Team"
+AUTHOR_EMAIL = "team@pinaxproject.com"
+URL = "https://github.com/pinax/biblion"
 
 
 setup(
     name=NAME,
-    version=VERSION,
+    version="2.6.0",
     description=DESCRIPTION,
     long_description=read("README.rst"),
     url=URL,
     license="MIT",
     packages=find_packages(),
-    package_data = {
+    package_data={
         "biblion": [
             "templates/biblion/*.xml",
         ]
@@ -39,9 +38,6 @@ setup(
         "Markdown>=2.4",
         "Pygments>=1.6"
     ],
-    tests_require=[
-        "Django>=1.4",
-    ],
     test_suite="runtests.runtests",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
@@ -52,8 +48,8 @@ setup(
         "Programming Language :: Python",
         "Framework :: Django",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 2.6",
-        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 2",
+        "Programming Language :: Python :: 3",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
     zip_safe=False
