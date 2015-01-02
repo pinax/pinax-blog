@@ -33,13 +33,16 @@ def ig(L, i):
         yield x[i]
 
 
+BIBLION_SECTION_CHOICES = [(1, settings.BIBLION_ALL_SECTION_NAME)]
+BIBLION_SECTION_CHOICES += zip(
+    range(2, 2 + len(settings.BIBLION_SECTIONS)),
+    ig(settings.BIBLION_SECTIONS, 1)
+)
+
+
 class Post(models.Model):
 
-    SECTION_CHOICES = [(1, settings.BIBLION_ALL_SECTION_NAME)] + \
-        zip(
-            range(2, 2 + len(settings.BIBLION_SECTIONS)),
-            ig(settings.BIBLION_SECTIONS, 1)
-        )
+    SECTION_CHOICES = BIBLION_SECTION_CHOICES
 
     section = models.IntegerField(choices=SECTION_CHOICES)
 
