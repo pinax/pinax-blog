@@ -20,7 +20,7 @@ URL = "https://github.com/pinax/biblion"
 
 setup(
     name=NAME,
-    version="2.6.1",
+    version="2.6.2",
     description=DESCRIPTION,
     long_description=read("README.rst"),
     url=URL,
@@ -32,7 +32,7 @@ setup(
         ]
     },
     install_requires=[
-        "django-appconf>=0.5",
+        "django-appconf>=1.0.1",
         "Pillow>=2.0",
         "creole>=1.2",
         "Markdown>=2.4",
