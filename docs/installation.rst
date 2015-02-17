@@ -6,13 +6,13 @@ Installation
 
 * Install the development version::
 
-    pip install biblion
+    pip install pinax-blog
 
-* Add ``biblion`` to your ``INSTALLED_APPS`` setting::
+* Add `pinax-blog` to your `INSTALLED_APPS` setting::
 
     INSTALLED_APPS = (
         # ...
-        "biblion",
+        "pinax.blog",
         # ...
     )
 

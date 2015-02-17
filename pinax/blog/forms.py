@@ -3,10 +3,10 @@ from datetime import datetime
 from django import forms
 from django.utils.functional import curry
 
-from biblion.conf import settings
-from biblion.models import Post, Revision
-from biblion.utils import can_tweet, load_path_attr
-from biblion.signals import post_published
+from .conf import settings
+from .models import Post, Revision
+from .utils import can_tweet, load_path_attr
+from .signals import post_published
 
 
 FIELDS = [
@@ -92,7 +92,7 @@ class AdminPostForm(forms.ModelForm):
 
         render_func = curry(
             load_path_attr(
-                settings.BIBLION_MARKUP_CHOICE_MAP[self.cleaned_data["markup"]]["parser"]
+                settings.PINAX_BLOG_MARKUP_CHOICE_MAP[self.cleaned_data["markup"]]["parser"]
             )
         )
 

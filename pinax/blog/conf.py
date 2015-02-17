@@ -6,12 +6,12 @@ from appconf import AppConf
 
 
 DEFAULT_MARKUP_CHOICE_MAP = {
-    "creole": {"label": "Creole", "parser": "biblion.parsers.creole_parser.parse"},
-    "markdown": {"label": "Markdown", "parser": "biblion.parsers.markdown_parser.parse"}
+    "creole": {"label": "Creole", "parser": "pinax.blog.parsers.creole_parser.parse"},
+    "markdown": {"label": "Markdown", "parser": "pinax.blog.parsers.markdown_parser.parse"}
 }
 
 
-class BiblionAppConf(AppConf):
+class PinaxBlogAppConf(AppConf):
 
     ALL_SECTION_NAME = "all"
     SECTIONS = []
@@ -24,3 +24,6 @@ class BiblionAppConf(AppConf):
             (key, value[key]["label"])
             for key in value.keys()
         ]
+
+    class Meta:
+        prefix = "pinax_blog"

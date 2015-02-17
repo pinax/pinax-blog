@@ -20,9 +20,9 @@ try:
 except ImportError:
     twitter = None
 
-from biblion.conf import settings
-from biblion.managers import PostManager
-from biblion.utils import can_tweet
+from .conf import settings
+from .managers import PostManager
+from .utils import can_tweet
 
 from string import letters
 from random import choice
@@ -33,24 +33,24 @@ def ig(L, i):
         yield x[i]
 
 
-BIBLION_SECTION_CHOICES = [(1, settings.BIBLION_ALL_SECTION_NAME)]
-BIBLION_SECTION_CHOICES += zip(
-    range(2, 2 + len(settings.BIBLION_SECTIONS)),
-    ig(settings.BIBLION_SECTIONS, 1)
+PINAX_BLOG_SECTION_CHOICES = [(1, settings.PINAX_BLOG_ALL_SECTION_NAME)]
+PINAX_BLOG_SECTION_CHOICES += zip(
+    range(2, 2 + len(settings.PINAX_BLOG_SECTIONS)),
+    ig(settings.PINAX_BLOG_SECTIONS, 1)
 )
 
 
 class Post(models.Model):
 
-    SECTION_CHOICES = BIBLION_SECTION_CHOICES
+    SECTION_CHOICES = PINAX_BLOG_SECTION_CHOICES
 
     section = models.IntegerField(choices=SECTION_CHOICES)
 
     title = models.CharField(max_length=90)
-    slug = models.SlugField(unique=settings.BIBLION_SLUG_UNIQUE)
+    slug = models.SlugField(unique=settings.PINAX_BLOG_SLUG_UNIQUE)
     author = models.ForeignKey(User, related_name="posts")
 
-    markup = models.CharField(max_length=25, choices=settings.BIBLION_MARKUP_CHOICES)
+    markup = models.CharField(max_length=25, choices=settings.PINAX_BLOG_MARKUP_CHOICES)
 
     teaser_html = models.TextField(editable=False)
     content_html = models.TextField(editable=False)
@@ -89,9 +89,9 @@ class Post(models.Model):
         """
         given a slug return the index for it
         """
-        if slug == settings.BIBLION_ALL_SECTION_NAME:
+        if slug == settings.PINAX_BLOG_ALL_SECTION_NAME:
             return 1
-        return dict(zip(ig(settings.BIBLION_SECTIONS, 0), range(2, 2 + len(settings.BIBLION_SECTIONS))))[slug]
+        return dict(zip(ig(settings.PINAX_BLOG_SECTIONS, 0), range(2, 2 + len(settings.PINAX_BLOG_SECTIONS))))[slug]
 
     @property
     def section_slug(self):
@@ -100,8 +100,8 @@ class Post(models.Model):
         need a property to turn them back into their slug form
         """
         if self.section == 1:
-            return settings.BIBLION_ALL_SECTION_NAME
-        return dict(zip(range(2, 2 + len(settings.BIBLION_SECTIONS)), ig(settings.BIBLION_SECTIONS, 0)))[self.section]
+            return settings.PINAX_BLOG_ALL_SECTION_NAME
+        return dict(zip(range(2, 2 + len(settings.PINAX_BLOG_SECTIONS)), ig(settings.PINAX_BLOG_SECTIONS, 0)))[self.section]
 
     def rev(self, rev_id):
         return self.revisions.get(pk=rev_id)
@@ -179,7 +179,7 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         if self.published:
-            if settings.BIBLION_SLUG_UNIQUE:
+            if settings.PINAX_BLOG_SLUG_UNIQUE:
                 name = "blog_post_slug"
                 kwargs = {
                     "post_slug": self.slug

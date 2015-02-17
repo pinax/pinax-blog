@@ -1,7 +1,7 @@
 from markdown import Markdown
 from markdown.inlinepatterns import ImagePattern, IMAGE_LINK_RE
 
-from biblion.models import Image
+from .models import Image
 
 
 class ImageLookupImagePattern(ImagePattern):

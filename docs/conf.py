@@ -7,7 +7,7 @@ extensions = []
 templates_path = []
 source_suffix = ".rst"
 master_doc = "index"
-project = "biblion"
+project = "pinax-blog"
 copyright_holder = "Eldarion, Inc."
 copyright = "2015, {0}".format(copyright_holder)
 exclude_patterns = ["_build"]
@@ -29,5 +29,5 @@ man_pages = [(
     1
 ),]
 
-version = pkg_resources.get_distribution("biblion").version
+version = pkg_resources.get_distribution("pinax-blog").version
 release = version

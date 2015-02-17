@@ -1,9 +1,9 @@
 from django.contrib import admin
 from django.utils.functional import curry
 
-from biblion.forms import AdminPostForm
-from biblion.models import Post, Image, ReviewComment
-from biblion.utils import can_tweet
+from .forms import AdminPostForm
+from .models import Post, Image, ReviewComment
+from .utils import can_tweet
 
 
 class ImageInline(admin.TabularInline):

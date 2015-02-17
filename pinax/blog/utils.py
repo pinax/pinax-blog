@@ -10,7 +10,7 @@ except ImportError:
     twitter = None
 
 
-from biblion.conf import settings
+from .conf import settings
 
 
 def can_tweet():

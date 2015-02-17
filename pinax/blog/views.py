@@ -11,10 +11,10 @@ from django.template.loader import render_to_string
 
 from django.contrib.sites.models import Site
 
-from biblion.conf import settings
-from biblion.exceptions import InvalidSection
-from biblion.models import Post, FeedHit
-from biblion.signals import post_viewed, post_redirected
+from .conf import settings
+from .exceptions import InvalidSection
+from .models import Post, FeedHit
+from .signals import post_viewed, post_redirected
 
 
 def blog_index(request):
@@ -30,7 +30,7 @@ def blog_index(request):
         if posts.count() == 1:
             return redirect(posts.get().get_absolute_url())
 
-    return render_to_response("biblion/blog_list.html", {
+    return render_to_response("pinax/blog/blog_list.html", {
         "posts": posts,
         "search_term": request.GET.get("q")
     }, context_instance=RequestContext(request))
@@ -43,7 +43,7 @@ def blog_section_list(request, section):
     except InvalidSection:
         raise Http404()
 
-    return render_to_response("biblion/blog_section_list.html", {
+    return render_to_response("pinax/blog/blog_section_list.html", {
         "section_slug": section,
         "section_name": dict(Post.SECTION_CHOICES)[Post.section_idx(section)],
         "posts": posts,
@@ -63,7 +63,7 @@ def blog_post_detail(request, **kwargs):
     else:
         queryset = Post.objects.current()
         if "post_slug" in kwargs:
-            if not settings.BIBLION_SLUG_UNIQUE:
+            if not settings.PINAX_BLOG_SLUG_UNIQUE:
                 raise Http404()
             post = get_object_or_404(queryset, slug=kwargs["post_slug"])
         else:
@@ -73,12 +73,12 @@ def blog_post_detail(request, **kwargs):
                 published__day=int(kwargs["day"]),
             )
             post = get_object_or_404(queryset, slug=kwargs["slug"])
-            if settings.BIBLION_SLUG_UNIQUE:
+            if settings.PINAX_BLOG_SLUG_UNIQUE:
                 post_redirected.send(sender=post, post=post, request=request)
                 return redirect(post.get_absolute_url(), permanent=True)
         post_viewed.send(sender=post, post=post, request=request)
 
-    return render_to_response("biblion/blog_post.html", {
+    return render_to_response("pinax/blog/blog_post.html", {
         "post": post,
     }, context_instance=RequestContext(request))
 
@@ -105,13 +105,13 @@ def blog_feed(request, section=None, feed_type=None):
         raise Http404()
 
     if section is None:
-        section = settings.BIBLION_ALL_SECTION_NAME
+        section = settings.PINAX_BLOG_ALL_SECTION_NAME
 
     if feed_type == "atom":
-        feed_template = "biblion/atom_feed.xml"
+        feed_template = "pinax/blog/atom_feed.xml"
         feed_mimetype = "application/atom+xml"
     elif feed_type == "rss":
-        feed_template = "biblion/rss_feed.xml"
+        feed_template = "pinax/blog/rss_feed.xml"
         feed_mimetype = "application/rss+xml"
     else:
         raise Http404()

@@ -7,7 +7,7 @@
   <lastBuildDate>{{ feed_updated }}</lastBuildDate>
   <description>Free web building tutorials</description>
     {% for entry in entries %}
-        {% include "biblion/rss_item.xml" %}
+        {% include "pinax/blog/rss_item.xml" %}
     {% endfor %}
 </channel>
 

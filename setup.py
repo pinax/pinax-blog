@@ -10,25 +10,24 @@ def read(*parts):
         return fp.read()
 
 
-PACKAGE = "biblion"
-NAME = "biblion"
+NAME = "pinax-blog"
 DESCRIPTION = "a Django blog app"
 AUTHOR = "Pinax Team"
 AUTHOR_EMAIL = "team@pinaxproject.com"
-URL = "https://github.com/pinax/biblion"
+URL = "https://github.com/pinax/pinax-blog"
 
 
 setup(
     name=NAME,
-    version="2.6.2",
+    version="3.0.0",
     description=DESCRIPTION,
     long_description=read("README.rst"),
     url=URL,
     license="MIT",
     packages=find_packages(),
     package_data={
-        "biblion": [
-            "templates/biblion/*.xml",
+        "pinax.blog": [
+            "templates/pinax/blog/*.xml",
         ]
     },
     install_requires=[

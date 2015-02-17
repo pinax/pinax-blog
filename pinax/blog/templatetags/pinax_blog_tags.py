@@ -1,7 +1,7 @@
 from django import template
 
-from biblion.models import Post
-from biblion.conf import settings
+from .models import Post
+from .conf import settings
 
 
 register = template.Library()
@@ -76,8 +76,8 @@ class BlogSectionsNode(template.Node):
         self.context_var = context_var
 
     def render(self, context):
-        sections = [(settings.BIBLION_ALL_SECTION_NAME, "All")]
-        sections += settings.BIBLION_SECTIONS
+        sections = [(settings.PINAX_BLOG_ALL_SECTION_NAME, "All")]
+        sections += settings.PINAX_BLOG_SECTIONS
         context[self.context_var] = sections
         return ""
 

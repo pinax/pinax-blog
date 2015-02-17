@@ -1,31 +1,30 @@
-==============
-Biblion README
-==============
+==========
+pinax-blog
+==========
+
+This app used to be named `biblion` when originally developed by Eldarion, Inc.
+Upon donating the Pinax, the app was renamed to `pinax-blog`, making it easier
+to find and know what it is.
+
 
 .. image:: https://badges.gitter.im/Join%20Chat.svg
-   :alt: Join the chat at https://gitter.im/pinax/biblion
-   :target: https://gitter.im/pinax/biblion?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+   :alt: Join the chat at https://gitter.im/pinax/pinax-blog
+   :target: https://gitter.im/pinax/pinax-blog?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
 
+.. image:: https://img.shields.io/travis/pinax/pinax-blog.svg
+    :target: https://travis-ci.org/pinax/pinax-blog
 
+.. image:: https://img.shields.io/coveralls/pinax/pinax-blog.svg
+    :target: https://coveralls.io/r/pinax/pinax-blog
 
-.. image:: https://img.shields.io/travis/pinax/biblion.svg
-    :target: https://travis-ci.org/pinax/biblion
+.. image:: https://img.shields.io/pypi/dm/pinax-blog.svg
+    :target:  https://pypi.python.org/pypi/pinax-blog/
 
-.. image:: https://img.shields.io/coveralls/pinax/biblion.svg
-    :target: https://coveralls.io/r/pinax/biblion
-
-.. image:: https://img.shields.io/pypi/dm/biblion.svg
-    :target:  https://pypi.python.org/pypi/biblion/
-
-.. image:: https://img.shields.io/pypi/v/biblion.svg
-    :target:  https://pypi.python.org/pypi/biblion/
+.. image:: https://img.shields.io/pypi/v/pinax-blog.svg
+    :target:  https://pypi.python.org/pypi/pinax-blog/
 
 .. image:: https://img.shields.io/badge/license-MIT-blue.svg
-    :target:  https://pypi.python.org/pypi/biblion/
-
-
-
-Biblion was the eldarion.com blog which we've extracted and open sourced.
+    :target:  https://pypi.python.org/pypi/pinax-blog/
 
 
 Current features include:
@@ -38,4 +37,5 @@ Current features include:
  * Traditional date based urls or simpler slug-only urls, via configuration
  * Control over opengraph and twitter card meta data per post
  * Review comments per post for multi-author workflows
+ * public but secret urls for unpublished blog posts for easier review
 

@@ -6,5 +6,5 @@ except ImportError:
 
 urlpatterns = patterns(
     "",
-    (r"^", include("biblion.urls")),
+    (r"^", include("pinax.blog.urls")),
 )

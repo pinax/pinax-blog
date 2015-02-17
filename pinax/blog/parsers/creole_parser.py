@@ -6,7 +6,7 @@ from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name, TextLexer
 from pygments.util import ClassNotFound
 
-from biblion.models import Image
+from .models import Image
 
 
 class Rules:
@@ -183,11 +183,11 @@ class ImageLookupHtmlEmitter(HtmlEmitter):
             return "<img src=\"%s\" />" % (image.image_path.url,)
 
 
-class BiblionHtmlEmitter(PygmentsHtmlEmitter, ImageLookupHtmlEmitter):
+class PinaxBlogHtmlEmitter(PygmentsHtmlEmitter, ImageLookupHtmlEmitter):
     pass
 
 
-def parse(text, emitter=BiblionHtmlEmitter):
+def parse(text, emitter=PinaxBlogHtmlEmitter):
     return emitter(Parser(text).parse()).emit()
 
 
