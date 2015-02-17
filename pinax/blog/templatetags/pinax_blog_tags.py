@@ -1,7 +1,7 @@
 from django import template
 
-from .models import Post
-from .conf import settings
+from ..models import Post
+from ..conf import settings
 
 
 register = template.Library()
