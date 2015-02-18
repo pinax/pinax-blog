@@ -4,15 +4,9 @@ from __future__ import unicode_literals
 from django.db import models, migrations
 from django.utils import timezone
 from django.conf import settings
-import taggit.managers
 
 
 class Migration(migrations.Migration):
-
-    dependencies = [
-        ('taggit', '0001_initial'),
-        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-    ]
 
     operations = [
         migrations.CreateModel(
@@ -57,7 +51,6 @@ class Migration(migrations.Migration):
                 ('view_count', models.IntegerField(default=0, editable=False)),
                 ('author', models.ForeignKey(related_name='posts', to=settings.AUTH_USER_MODEL)),
                 ('primary_image', models.ForeignKey(related_name='+', blank=True, to='blog.Image', null=True)),
-                ('tags', taggit.managers.TaggableManager(to='taggit.Tag', through='taggit.TaggedItem', help_text='A comma-separated list of tags.', verbose_name='Tags')),
             ],
             options={
                 'ordering': ('-published',),
