@@ -1,6 +1,5 @@
-from datetime import datetime
-
 from django import forms
+from django.utils import timezone
 from django.utils.functional import curry
 
 from .conf import settings
@@ -98,7 +97,7 @@ class AdminPostForm(forms.ModelForm):
 
         post.teaser_html = render_func(self.cleaned_data["teaser"])
         post.content_html = render_func(self.cleaned_data["content"])
-        post.updated = datetime.now()
+        post.updated = timezone.now()
         post.save()
 
         r = Revision()

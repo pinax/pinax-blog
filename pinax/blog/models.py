@@ -5,12 +5,11 @@ try:
 except ImportError:
     from urllib.request import urlopen  # noqa
 
-from datetime import datetime
-
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.utils import timezone
 from django.utils.html import strip_tags
 
 from django.contrib.sites.models import Site
@@ -59,7 +58,7 @@ class Post(models.Model):
     primary_image = models.ForeignKey("Image", null=True, blank=True, related_name="+")
     tweet_text = models.CharField(max_length=140, editable=False)
 
-    created = models.DateTimeField(default=datetime.now, editable=False)  # when first revision was created
+    created = models.DateTimeField(default=timezone.now, editable=False)  # when first revision was created
     updated = models.DateTimeField(null=True, blank=True, editable=False)  # when last revision was created (even if not published)
     published = models.DateTimeField(null=True, blank=True, editable=False)  # when last published
 
@@ -157,7 +156,7 @@ class Post(models.Model):
             )
 
     def save(self, **kwargs):
-        self.updated_at = datetime.now()
+        self.updated_at = timezone.now()
         if not self.secret_key:
             # Generate a random secret key
             self.secret_key = "".join(choice(letters) for _ in xrange(8))
@@ -216,7 +215,7 @@ class Revision(models.Model):
 
     author = models.ForeignKey(User, related_name="revisions")
 
-    updated = models.DateTimeField(default=datetime.now)
+    updated = models.DateTimeField(default=timezone.now)
     published = models.DateTimeField(null=True, blank=True)
 
     view_count = models.IntegerField(default=0, editable=False)
@@ -236,7 +235,7 @@ class Image(models.Model):
     image_path = models.ImageField(upload_to="images/%Y/%m/%d")
     url = models.CharField(max_length=150, blank=True)
 
-    timestamp = models.DateTimeField(default=datetime.now, editable=False)
+    timestamp = models.DateTimeField(default=timezone.now, editable=False)
 
     def __unicode__(self):
         if self.pk is not None:
@@ -248,7 +247,7 @@ class Image(models.Model):
 class FeedHit(models.Model):
 
     request_data = models.TextField()
-    created = models.DateTimeField(default=datetime.now)
+    created = models.DateTimeField(default=timezone.now)
 
 
 class ReviewComment(models.Model):
@@ -256,5 +255,5 @@ class ReviewComment(models.Model):
     post = models.ForeignKey(Post, related_name="review_comments")
 
     review_text = models.TextField()
-    timestamp = models.DateTimeField(default=datetime.now)
+    timestamp = models.DateTimeField(default=timezone.now)
     addressed = models.BooleanField(default=False)

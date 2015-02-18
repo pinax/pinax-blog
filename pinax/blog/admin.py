@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils import timezone
 from django.utils.functional import curry
 
 from .forms import AdminPostForm
@@ -15,10 +16,18 @@ class ReviewInline(admin.TabularInline):
     model = ReviewComment
 
 
+def make_published(modeladmin, request, queryset):
+    queryset = queryset.exclude(state=Post.STATE_CHOICES[-1][0], published__isnull=False)
+    queryset.update(state=Post.STATE_CHOICES[-1][0])
+    queryset.filter(published__isnull=True).update(published=timezone.now())
+make_published.short_description = "Publish selected posts"
+
+
 class PostAdmin(admin.ModelAdmin):
-    list_display = ["title", "published_flag", "section", "show_secret_share_url"]
-    list_filter = ["section"]
+    list_display = ["title", "state", "section", "published", "show_secret_share_url"]
+    list_filter = ["section", "state"]
     form = AdminPostForm
+    actions = [make_published]
     fields = [
         "section",
         "title",
@@ -30,7 +39,7 @@ class PostAdmin(admin.ModelAdmin):
         "description",
         "primary_image",
         "sharable_url",
-        "publish",
+        "state"
     ]
     readonly_fields = ["sharable_url"]
 
@@ -46,11 +55,6 @@ class PostAdmin(admin.ModelAdmin):
         return '<a href="%s">%s</a>' % (obj.sharable_url, obj.sharable_url)
     show_secret_share_url.short_description = "Share this url"
     show_secret_share_url.allow_tags = True
-
-    def published_flag(self, obj):
-        return bool(obj.published)
-    published_flag.short_description = "Published"
-    published_flag.boolean = True
 
     def formfield_for_dbfield(self, db_field, **kwargs):
         request = kwargs.get("request")
