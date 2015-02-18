@@ -15,6 +15,9 @@ class PinaxBlogAppConf(AppConf):
 
     ALL_SECTION_NAME = "all"
     SECTIONS = []
+    UNPUBLISHED_STATES = [
+        "Draft"
+    ]
     MARKUP_CHOICE_MAP = DEFAULT_MARKUP_CHOICE_MAP
     MARKUP_CHOICES = DEFAULT_MARKUP_CHOICE_MAP
     SLUG_UNIQUE = False

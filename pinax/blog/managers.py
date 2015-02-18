@@ -5,10 +5,13 @@ from .conf import settings
 from .exceptions import InvalidSection
 
 
+PUBLISHED_STATE = len(settings.PINAX_BLOG_UNPUBLISHED_STATES) + 1
+
+
 class PostManager(models.Manager):
 
     def published(self):
-        return self.exclude(published=None)
+        return self.filter(published__isnull=False, state=PUBLISHED_STATE)
 
     def current(self):
         return self.published().order_by("-published")

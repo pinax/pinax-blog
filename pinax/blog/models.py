@@ -37,11 +37,14 @@ PINAX_BLOG_SECTION_CHOICES += zip(
     range(2, 2 + len(settings.PINAX_BLOG_SECTIONS)),
     ig(settings.PINAX_BLOG_SECTIONS, 1)
 )
+STATES = settings.PINAX_BLOG_UNPUBLISHED_STATES + ["Published"]
+PINAX_BLOG_STATE_CHOICES = zip(range(1, 1 + len(STATES)), STATES)
 
 
 class Post(models.Model):
 
     SECTION_CHOICES = PINAX_BLOG_SECTION_CHOICES
+    STATE_CHOICES = PINAX_BLOG_STATE_CHOICES
 
     section = models.IntegerField(choices=SECTION_CHOICES)
 
@@ -61,6 +64,7 @@ class Post(models.Model):
     created = models.DateTimeField(default=timezone.now, editable=False)  # when first revision was created
     updated = models.DateTimeField(null=True, blank=True, editable=False)  # when last revision was created (even if not published)
     published = models.DateTimeField(null=True, blank=True, editable=False)  # when last published
+    state = models.IntegerField(choices=STATE_CHOICES, default=STATE_CHOICES[0][0])
 
     secret_key = models.CharField(
         max_length=8,

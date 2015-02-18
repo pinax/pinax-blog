@@ -18,7 +18,7 @@ FIELDS = [
     "content",
     "description",
     "primary_image",
-    "publish",
+    "state",
 ]
 
 if can_tweet():
@@ -44,11 +44,6 @@ class AdminPostForm(forms.ModelForm):
         widget=forms.Textarea(attrs={"style": "width: 80%;"}),
         required=False
     )
-    publish = forms.BooleanField(
-        required=False,
-        help_text="Checking this will publish this articles on the site",
-    )
-
     if can_tweet():
         tweet = forms.BooleanField(
             required=False,
@@ -73,23 +68,14 @@ class AdminPostForm(forms.ModelForm):
             self.fields["teaser"].initial = latest_revision.teaser
             self.fields["content"].initial = latest_revision.content
 
-            # @@@ can a post be unpublished then re-published? should be pulled
-            # from latest revision maybe?
-            self.fields["publish"].initial = bool(post.published)
-
     def save(self):
         published = False
         post = super(AdminPostForm, self).save(commit=False)
 
-        if post.pk is None:
-            if self.cleaned_data["publish"]:
-                post.published = datetime.now()
+        if post.pk is None or Post.objects.filter(pk=post.pk, published=None).count():
+            if self.cleaned_data["state"] == Post.STATE_CHOICES[-1][0]:
+                post.published = timezone.now()
                 published = True
-        else:
-            if Post.objects.filter(pk=post.pk, published=None).count():
-                if self.cleaned_data["publish"]:
-                    post.published = datetime.now()
-                    published = True
 
         render_func = curry(
             load_path_attr(
