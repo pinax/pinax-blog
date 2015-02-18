@@ -29,13 +29,13 @@ to find and know what it is.
 
 Current features include:
 
- * support for multiple channels (e.g. technical vs business)
- * use of Creole and Markdown as markup format
- * Atom and RSS feeds
- * previewing of blog posts before publishing
- * optional ability to announce new posts on twitter
- * Traditional date based urls or simpler slug-only urls, via configuration
- * Control over opengraph and twitter card meta data per post
- * Review comments per post for multi-author workflows
- * public but secret urls for unpublished blog posts for easier review
+* support for multiple channels (e.g. technical vs business)
+* use of Creole and Markdown as markup format
+* Atom and RSS feeds
+* previewing of blog posts before publishing
+* optional ability to announce new posts on twitter
+* Traditional date based urls or simpler slug-only urls, via configuration
+* Control over opengraph and twitter card meta data per post
+* Review comments per post for multi-author workflows
+* public but secret urls for unpublished blog posts for easier review
 
