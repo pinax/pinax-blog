@@ -42,6 +42,7 @@ class AdminPostForm(forms.ModelForm):
     )
     description = forms.CharField(
         widget=forms.Textarea(attrs={"style": "width: 80%;"}),
+        required=False
     )
     publish = forms.BooleanField(
         required=False,
@@ -66,6 +67,7 @@ class AdminPostForm(forms.ModelForm):
         # grab the latest revision of the Post instance
         latest_revision = post.latest()
 
+        self.fields["tags"].required = False
         if latest_revision:
             # set initial data from the latest revision
             self.fields["teaser"].initial = latest_revision.teaser
