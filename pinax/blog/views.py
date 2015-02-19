@@ -18,7 +18,6 @@ from .signals import post_viewed, post_redirected
 
 
 def blog_index(request, section=None):
-
     if section:
         try:
             posts = Post.objects.section(section)
