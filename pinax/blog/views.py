@@ -21,7 +21,6 @@ def blog_index(request, section=None):
     if section:
         try:
             posts = Post.objects.section(section)
-            print "posts count: " + str(posts.count())
         except InvalidSection:
             raise Http404()
     else:
