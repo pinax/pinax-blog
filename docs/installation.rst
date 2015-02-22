@@ -16,6 +16,12 @@ Installation
         # ...
     )
 
+* Optionally, if you want `creole` support for a mark up choice:
+
+    pip install creole
+
+NOTE: the `creole` package does not support Python 3
+
 
 .. _dependencies:
 

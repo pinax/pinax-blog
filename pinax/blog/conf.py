@@ -5,10 +5,21 @@ from django.conf import settings  # noqa
 from appconf import AppConf
 
 
+def is_installed(package):
+    try:
+        __import__(package)
+        return True
+    except ImportError:
+        return False
+
+
 DEFAULT_MARKUP_CHOICE_MAP = {
-    "creole": {"label": "Creole", "parser": "pinax.blog.parsers.creole_parser.parse"},
     "markdown": {"label": "Markdown", "parser": "pinax.blog.parsers.markdown_parser.parse"}
 }
+if is_installed("creole"):
+    DEFAULT_MARKUP_CHOICE_MAP.update({
+        "creole": {"label": "Creole", "parser": "pinax.blog.parsers.creole_parser.parse"},
+    })
 
 
 class PinaxBlogAppConf(AppConf):

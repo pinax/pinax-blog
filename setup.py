@@ -33,7 +33,6 @@ setup(
     install_requires=[
         "django-appconf>=1.0.1",
         "Pillow>=2.0",
-        "creole>=1.2",
         "Markdown>=2.4",
         "Pygments>=1.6"
     ],

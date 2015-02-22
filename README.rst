@@ -30,7 +30,7 @@ to find and know what it is.
 Current features include:
 
 * support for multiple channels (e.g. technical vs business)
-* use of Creole and Markdown as markup format
+* use of Creole (optional) and Markdown as markup format
 * Atom and RSS feeds
 * previewing of blog posts before publishing
 * optional ability to announce new posts on twitter
