@@ -26,6 +26,9 @@ to find and know what it is.
 .. image:: https://img.shields.io/badge/license-MIT-blue.svg
     :target:  https://pypi.python.org/pypi/pinax-blog/
 
+.. image:: https://readthedocs.org/projects/pinax-blog/badge/?version=latest
+    :target: https://pinax-blog.readthedocs.org/
+
 
 Current features include:
 
