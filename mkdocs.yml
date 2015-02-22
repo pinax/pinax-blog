@@ -1,10 +1,10 @@
 site_name: pinax-blog
 pages:
 - [index.md, Home]
-- [changelog.md, Change Log]
 - [usage.md, Usage]
 - [templates.md, Templates]
 - [customize-admin.md, Customize Admin]
+- [changelog.md, Change Log]
 theme: readthedocs
 repo_url: https://github.com/pinax/pinax-blog
 site_description: "documentation for pinax-blog, a blog app for Django sites"
