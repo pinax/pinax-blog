@@ -1,0 +1,5 @@
+site_name: pinax-blog
+pages:
+- [index.md, Home]
+- [changelog.md, Change Log]
+theme: readthedocs

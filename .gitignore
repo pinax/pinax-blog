@@ -8,3 +8,4 @@ MANIFEST
 *.egg
 docs/_build/
 htmlcov/
+site/
