@@ -23,7 +23,11 @@ from .conf import settings
 from .managers import PostManager
 from .utils import can_tweet
 
-from string import letters
+try:
+    from string import letters
+except ImportError:
+    from string import ascii_letters as letters
+
 from random import choice
 
 
