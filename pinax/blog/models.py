@@ -167,7 +167,7 @@ class Post(models.Model):
         self.updated_at = timezone.now()
         if not self.secret_key:
             # Generate a random secret key
-            self.secret_key = "".join(choice(letters) for _ in xrange(8))
+            self.secret_key = "".join(choice(letters) for _ in range(8))
         super(Post, self).save(**kwargs)
 
     @property
