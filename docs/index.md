@@ -3,7 +3,7 @@
 Originally named `biblion`, the eldarion.com blog app intended to be suitable
 for site-level company and project blogs, is now known as `pinax-blog`.
 
-## Installation
+## Quickstart
 
 Install the development version:
 
@@ -17,12 +17,9 @@ Add `pinax-blog` to your `INSTALLED_APPS` setting:
         # ...
     )
 
-Optionally, if you want `creole` support for a mark up choice:
+Add entry to your `urls.py`:
 
-    pip install creole
-
-
-NOTE: the `creole` package does not support Python 3
+    url(r"^/blog/", include("pinax.blog.urls"))
 
 
 ## Dependencies
@@ -31,3 +28,9 @@ NOTE: the `creole` package does not support Python 3
 * `Pillow>=2.0`
 * `Markdown>=2.6`
 * `Pygments>=2.0.2`
+
+Optionally, if you want `creole` support for a mark up choice:
+
+    pip install creole
+
+NOTE: the `creole` package does not support Python 3

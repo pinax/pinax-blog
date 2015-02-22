@@ -2,4 +2,7 @@ site_name: pinax-blog
 pages:
 - [index.md, Home]
 - [changelog.md, Change Log]
+- [usage.md, Usage]
+- [templates.md, Templates]
+- [customize-admin.md, Customize Admin]
 theme: readthedocs
