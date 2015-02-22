@@ -37,12 +37,12 @@ def ig(L, i):
 
 
 PINAX_BLOG_SECTION_CHOICES = [(1, settings.PINAX_BLOG_ALL_SECTION_NAME)]
-PINAX_BLOG_SECTION_CHOICES += zip(
+PINAX_BLOG_SECTION_CHOICES += list(zip(
     range(2, 2 + len(settings.PINAX_BLOG_SECTIONS)),
     ig(settings.PINAX_BLOG_SECTIONS, 1)
-)
+))
 STATES = settings.PINAX_BLOG_UNPUBLISHED_STATES + ["Published"]
-PINAX_BLOG_STATE_CHOICES = zip(range(1, 1 + len(STATES)), STATES)
+PINAX_BLOG_STATE_CHOICES = list(zip(range(1, 1 + len(STATES)), STATES))
 
 
 class Post(models.Model):
