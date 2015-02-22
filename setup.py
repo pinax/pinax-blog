@@ -33,8 +33,8 @@ setup(
     install_requires=[
         "django-appconf>=1.0.1",
         "Pillow>=2.0",
-        "Markdown>=2.4",
-        "Pygments>=1.6"
+        "Markdown>=2.6",
+        "Pygments>=2.0.2"
     ],
     test_suite="runtests.runtests",
     classifiers=[
