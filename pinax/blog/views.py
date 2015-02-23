@@ -17,9 +17,14 @@ from .models import Post, FeedHit
 from .signals import post_viewed, post_redirected
 
 
-def blog_index(request):
-
-    posts = Post.objects.current()
+def blog_index(request, section=None):
+    if section:
+        try:
+            posts = Post.objects.section(section)
+        except InvalidSection:
+            raise Http404()
+    else:
+        posts = Post.objects.current()
 
     if request.GET.get("q"):
         posts = posts.filter(
@@ -32,21 +37,9 @@ def blog_index(request):
 
     return render_to_response("pinax/blog/blog_list.html", {
         "posts": posts,
-        "search_term": request.GET.get("q")
-    }, context_instance=RequestContext(request))
-
-
-def blog_section_list(request, section):
-
-    try:
-        posts = Post.objects.section(section)
-    except InvalidSection:
-        raise Http404()
-
-    return render_to_response("pinax/blog/blog_section_list.html", {
         "section_slug": section,
-        "section_name": dict(Post.SECTION_CHOICES)[Post.section_idx(section)],
-        "posts": posts,
+        "section_name": dict(Post.SECTION_CHOICES)[Post.section_idx(section)] if section else None,
+        "search_term": request.GET.get("q")
     }, context_instance=RequestContext(request))
 
 
