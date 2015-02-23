@@ -3,6 +3,13 @@
 Originally named `biblion`, the eldarion.com blog app intended to be suitable
 for site-level company and project blogs, is now known as `pinax-blog`.
 
+!!! note "Pinax Ecosystem"
+    This app was developed as part of the Pinax ecosystem but is just a Django app
+    and can be used independently of other Pinax apps.
+    
+    To learn more about Pinax, see <http://pinaxproject.com/>
+
+
 ## Quickstart
 
 Install the development version:
