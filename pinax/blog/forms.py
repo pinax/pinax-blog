@@ -62,7 +62,6 @@ class AdminPostForm(forms.ModelForm):
         # grab the latest revision of the Post instance
         latest_revision = post.latest()
 
-        #self.fields["tags"].required = False
         if latest_revision:
             # set initial data from the latest revision
             self.fields["teaser"].initial = latest_revision.teaser
