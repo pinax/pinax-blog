@@ -11,8 +11,8 @@ teaser and body content:
     {% load i18n admin_urls %}
     {% block extrahead %}
         {{ block.super }}
-        <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/ace/1.1.8/ace.js"></script>
         <script>
         $(function () {
             var contentDiv = $("<div>").attr("id", "content-editor"),
@@ -28,8 +28,8 @@ teaser and body content:
                     editor.getSession().setTabSize(4);
                     editor.getSession().setUseSoftTabs(true);
                 };
-            $(".content .c-2").append(contentDiv);
-            $(".teaser .c-2").append(teaserDiv);
+            $(".field-content div").append(contentDiv);
+            $(".field-teaser div").append(teaserDiv);
             var editor1 = ace.edit("content-editor");
             var editor2 = ace.edit("teaser-editor");
             var textarea1 = $('textarea[name="content"]').hide();
