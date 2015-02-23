@@ -5,7 +5,6 @@
   <title>{{ feed_title }}</title>
   <link>{{ blog_url }}</link>
   <lastBuildDate>{{ feed_updated }}</lastBuildDate>
-  <description>Free web building tutorials</description>
     {% for entry in entries %}
         {% include "pinax/blog/rss_item.xml" %}
     {% endfor %}
