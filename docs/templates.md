@@ -5,21 +5,14 @@ in your template search path.
 
 ## Blog List
 
-The url `blog` renders the template `pinax/blog/blog_list.html` with `posts`
-and `search_query` context variables.
+The url `blog` and `blog_section` both render the template
+`pinax/blog/blog_list.html` with `posts`, `search_query`, `section_slug`,
+and `section_name` context variables.
 
 The `posts` variable is a queryset of current blog posts. If the `GET` parameter,
 `q` is found, it filters the queryset create a simple search mechanism, then
-assigns the value to `search_query`.
-
-
-## Section List
-
-The url `blog_section` renders the template `pinax/blog/blog_section_list.html`
-with `section_slug`, `section_name`, and `posts` context variables.
-
-The `posts` variable is a queryset of current blogs filtered to the specified
-section.
+assigns the value to `search_query`. If the `blog` url is requested then
+`section` and `section_name` will be `None`.
 
 
 ## Post Detail
