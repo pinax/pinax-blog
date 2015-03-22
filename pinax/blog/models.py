@@ -80,6 +80,10 @@ class Post(models.Model):
     view_count = models.IntegerField(default=0, editable=False)
 
     @property
+    def is_published(self):
+        return self.state == PINAX_BLOG_STATE_CHOICES[-1][0]
+
+    @property
     def meta_description(self):
         if self.description:
             return self.description
@@ -168,6 +172,8 @@ class Post(models.Model):
         if not self.secret_key:
             # Generate a random secret key
             self.secret_key = "".join(choice(letters) for _ in range(8))
+        if self.is_published and self.published is None:
+            self.published = timezone.now()
         super(Post, self).save(**kwargs)
 
     @property
@@ -176,7 +182,7 @@ class Post(models.Model):
         An url to reach this post (there is a secret url for sharing unpublished
         posts to outside users).
         """
-        if not self.published:
+        if not self.is_published:
             if self.secret_key:
                 return reverse("blog_post_secret", kwargs={"post_secret_key": self.secret_key})
             else:
@@ -185,7 +191,7 @@ class Post(models.Model):
             return self.get_absolute_url()
 
     def get_absolute_url(self):
-        if self.published:
+        if self.is_published:
             if settings.PINAX_BLOG_SLUG_UNIQUE:
                 name = "blog_post_slug"
                 kwargs = {
