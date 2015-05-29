@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.utils.functional import curry
 
 from .forms import AdminPostForm
-from .models import Post, Image, ReviewComment
+from .models import Post, Image, ReviewComment, Section
 from .utils import can_tweet
 
 
@@ -76,5 +76,11 @@ class PostAdmin(admin.ModelAdmin):
         return form.save()
 
 
+class SectionAdmin(admin.ModelAdmin):
+    prepopulated_fields = {"slug": ("name",)}
+
+
 admin.site.register(Post, PostAdmin)
 admin.site.register(Image)
+admin.site.register(Section, SectionAdmin)
+

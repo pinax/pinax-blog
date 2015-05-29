@@ -36,21 +36,25 @@ def ig(L, i):
         yield x[i]
 
 
-PINAX_BLOG_SECTION_CHOICES = [(1, settings.PINAX_BLOG_ALL_SECTION_NAME)]
-PINAX_BLOG_SECTION_CHOICES += list(zip(
-    range(2, 2 + len(settings.PINAX_BLOG_SECTIONS)),
-    ig(settings.PINAX_BLOG_SECTIONS, 1)
-))
+
 STATES = settings.PINAX_BLOG_UNPUBLISHED_STATES + ["Published"]
 PINAX_BLOG_STATE_CHOICES = list(zip(range(1, 1 + len(STATES)), STATES))
+
+class Section(models.Model):
+    name = models.CharField(max_length=150)
+    slug = models.SlugField(unique=True)
+    enabled = models.BooleanField(default=True)
+
+    def __unicode__(self):
+        return self.name
+
 
 
 class Post(models.Model):
 
-    SECTION_CHOICES = PINAX_BLOG_SECTION_CHOICES
     STATE_CHOICES = PINAX_BLOG_STATE_CHOICES
 
-    section = models.IntegerField(choices=SECTION_CHOICES)
+    section = models.ForeignKey(Section)
 
     title = models.CharField(max_length=90)
     slug = models.SlugField(unique=settings.PINAX_BLOG_SLUG_UNIQUE)
@@ -98,21 +102,19 @@ class Post(models.Model):
     @staticmethod
     def section_idx(slug):
         """
-        given a slug return the index for it
+        Return post section id. Keeping backward compatibility with idx based versions and templates. 
         """
-        if slug == settings.PINAX_BLOG_ALL_SECTION_NAME:
-            return 1
-        return dict(zip(ig(settings.PINAX_BLOG_SECTIONS, 0), range(2, 2 + len(settings.PINAX_BLOG_SECTIONS))))[slug]
+        if slug != "all":
+            return Section.objects.get(slug=slug).pk
+        else:
+            return 0
 
     @property
     def section_slug(self):
         """
-        an IntegerField is used for storing sections in the database so we
-        need a property to turn them back into their slug form
+        Return post section slug
         """
-        if self.section == 1:
-            return settings.PINAX_BLOG_ALL_SECTION_NAME
-        return dict(zip(range(2, 2 + len(settings.PINAX_BLOG_SECTIONS)), ig(settings.PINAX_BLOG_SECTIONS, 0)))[self.section]
+        return self.section.slug 
 
     def rev(self, rev_id):
         return self.revisions.get(pk=rev_id)
@@ -271,3 +273,5 @@ class ReviewComment(models.Model):
     review_text = models.TextField()
     timestamp = models.DateTimeField(default=timezone.now)
     addressed = models.BooleanField(default=False)
+
+
