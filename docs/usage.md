@@ -22,7 +22,7 @@ them in the file selector in the images section, and then hitting "Save and
 Continue Editing". Once the form reloads, you'll see indicators above each
 uploaded image with a number between two brackets, e.g. `{{ 25 }}`.
 
-This is the syntax if you are using `creale` for adding that image to your
+This is the syntax if you are using `creole` for adding that image to your
 post. You can just copy and paste that.
 
 If you are using `markdown` however, you will need to use the following
