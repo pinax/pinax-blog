@@ -26,7 +26,7 @@ Add `pinax-blog` to your `INSTALLED_APPS` setting:
 
 Add entry to your `urls.py`:
 
-    url(r"^/blog/", include("pinax.blog.urls"))
+    url(r"^blog/", include("pinax.blog.urls"))
 
 
 ## Dependencies
