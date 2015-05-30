@@ -99,23 +99,6 @@ class Post(models.Model):
         if self.primary_image:
             return self.primary_image.image_path.url
 
-    @staticmethod
-    def section_idx(slug):
-        """
-        Return post section id. Keeping backward compatibility with idx based versions and templates. 
-        """
-        if slug != "all":
-            return Section.objects.get(slug=slug).pk
-        else:
-            return 0
-
-    @property
-    def section_slug(self):
-        """
-        Return post section slug
-        """
-        return self.section.slug 
-
     def rev(self, rev_id):
         return self.revisions.get(pk=rev_id)
 
