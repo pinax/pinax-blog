@@ -41,7 +41,7 @@ STATES = settings.PINAX_BLOG_UNPUBLISHED_STATES + ["Published"]
 PINAX_BLOG_STATE_CHOICES = list(zip(range(1, 1 + len(STATES)), STATES))
 
 class Section(models.Model):
-    name = models.CharField(max_length=150)
+    name = models.CharField(max_length=150,unique=True)
     slug = models.SlugField(unique=True)
     enabled = models.BooleanField(default=True)
 
