@@ -54,6 +54,9 @@ class AdminPostForm(forms.ModelForm):
         model = Post
         fields = FIELDS
 
+    class Media:
+        js = ("js/admin_post_form.js",)
+
     def __init__(self, *args, **kwargs):
         super(AdminPostForm, self).__init__(*args, **kwargs)
 
