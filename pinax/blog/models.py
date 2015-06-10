@@ -35,22 +35,24 @@ def ig(L, i):
     for x in L:
         yield x[i]
 
-
-PINAX_BLOG_SECTION_CHOICES = [(1, settings.PINAX_BLOG_ALL_SECTION_NAME)]
-PINAX_BLOG_SECTION_CHOICES += list(zip(
-    range(2, 2 + len(settings.PINAX_BLOG_SECTIONS)),
-    ig(settings.PINAX_BLOG_SECTIONS, 1)
-))
 STATES = settings.PINAX_BLOG_UNPUBLISHED_STATES + ["Published"]
 PINAX_BLOG_STATE_CHOICES = list(zip(range(1, 1 + len(STATES)), STATES))
 
 
+class Section(models.Model):
+    name = models.CharField(max_length=150, unique=True)
+    slug = models.SlugField(unique=True)
+    enabled = models.BooleanField(default=True)
+
+    def __unicode__(self):
+        return self.name
+
+
 class Post(models.Model):
 
-    SECTION_CHOICES = PINAX_BLOG_SECTION_CHOICES
     STATE_CHOICES = PINAX_BLOG_STATE_CHOICES
 
-    section = models.IntegerField(choices=SECTION_CHOICES)
+    section = models.ForeignKey(Section)
 
     title = models.CharField(max_length=90)
     slug = models.SlugField(unique=settings.PINAX_BLOG_SLUG_UNIQUE)
@@ -94,25 +96,6 @@ class Post(models.Model):
     def meta_image(self):
         if self.primary_image:
             return self.primary_image.image_path.url
-
-    @staticmethod
-    def section_idx(slug):
-        """
-        given a slug return the index for it
-        """
-        if slug == settings.PINAX_BLOG_ALL_SECTION_NAME:
-            return 1
-        return dict(zip(ig(settings.PINAX_BLOG_SECTIONS, 0), range(2, 2 + len(settings.PINAX_BLOG_SECTIONS))))[slug]
-
-    @property
-    def section_slug(self):
-        """
-        an IntegerField is used for storing sections in the database so we
-        need a property to turn them back into their slug form
-        """
-        if self.section == 1:
-            return settings.PINAX_BLOG_ALL_SECTION_NAME
-        return dict(zip(range(2, 2 + len(settings.PINAX_BLOG_SECTIONS)), ig(settings.PINAX_BLOG_SECTIONS, 0)))[self.section]
 
     def rev(self, rev_id):
         return self.revisions.get(pk=rev_id)

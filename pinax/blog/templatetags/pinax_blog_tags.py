@@ -1,7 +1,6 @@
 from django import template
 
-from ..models import Post
-from ..conf import settings
+from ..models import Post, Section
 
 
 register = template.Library()
@@ -52,7 +51,8 @@ class LatestSectionPostNode(template.Node):
 
     def render(self, context):
         section = self.section.resolve(context)
-        post = Post.objects.section(section, queryset=Post.objects.current())
+
+        post = Post.objects.published().filter(section__name=section).order_by("-published")
         try:
             post = post[0]
         except IndexError:
@@ -76,8 +76,7 @@ class BlogSectionsNode(template.Node):
         self.context_var = context_var
 
     def render(self, context):
-        sections = [(settings.PINAX_BLOG_ALL_SECTION_NAME, "All")]
-        sections += settings.PINAX_BLOG_SECTIONS
+        sections = Section.objects.filter(enabled=True)
         context[self.context_var] = sections
         return ""
 

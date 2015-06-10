@@ -13,18 +13,21 @@ from django.contrib.sites.models import Site
 
 from .conf import settings
 from .exceptions import InvalidSection
-from .models import Post, FeedHit
+from .models import Post, FeedHit, Section
 from .signals import post_viewed, post_redirected
 
 
 def blog_index(request, section=None):
     if section:
         try:
-            posts = Post.objects.section(section)
+            posts = Post.objects.filter(section__slug=section)
+            section_object = get_object_or_404(Section, slug=section)
+
         except InvalidSection:
             raise Http404()
     else:
         posts = Post.objects.current()
+        section_object = None
 
     if request.GET.get("q"):
         posts = posts.filter(
@@ -38,7 +41,7 @@ def blog_index(request, section=None):
     return render_to_response("pinax/blog/blog_list.html", {
         "posts": posts,
         "section_slug": section,
-        "section_name": dict(Post.SECTION_CHOICES)[Post.section_idx(section)] if section else None,
+        "section_name": section_object.name if section else None,
         "search_term": request.GET.get("q")
     }, context_instance=RequestContext(request))
 
@@ -93,7 +96,7 @@ def serialize_request(request):
 def blog_feed(request, section=None, feed_type=None):
 
     try:
-        posts = Post.objects.section(section)
+        posts = Post.objects.filter(section__slug=section)
     except InvalidSection:
         raise Http404()
 
