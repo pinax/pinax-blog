@@ -1,8 +1,10 @@
 from django.conf.urls import url, patterns
 
 from .views import (
+    BlogIndexView,
     DateBasedPostDetailView,
     SecretKeyPostDetailView,
+    SectionIndexView,
     SlugUniquePostDetailView,
     StaffPostDetailView
 )
@@ -10,8 +12,8 @@ from .views import (
 
 urlpatterns = patterns(
     "pinax.blog.views",
-    url(r'^$', "blog_index", name="blog"),
-    url(r'^section/(?P<section>[-\w]+)/$', "blog_index", name="blog_section"),
+    url(r'^$', BlogIndexView.as_view(), name="blog"),
+    url(r'^section/(?P<section>[-\w]+)/$', SectionIndexView.as_view(), name="blog_section"),
     url(r'^(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/(?P<slug>[-\w]+)/$', DateBasedPostDetailView.as_view(), name="blog_post"),
     url(r'^(?P<post_slug>[-\w]+)/$', SlugUniquePostDetailView.as_view(), name="blog_post_slug"),
     url(r'^post/(?P<post_pk>\d+)/$', StaffPostDetailView.as_view(), name="blog_post_pk"),
