@@ -23,7 +23,7 @@ class BlogIndexView(ListView):
     model = Post
     template_name = "pinax/blog/blog_list.html"
     search_parameter = "q"
-    paginate_by = 20
+    paginate_by = 10
 
     def get_current_section(self):
         return "all"
