@@ -5,7 +5,7 @@ from datetime import datetime
 from django.db.models import Q
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, Http404
-from django.shortcuts import redirect, render_to_response, get_object_or_404
+from django.shortcuts import redirect, render_to_response
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.views.generic import DetailView
