@@ -1,5 +1,9 @@
 # Change Log
 
+## 4.1.2
+
+* Get rid of import_module warning
+
 ## 4.1.1
 
 * Fix bug in how date based urls are generated without localizing time first
