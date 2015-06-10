@@ -1,5 +1,9 @@
 # Change Log
 
+## 4.1.1
+
+* Fix bug in how date based urls are generated without localizing time first
+
 ## 4.1.0
 
 * Added sections as model
