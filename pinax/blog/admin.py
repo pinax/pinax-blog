@@ -83,4 +83,3 @@ class SectionAdmin(admin.ModelAdmin):
 admin.site.register(Post, PostAdmin)
 admin.site.register(Image)
 admin.site.register(Section, SectionAdmin)
-

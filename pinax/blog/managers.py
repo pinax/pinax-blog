@@ -1,8 +1,6 @@
 from django.db import models
-from django.db.models.query import Q
 
 from .conf import settings
-from .exceptions import InvalidSection
 
 
 PUBLISHED_STATE = len(settings.PINAX_BLOG_UNPUBLISHED_STATES) + 1

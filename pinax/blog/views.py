@@ -21,7 +21,7 @@ def blog_index(request, section=None):
     if section:
         try:
             posts = Post.objects.filter(section__slug=section)
-            section_object = get_object_or_404(Section,slug=section)
+            section_object = get_object_or_404(Section, slug=section)
 
         except InvalidSection:
             raise Http404()
