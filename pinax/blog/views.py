@@ -8,11 +8,14 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import redirect, render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.template.loader import render_to_string
+from django.views.generic import DetailView
+from django.views.generic.dates import DateDetailView
 
 from django.contrib.sites.models import Site
 
 from .conf import settings
 from .exceptions import InvalidSection
+from .managers import PUBLISHED_STATE
 from .models import Post, FeedHit, Section
 from .signals import post_viewed, post_redirected
 
@@ -46,37 +49,64 @@ def blog_index(request, section=None):
     }, context_instance=RequestContext(request))
 
 
-def blog_post_detail(request, **kwargs):
+class SlugUniquePostDetailView(DetailView):
+    model = Post
+    template_name = "pinax/blog/blog_post.html"
+    slug_url_kwarg = "post_slug"
 
-    if "post_pk" in kwargs:
-        if request.user.is_authenticated() and request.user.is_staff:
-            queryset = Post.objects.all()
-            post = get_object_or_404(queryset, pk=kwargs["post_pk"])
-        else:
+    def get(self, request, *args, **kwargs):
+        if not settings.PINAX_BLOG_SLUG_UNIQUE:
             raise Http404()
-    elif "post_secret_key" in kwargs:
-        post = get_object_or_404(Post, secret_key=kwargs["post_secret_key"])
-    else:
-        queryset = Post.objects.current()
-        if "post_slug" in kwargs:
-            if not settings.PINAX_BLOG_SLUG_UNIQUE:
-                raise Http404()
-            post = get_object_or_404(queryset, slug=kwargs["post_slug"])
-        else:
-            queryset = queryset.filter(
-                published__year=int(kwargs["year"]),
-                published__month=int(kwargs["month"]),
-                published__day=int(kwargs["day"]),
-            )
-            post = get_object_or_404(queryset, slug=kwargs["slug"])
-            if settings.PINAX_BLOG_SLUG_UNIQUE:
-                post_redirected.send(sender=post, post=post, request=request)
-                return redirect(post.get_absolute_url(), permanent=True)
-        post_viewed.send(sender=post, post=post, request=request)
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        post_viewed.send(sender=self.object, post=self.object, request=request)
+        return self.render_to_response(context)
 
-    return render_to_response("pinax/blog/blog_post.html", {
-        "post": post,
-    }, context_instance=RequestContext(request))
+    def get_queryset(self):
+        queryset = super(SlugUniquePostDetailView, self).get_queryset()
+        queryset = queryset.filter(state=PUBLISHED_STATE)
+        return queryset
+
+
+class DateBasedPostDetailView(DateDetailView):
+    model = Post
+    month_format = "%m"
+    date_field = "published"
+    template_name = "pinax/blog/blog_post.html"
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if settings.PINAX_BLOG_SLUG_UNIQUE:
+            post_redirected.send(sender=self.object, post=self.object, request=request)
+            return redirect(self.object.get_absolute_url(), permanent=True)
+        context = self.get_context_data(object=self.object)
+        post_viewed.send(sender=self.object, post=self.object, request=request)
+        return self.render_to_response(context)
+
+    def get_queryset(self):
+        queryset = super(DateBasedPostDetailView, self).get_queryset()
+        queryset = queryset.filter(state=PUBLISHED_STATE)
+        return queryset
+
+
+class StaffPostDetailView(DetailView):
+    model = Post
+    template_name = "pinax/blog/blog_post.html"
+    pk_url_kwarg = "post_pk"
+
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated() and not request.user.is_staff:
+            raise Http404()
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
+
+
+class SecretKeyPostDetailView(DetailView):
+    model = Post
+    slug_url_kwarg = "post_secret_key"
+    slug_field = "secret_key"
+    template_name = "pinax/blog/blog_post.html"
 
 
 def serialize_request(request):
