@@ -19,6 +19,8 @@ try:
 except ImportError:
     twitter = None
 
+import pytz
+
 from .conf import settings
 from .managers import PostManager
 from .utils import can_tweet
@@ -182,10 +184,14 @@ class Post(models.Model):
                 }
             else:
                 name = "blog_post"
+                if settings.USE_TZ and settings.TIME_ZONE:
+                    published = pytz.timezone(settings.TIME_ZONE).normalize(self.published)
+                else:
+                    published = self.published
                 kwargs = {
-                    "year": self.published.strftime("%Y"),
-                    "month": self.published.strftime("%m"),
-                    "day": self.published.strftime("%d"),
+                    "year": published.strftime("%Y"),
+                    "month": published.strftime("%m"),
+                    "day": published.strftime("%d"),
                     "slug": self.slug,
                 }
         else:
