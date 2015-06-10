@@ -73,7 +73,7 @@ class SlugUniquePostDetailView(DetailView):
         if not settings.PINAX_BLOG_SLUG_UNIQUE:
             raise Http404()
         self.object = self.get_object()
-        context = self.get_context_data(object=self.object)
+        context = self.get_context_data(object=self.object, current_section=self.object.section)
         post_viewed.send(sender=self.object, post=self.object, request=request)
         return self.render_to_response(context)
 
@@ -94,7 +94,7 @@ class DateBasedPostDetailView(DateDetailView):
         if settings.PINAX_BLOG_SLUG_UNIQUE:
             post_redirected.send(sender=self.object, post=self.object, request=request)
             return redirect(self.object.get_absolute_url(), permanent=True)
-        context = self.get_context_data(object=self.object)
+        context = self.get_context_data(object=self.object, current_section=self.object.section)
         post_viewed.send(sender=self.object, post=self.object, request=request)
         return self.render_to_response(context)
 
