@@ -1,10 +1,12 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"?>
 <rss version="2.0">
 
 <channel>
   <title>{{ feed_title }}</title>
+  <description>The latest posts from {{ feed_title }}</description>
   <link>{{ blog_url }}</link>
-  <lastBuildDate>{{ feed_updated }}</lastBuildDate>
+  <atom:link href="{{ feed_url }}" rel="self" type="application/rss+xml" />
+  <lastBuildDate>{{ feed_updated|date:"D, d M Y H:i:s O" }}</lastBuildDate>
     {% for entry in entries %}
         {% include "pinax/blog/rss_item.xml" %}
     {% endfor %}
