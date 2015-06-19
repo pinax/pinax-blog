@@ -1,5 +1,9 @@
 # Change Log
 
+## 4.1.4
+
+* Add ability to provide a named feed title for section feeds
+
 ## 4.1.3
 
 * Fixed RSS validation issue

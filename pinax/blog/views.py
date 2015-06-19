@@ -157,6 +157,7 @@ def blog_feed(request, section=None, feed_type=None):
 
     current_site = Site.objects.get_current()
     feed_title = settings.PINAX_BLOG_FEED_TITLE
+    feed_title = settings.PINAX_BLOG_SECTION_FEED_TITLE % section.name
     blog_url = "http://%s%s" % (current_site.domain, reverse("blog"))
     url_name, kwargs = "blog_feed", {"section": section.slug if section else "all", "feed_type": feed_type}
     feed_url = "http://%s%s" % (current_site.domain, reverse(url_name, kwargs=kwargs))
