@@ -1,5 +1,9 @@
 # Change Log
 
+## 4.1.7
+
+* Fix displaying all items for a feed
+
 ## 4.1.6
 
 * Move namespace declarations to fix RSS validation

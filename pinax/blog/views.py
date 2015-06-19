@@ -140,7 +140,7 @@ def serialize_request(request):
 def blog_feed(request, section=None, feed_type=None):
 
     posts = Post.objects.current()
-    if section:
+    if section or section != "all":
         section = get_object_or_404(Section, slug=section)
         posts = posts.filter(section=section)
     else:
