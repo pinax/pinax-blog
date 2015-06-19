@@ -2,7 +2,8 @@
 
 ## 4.1.4
 
-* Add ability to provide a named feed title for section feeds
+* Added ability to provide a named feed title for section feeds
+* Added defaults for feed title settings
 
 ## 4.1.3
 
