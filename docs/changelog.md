@@ -1,5 +1,10 @@
 # Change Log
 
+## 4.1.3
+
+* Fixed RSS validation issue
+* Only show published posts in feed
+
 ## 4.1.2
 
 * Get rid of import_module warning
