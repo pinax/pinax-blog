@@ -1,5 +1,9 @@
 # Change Log
 
+## 4.1.6
+
+* Move namespace declarations to fix RSS validation
+
 ## 4.1.5
 
 * More validation error fixes for RSS feed
