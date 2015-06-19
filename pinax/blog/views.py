@@ -5,7 +5,7 @@ from datetime import datetime
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import HttpResponse, Http404
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.views.generic import DetailView, ListView
 from django.views.generic.dates import DateDetailView
@@ -13,7 +13,6 @@ from django.views.generic.dates import DateDetailView
 from django.contrib.sites.models import Site
 
 from .conf import settings
-from .exceptions import InvalidSection
 from .managers import PUBLISHED_STATE
 from .models import Post, FeedHit, Section
 from .signals import post_viewed, post_redirected
@@ -140,12 +139,11 @@ def serialize_request(request):
 
 def blog_feed(request, section=None, feed_type=None):
 
-    try:
-        posts = Post.objects.filter(section__slug=section)
-    except InvalidSection:
-        raise Http404()
-
-    if section is None:
+    posts = Post.objects.current()
+    if section:
+        section = get_object_or_404(Section, slug=section)
+        posts = posts.filter(section=section)
+    else:
         section = settings.PINAX_BLOG_ALL_SECTION_NAME
 
     if feed_type == "atom":
@@ -158,12 +156,9 @@ def blog_feed(request, section=None, feed_type=None):
         raise Http404()
 
     current_site = Site.objects.get_current()
-
-    feed_title = "%s Blog: %s" % (current_site.name, section[0].upper() + section[1:])
-
+    feed_title = settings.PINAX_BLOG_FEED_TITLE
     blog_url = "http://%s%s" % (current_site.domain, reverse("blog"))
-
-    url_name, kwargs = "blog_feed", {"section": section, "feed_type": feed_type}
+    url_name, kwargs = "blog_feed", {"section": section.slug if section else "all", "feed_type": feed_type}
     feed_url = "http://%s%s" % (current_site.domain, reverse(url_name, kwargs=kwargs))
 
     if posts:
