@@ -142,8 +142,10 @@ def blog_feed(request, section=None, feed_type=None):
     posts = Post.objects.current()
     if section and section != "all":
         section = get_object_or_404(Section, slug=section)
+        feed_title = settings.PINAX_BLOG_SECTION_FEED_TITLE % section.name
         posts = posts.filter(section=section)
     else:
+        feed_title = settings.PINAX_BLOG_FEED_TITLE
         section = settings.PINAX_BLOG_ALL_SECTION_NAME
 
     if feed_type == "atom":
@@ -156,10 +158,8 @@ def blog_feed(request, section=None, feed_type=None):
         raise Http404()
 
     current_site = Site.objects.get_current()
-    feed_title = settings.PINAX_BLOG_FEED_TITLE
-    feed_title = settings.PINAX_BLOG_SECTION_FEED_TITLE % section.name
     blog_url = "http://%s%s" % (current_site.domain, reverse("blog"))
-    url_name, kwargs = "blog_feed", {"section": section.slug if section else "all", "feed_type": feed_type}
+    url_name, kwargs = "blog_feed", {"section": section.slug if section != "all" else "all", "feed_type": feed_type}
     feed_url = "http://%s%s" % (current_site.domain, reverse(url_name, kwargs=kwargs))
 
     if posts:
