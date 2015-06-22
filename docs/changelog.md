@@ -1,5 +1,9 @@
 # Change Log
 
+## 4.1.8
+
+* Fix feed filtering logic
+
 ## 4.1.7
 
 * Fix displaying all items for a feed
