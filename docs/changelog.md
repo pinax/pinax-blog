@@ -1,5 +1,9 @@
 # Change Log
 
+## 4.1.10
+
+* Added `@python_2_unicode_compatible` for py3 compatibility
+
 ## 4.1.9
 
 * Fixed remaining feed bugs
