@@ -10,6 +10,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.utils import timezone
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.html import strip_tags
 
 from django.contrib.sites.models import Site
@@ -41,15 +42,17 @@ STATES = settings.PINAX_BLOG_UNPUBLISHED_STATES + ["Published"]
 PINAX_BLOG_STATE_CHOICES = list(zip(range(1, 1 + len(STATES)), STATES))
 
 
+@python_2_unicode_compatible
 class Section(models.Model):
     name = models.CharField(max_length=150, unique=True)
     slug = models.SlugField(unique=True)
     enabled = models.BooleanField(default=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
+@python_2_unicode_compatible
 class Post(models.Model):
 
     STATE_CHOICES = PINAX_BLOG_STATE_CHOICES
@@ -119,7 +122,7 @@ class Post(models.Model):
 
     objects = PostManager()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     def as_tweet(self):
@@ -207,6 +210,7 @@ class Post(models.Model):
         self.current().inc_views()
 
 
+@python_2_unicode_compatible
 class Revision(models.Model):
 
     post = models.ForeignKey(Post, related_name="revisions")
@@ -223,7 +227,7 @@ class Revision(models.Model):
 
     view_count = models.IntegerField(default=0, editable=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return "Revision %s for %s" % (self.updated.strftime('%Y%m%d-%H%M'), self.post.slug)
 
     def inc_views(self):
@@ -231,6 +235,7 @@ class Revision(models.Model):
         self.save()
 
 
+@python_2_unicode_compatible
 class Image(models.Model):
 
     post = models.ForeignKey(Post, related_name="images")
@@ -240,7 +245,7 @@ class Image(models.Model):
 
     timestamp = models.DateTimeField(default=timezone.now, editable=False)
 
-    def __unicode__(self):
+    def __str__(self):
         if self.pk is not None:
             return "{{ %d }}" % self.pk
         else:
