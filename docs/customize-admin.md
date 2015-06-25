@@ -4,7 +4,7 @@ Customizing the admin functionality can be as complex as overriding the `ModelAd
 and `ModelForm` that ships with `pinax-blog` or as simple as just overriding
 the `admin/blog/post/change_form.html` template.
 
-Here is an example of an actual customization to use the [ACE Editor]() for
+Here is an example of an actual customization to use the [ACE Editor](http://ace.c9.io/) for
 teaser and body content:
 
     {% extends "admin/change_form.html" %}
