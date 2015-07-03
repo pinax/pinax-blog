@@ -122,6 +122,12 @@ class SecretKeyPostDetailView(DetailView):
     slug_field = "secret_key"
     template_name = "pinax/blog/blog_post.html"
 
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.object.is_published:
+            return redirect(self.object.get_absolute_url())
+        return super(SecretKeyPostDetailView, self).get(request, *args, **kwargs)
+
 
 def serialize_request(request):
     data = {
