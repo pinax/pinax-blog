@@ -21,7 +21,7 @@ class ImageLookupImagePattern(ImagePattern):
 
 
 def parse(text):
-    md = Markdown(extensions=["codehilite"])
+    md = Markdown(extensions=["codehilite", "tables", "smarty", "admonition", "toc"])
     md.inlinePatterns["image_link"] = ImageLookupImagePattern(IMAGE_LINK_RE, md)
     html = md.convert(text)
     return html
