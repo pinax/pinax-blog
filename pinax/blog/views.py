@@ -139,7 +139,7 @@ def serialize_request(request):
 
 def blog_feed(request, section=None, feed_type=None):
 
-    posts = Post.objects.current()
+    posts = Post.objects.published().order_by("-updated")
     if section and section != "all":
         section = get_object_or_404(Section, slug=section)
         feed_title = settings.PINAX_BLOG_SECTION_FEED_TITLE % section.name
@@ -163,7 +163,7 @@ def blog_feed(request, section=None, feed_type=None):
     feed_url = "http://%s%s" % (current_site.domain, reverse(url_name, kwargs=kwargs))
 
     if posts:
-        feed_updated = posts[0].published
+        feed_updated = posts[0].updated
     else:
         feed_updated = datetime(2009, 8, 1, 0, 0, 0)
 
