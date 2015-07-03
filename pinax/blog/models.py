@@ -96,7 +96,7 @@ class Post(models.Model):
     @property
     def newer_post(self):
         if self.is_published:
-            return next(iter(Post.objects.published().order_by("published").filter(published__gt=self.published)))
+            return next(iter(Post.objects.published().order_by("published").filter(published__gt=self.published)), None)
 
     @property
     def is_published(self):
