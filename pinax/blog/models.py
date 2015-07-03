@@ -87,6 +87,18 @@ class Post(models.Model):
     view_count = models.IntegerField(default=0, editable=False)
 
     @property
+    def older_post(self):
+        qs = Post.objects.published()
+        if self.is_published:
+            qs = qs.filter(published__lt=self.published)
+        return next(iter(qs), None)
+
+    @property
+    def newer_post(self):
+        if self.is_published:
+            return next(iter(Post.objects.published().order_by("published").filter(published__gt=self.published)))
+
+    @property
     def is_published(self):
         return self.state == PINAX_BLOG_STATE_CHOICES[-1][0]
 
