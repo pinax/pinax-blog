@@ -1,5 +1,13 @@
 # Change Log
 
+## 4.2.0
+
+* Added newer and older post references
+* Added more extensions to markdown parser
+* Fixed html content in atom feed
+* Redirect to published post from secret shareable url if published
+* Use updated instead of published for updating atom feed
+
 ## 4.1.10
 
 * Added `@python_2_unicode_compatible` for py3 compatibility
