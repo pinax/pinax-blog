@@ -1,5 +1,9 @@
 # Change Log
 
+## 4.2.1
+
+* Fixed StopIteration exception in newer_post
+
 ## 4.2.0
 
 * Added newer and older post references
