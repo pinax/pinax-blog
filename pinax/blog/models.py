@@ -32,7 +32,7 @@ except ImportError:
     from string import ascii_letters as letters
 
 from random import choice
-
+from django.conf import settings
 
 def ig(L, i):
     for x in L:
@@ -61,7 +61,7 @@ class Post(models.Model):
 
     title = models.CharField(max_length=90)
     slug = models.SlugField(unique=settings.PINAX_BLOG_SLUG_UNIQUE)
-    author = models.ForeignKey(User, related_name="posts")
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="posts")
 
     markup = models.CharField(max_length=25, choices=settings.PINAX_BLOG_MARKUP_CHOICES)
 
@@ -232,7 +232,7 @@ class Revision(models.Model):
 
     content = models.TextField()
 
-    author = models.ForeignKey(User, related_name="revisions")
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="revisions")
 
     updated = models.DateTimeField(default=timezone.now)
     published = models.DateTimeField(null=True, blank=True)
