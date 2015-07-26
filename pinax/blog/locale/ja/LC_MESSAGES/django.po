@@ -1,0 +1,160 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: pinax-blog\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-07-26 15:41+0900\n"
+"PO-Revision-Date: 2015-07-26 15:47+0900\n"
+"Last-Translator: Hiroshi Miura <miurahr@linux.com>\n"
+"Language-Team: japanese <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 1.5.4\n"
+"Language: ja\n"
+
+#: admin.py:24
+msgid "Publish selected posts"
+msgstr "選択した投稿を発行する"
+
+#: admin.py:57
+msgid "Share this url"
+msgstr "このURLを共有する"
+
+#: forms.py:32 models.py:67 models.py:239
+msgid "Title"
+msgstr "タイトル"
+
+#: forms.py:37 models.py:68
+msgid "Slug"
+msgstr "スラッグ"
+
+#: forms.py:41 models.py:240
+msgid "Teaser"
+msgstr "ティーザー"
+
+#: forms.py:45 models.py:242
+msgid "Content"
+msgstr "コンテンツ"
+
+#: forms.py:49 models.py:76
+msgid "Description"
+msgstr "記述"
+
+#: forms.py:56
+msgid "Checking this will send out a tweet for this post"
+msgstr "チェックすると、この投稿を知らせるツイートが送信されます"
+
+#: forms.py:57
+msgid "Can tweet?"
+msgstr "Tweetします？"
+
+#: models.py:56
+msgid "Section"
+msgstr "セクション"
+
+#: models.py:57
+msgid "Sections"
+msgstr "セクション"
+
+#: models.py:69 models.py:244
+msgid "Author"
+msgstr "著者"
+
+#: models.py:71
+msgid "Markup"
+msgstr "マークアップ"
+
+#: models.py:78
+msgid "Primary Image"
+msgstr "代表イメージ"
+
+#: models.py:79
+msgid "Tweet text"
+msgstr "ツイートのテキスト"
+
+#: models.py:81 models.py:287
+msgid "Created"
+msgstr "作成日"
+
+#: models.py:82 models.py:246
+msgid "Updated"
+msgstr "更新日"
+
+#: models.py:83 models.py:247
+msgid "Published"
+msgstr "発行日"
+
+#: models.py:84
+msgid "State"
+msgstr "状態"
+
+#: models.py:87
+msgid "Secret key"
+msgstr "秘密鍵"
+
+#: models.py:91
+msgid "allows url for sharing unpublished posts to unauthenticated users"
+msgstr "未発行の投稿を、未認証ユーザに対して、URL共有を許す"
+
+#: models.py:94 models.py:249
+msgid "View count"
+msgstr "閲覧数"
+
+#: models.py:141 models.py:237 models.py:266 models.py:292
+msgid "Post"
+msgstr "投稿"
+
+#: models.py:142
+msgid "Posts"
+msgstr "投稿"
+
+#: models.py:252
+#, python-format
+msgid "Revision %(time)s for %(slug)s"
+msgstr " %(slug)sの%(time)s回の改版"
+
+#: models.py:259
+msgid "Revision"
+msgstr "改版数"
+
+#: models.py:260
+msgid "Revisions"
+msgstr "改版数"
+
+#: models.py:269
+msgid "Url"
+msgstr "URL"
+
+#: models.py:271 models.py:295
+msgid "Timestamp"
+msgstr "タイムスタンプ"
+
+#: models.py:277
+msgid "deleted image"
+msgstr "削除された画像"
+
+#: models.py:280
+msgid "Image"
+msgstr "画像"
+
+#: models.py:281
+msgid "Images"
+msgstr "画像"
+
+#: models.py:286
+msgid "Request data"
+msgstr "要求データ"
+
+#: models.py:294
+msgid "Review text"
+msgstr "文章のレビュー"
+
+#: models.py:296
+msgid "Addressed"
+msgstr "対応"
