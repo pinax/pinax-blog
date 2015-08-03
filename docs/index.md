@@ -6,7 +6,7 @@ for site-level company and project blogs, is now known as `pinax-blog`.
 !!! note "Pinax Ecosystem"
     This app was developed as part of the Pinax ecosystem but is just a Django app
     and can be used independently of other Pinax apps.
-    
+
     To learn more about Pinax, see <http://pinaxproject.com/>
 
 
@@ -27,6 +27,13 @@ Add `pinax-blog` to your `INSTALLED_APPS` setting:
 Add entry to your `urls.py`:
 
     url(r"^blog/", include("pinax.blog.urls"))
+
+If you aren't using the Django Sites framework you will need to add `CURRENT_SITE` to your project `settings.py`:
+
+    CURRENT_SITE = {
+        "name": "My site",
+        "domain": "example.com",
+    }
 
 
 ## Dependencies

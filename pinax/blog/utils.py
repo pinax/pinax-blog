@@ -1,3 +1,4 @@
+from django.contrib.sites.models import Site
 from django.core.exceptions import ImproperlyConfigured
 try:
     from importlib import import_module
@@ -31,3 +32,11 @@ def load_path_attr(path):
     except AttributeError:
         raise ImproperlyConfigured("Module '%s' does not define a '%s'" % (module, attr))
     return attr
+
+
+def get_current_site():
+    if hasattr(settings, "CURRENT_SITE") and settings.CURRENT_SITE is not None:
+        return Site(name=settings.CURRENT_SITE['name'],
+                    domain=settings.CURRENT_SITE['domain'])
+    else:
+        return Site.objects.get_current()

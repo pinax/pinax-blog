@@ -13,8 +13,6 @@ from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.html import strip_tags
 
-from django.contrib.sites.models import Site
-
 try:
     import twitter
 except ImportError:
@@ -24,7 +22,7 @@ import pytz
 
 from .conf import settings
 from .managers import PostManager
-from .utils import can_tweet
+from .utils import can_tweet, get_current_site
 
 try:
     from string import letters
@@ -139,7 +137,7 @@ class Post(models.Model):
 
     def as_tweet(self):
         if not self.tweet_text:
-            current_site = Site.objects.get_current()
+            current_site = get_current_site()
             api_url = "http://api.tr.im/api/trim_url.json"
             u = urlopen("%s?url=http://%s%s" % (
                 api_url,

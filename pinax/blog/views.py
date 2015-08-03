@@ -10,12 +10,11 @@ from django.template.loader import render_to_string
 from django.views.generic import DetailView, ListView
 from django.views.generic.dates import DateDetailView
 
-from django.contrib.sites.models import Site
-
 from .conf import settings
 from .managers import PUBLISHED_STATE
 from .models import Post, FeedHit, Section
 from .signals import post_viewed, post_redirected
+from .utils import get_current_site
 
 
 class BlogIndexView(ListView):
@@ -163,7 +162,7 @@ def blog_feed(request, section=None, feed_type=None):
     else:
         raise Http404()
 
-    current_site = Site.objects.get_current()
+    current_site = get_current_site()
     blog_url = "http://%s%s" % (current_site.domain, reverse("blog"))
     url_name, kwargs = "blog_feed", {"section": section.slug if section != "all" else "all", "feed_type": feed_type}
     feed_url = "http://%s%s" % (current_site.domain, reverse(url_name, kwargs=kwargs))

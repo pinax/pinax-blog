@@ -24,6 +24,10 @@ DEFAULT_SETTINGS = dict(
     SITE_ID=1,
     ROOT_URLCONF="pinax.blog.tests.urls",
     SECRET_KEY="notasecret",
+    CURRENT_SITE={
+        "name": "Test site",
+        "domain": "http://test.example.com/",
+    },
 )
 
 
