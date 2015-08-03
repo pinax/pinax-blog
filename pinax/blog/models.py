@@ -29,7 +29,6 @@ except ImportError:
     from string import ascii_letters as letters
 
 from random import choice
-from django.conf import settings
 
 def ig(L, i):
     for x in L:
