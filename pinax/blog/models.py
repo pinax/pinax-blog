@@ -12,6 +12,7 @@ from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.html import strip_tags
+from django.utils.translation import ugettext_lazy as _
 
 from django.contrib.sites.models import Site
 
@@ -51,6 +52,10 @@ class Section(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = _("Section")
+        verbose_name_plural = _("Sections")
+
 
 @python_2_unicode_compatible
 class Post(models.Model):
@@ -59,32 +64,34 @@ class Post(models.Model):
 
     section = models.ForeignKey(Section)
 
-    title = models.CharField(max_length=90)
-    slug = models.SlugField(unique=settings.PINAX_BLOG_SLUG_UNIQUE)
-    author = models.ForeignKey(User, related_name="posts")
+    title = models.CharField(_("Title"), max_length=90)
+    slug = models.SlugField(_("Slug"), unique=settings.PINAX_BLOG_SLUG_UNIQUE)
+    author = models.ForeignKey(User, related_name="posts", verbose_name=_("Author"))
 
-    markup = models.CharField(max_length=25, choices=settings.PINAX_BLOG_MARKUP_CHOICES)
+    markup = models.CharField(_("Markup"), max_length=25, choices=settings.PINAX_BLOG_MARKUP_CHOICES)
 
     teaser_html = models.TextField(editable=False)
     content_html = models.TextField(editable=False)
 
-    description = models.TextField(blank=True)
-    primary_image = models.ForeignKey("Image", null=True, blank=True, related_name="+")
-    tweet_text = models.CharField(max_length=140, editable=False)
+    description = models.TextField(_("Description"), blank=True)
+    primary_image = models.ForeignKey("Image", null=True, blank=True,
+                                      related_name="+", verbose_name=_("Primary Image"))
+    tweet_text = models.CharField(_("Tweet text"), max_length=140, editable=False)
 
-    created = models.DateTimeField(default=timezone.now, editable=False)  # when first revision was created
-    updated = models.DateTimeField(null=True, blank=True, editable=False)  # when last revision was created (even if not published)
-    published = models.DateTimeField(null=True, blank=True, editable=False)  # when last published
-    state = models.IntegerField(choices=STATE_CHOICES, default=STATE_CHOICES[0][0])
+    created = models.DateTimeField(_("Created"), default=timezone.now, editable=False)  # when first revision was created
+    updated = models.DateTimeField(_("Updated"), null=True, blank=True, editable=False)  # when last revision was created (even if not published)
+    published = models.DateTimeField(_("Published"), null=True, blank=True, editable=False)  # when last published
+    state = models.IntegerField(_("State"), choices=STATE_CHOICES, default=STATE_CHOICES[0][0])
 
     secret_key = models.CharField(
+        _("Secret key"),
         max_length=8,
         blank=True,
         unique=True,
-        help_text="allows url for sharing unpublished posts to unauthenticated users"
+        help_text=_("allows url for sharing unpublished posts to unauthenticated users")
     )
 
-    view_count = models.IntegerField(default=0, editable=False)
+    view_count = models.IntegerField(_("View count"), default=0, editable=False)
 
     @property
     def older_post(self):
@@ -131,6 +138,8 @@ class Post(models.Model):
     class Meta:
         ordering = ("-published",)
         get_latest_by = "published"
+        verbose_name = _("Post")
+        verbose_name_plural = _("Posts")
 
     objects = PostManager()
 
@@ -147,7 +156,7 @@ class Post(models.Model):
                 self.get_absolute_url(),
             ))
             result = json.loads(u.read())
-            self.tweet_text = "%s %s — %s" % (
+            self.tweet_text = "%s %s \u2014%s" % (
                 settings.TWITTER_TWEET_PREFIX,
                 self.title,
                 result["url"],
@@ -225,55 +234,63 @@ class Post(models.Model):
 @python_2_unicode_compatible
 class Revision(models.Model):
 
-    post = models.ForeignKey(Post, related_name="revisions")
+    post = models.ForeignKey(Post, related_name="revisions", verbose_name=_("Post"))
 
-    title = models.CharField(max_length=90)
-    teaser = models.TextField()
+    title = models.CharField(_("Title"), max_length=90)
+    teaser = models.TextField(_("Teaser"))
 
-    content = models.TextField()
+    content = models.TextField(_("Content"))
 
-    author = models.ForeignKey(User, related_name="revisions")
+    author = models.ForeignKey(User, related_name="revisions", verbose_name=_("Author"))
 
-    updated = models.DateTimeField(default=timezone.now)
-    published = models.DateTimeField(null=True, blank=True)
+    updated = models.DateTimeField(_("Updated"), default=timezone.now)
+    published = models.DateTimeField(_("Published"), null=True, blank=True)
 
-    view_count = models.IntegerField(default=0, editable=False)
+    view_count = models.IntegerField(_("View count"), default=0, editable=False)
 
     def __str__(self):
-        return "Revision %s for %s" % (self.updated.strftime('%Y%m%d-%H%M'), self.post.slug)
+        return _("Revision %(time)s for %(slug)s") % {'time': self.updated.strftime('%Y%m%d-%H%M'), 'slug': self.post.slug}
 
     def inc_views(self):
         self.view_count += 1
         self.save()
 
+    class Meta:
+        verbose_name = _("Revision")
+        verbose_name_plural = _("Revisions")
+
 
 @python_2_unicode_compatible
 class Image(models.Model):
 
-    post = models.ForeignKey(Post, related_name="images")
+    post = models.ForeignKey(Post, related_name="images", verbose_name=_("Post"))
 
     image_path = models.ImageField(upload_to="images/%Y/%m/%d")
-    url = models.CharField(max_length=150, blank=True)
+    url = models.CharField(_("Url"), max_length=150, blank=True)
 
-    timestamp = models.DateTimeField(default=timezone.now, editable=False)
+    timestamp = models.DateTimeField(_("Timestamp"), default=timezone.now, editable=False)
 
     def __str__(self):
         if self.pk is not None:
             return "{{ %d }}" % self.pk
         else:
-            return "deleted image"
+            return _("deleted image")
+
+    class Meta:
+        verbose_name = _("Image")
+        verbose_name_plural = _("Images")
 
 
 class FeedHit(models.Model):
 
-    request_data = models.TextField()
-    created = models.DateTimeField(default=timezone.now)
+    request_data = models.TextField(_("Request data"))
+    created = models.DateTimeField(_("Created"), default=timezone.now)
 
 
 class ReviewComment(models.Model):
 
-    post = models.ForeignKey(Post, related_name="review_comments")
+    post = models.ForeignKey(Post, related_name="review_comments", verbose_name=_("Post"))
 
-    review_text = models.TextField()
-    timestamp = models.DateTimeField(default=timezone.now)
-    addressed = models.BooleanField(default=False)
+    review_text = models.TextField(_("Review text"))
+    timestamp = models.DateTimeField(_("Timestamp"), default=timezone.now)
+    addressed = models.BooleanField(_("Addressed"), default=False)

@@ -1,6 +1,7 @@
 from django import forms
 from django.utils import timezone
 from django.utils.functional import curry
+from django.utils.translation import ugettext_lazy as _
 
 from .conf import settings
 from .models import Post, Revision
@@ -28,26 +29,32 @@ if can_tweet():
 class AdminPostForm(forms.ModelForm):
 
     title = forms.CharField(
+        label=_("Title"),
         max_length=90,
         widget=forms.TextInput(attrs={"style": "width: 50%;"}),
     )
     slug = forms.CharField(
+        label=_("Slug"),
         widget=forms.TextInput(attrs={"style": "width: 50%;"})
     )
     teaser = forms.CharField(
+        label=_("Teaser"),
         widget=forms.Textarea(attrs={"style": "width: 80%;"}),
     )
     content = forms.CharField(
+        label=_("Content"),
         widget=forms.Textarea(attrs={"style": "width: 80%; height: 300px;"})
     )
     description = forms.CharField(
+        label=_("Description"),
         widget=forms.Textarea(attrs={"style": "width: 80%;"}),
         required=False
     )
     if can_tweet():
         tweet = forms.BooleanField(
             required=False,
-            help_text="Checking this will send out a tweet for this post",
+            help_text=_("Checking this will send out a tweet for this post"),
+            label=_("Can tweet?"),
         )
 
     class Meta:

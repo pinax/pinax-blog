@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils import timezone
 from django.utils.functional import curry
+from django.utils.translation import ugettext_lazy as _
 
 from .forms import AdminPostForm
 from .models import Post, Image, ReviewComment, Section
@@ -20,7 +21,7 @@ def make_published(modeladmin, request, queryset):
     queryset = queryset.exclude(state=Post.STATE_CHOICES[-1][0], published__isnull=False)
     queryset.update(state=Post.STATE_CHOICES[-1][0])
     queryset.filter(published__isnull=True).update(published=timezone.now())
-make_published.short_description = "Publish selected posts"
+make_published.short_description = _("Publish selected posts")
 
 
 class PostAdmin(admin.ModelAdmin):
@@ -53,7 +54,7 @@ class PostAdmin(admin.ModelAdmin):
 
     def show_secret_share_url(self, obj):
         return '<a href="%s">%s</a>' % (obj.sharable_url, obj.sharable_url)
-    show_secret_share_url.short_description = "Share this url"
+    show_secret_share_url.short_description = _("Share this url")
     show_secret_share_url.allow_tags = True
 
     def formfield_for_dbfield(self, db_field, **kwargs):

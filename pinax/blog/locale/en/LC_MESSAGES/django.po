@@ -1,0 +1,159 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-07-26 15:41+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: admin.py:24
+msgid "Publish selected posts"
+msgstr ""
+
+#: admin.py:57
+msgid "Share this url"
+msgstr ""
+
+#: forms.py:32 models.py:67 models.py:239
+msgid "Title"
+msgstr ""
+
+#: forms.py:37 models.py:68
+msgid "Slug"
+msgstr ""
+
+#: forms.py:41 models.py:240
+msgid "Teaser"
+msgstr ""
+
+#: forms.py:45 models.py:242
+msgid "Content"
+msgstr ""
+
+#: forms.py:49 models.py:76
+msgid "Description"
+msgstr ""
+
+#: forms.py:56
+msgid "Checking this will send out a tweet for this post"
+msgstr ""
+
+#: forms.py:57
+msgid "Can tweet?"
+msgstr ""
+
+#: models.py:56
+msgid "Section"
+msgstr ""
+
+#: models.py:57
+msgid "Sections"
+msgstr ""
+
+#: models.py:69 models.py:244
+msgid "Author"
+msgstr ""
+
+#: models.py:71
+msgid "Markup"
+msgstr ""
+
+#: models.py:78
+msgid "Primary Image"
+msgstr ""
+
+#: models.py:79
+msgid "Tweet text"
+msgstr ""
+
+#: models.py:81 models.py:287
+msgid "Created"
+msgstr ""
+
+#: models.py:82 models.py:246
+msgid "Updated"
+msgstr ""
+
+#: models.py:83 models.py:247
+msgid "Published"
+msgstr ""
+
+#: models.py:84
+msgid "State"
+msgstr ""
+
+#: models.py:87
+msgid "Secret key"
+msgstr ""
+
+#: models.py:91
+msgid "allows url for sharing unpublished posts to unauthenticated users"
+msgstr ""
+
+#: models.py:94 models.py:249
+msgid "View count"
+msgstr ""
+
+#: models.py:141 models.py:237 models.py:266 models.py:292
+msgid "Post"
+msgstr ""
+
+#: models.py:142
+msgid "Posts"
+msgstr ""
+
+#: models.py:252
+#, python-format
+msgid "Revision %(time)s for %(slug)s"
+msgstr ""
+
+#: models.py:259
+msgid "Revision"
+msgstr ""
+
+#: models.py:260
+msgid "Revisions"
+msgstr ""
+
+#: models.py:269
+msgid "Url"
+msgstr ""
+
+#: models.py:271 models.py:295
+msgid "Timestamp"
+msgstr ""
+
+#: models.py:277
+msgid "deleted image"
+msgstr ""
+
+#: models.py:280
+msgid "Image"
+msgstr ""
+
+#: models.py:281
+msgid "Images"
+msgstr ""
+
+#: models.py:286
+msgid "Request data"
+msgstr ""
+
+#: models.py:294
+msgid "Review text"
+msgstr ""
+
+#: models.py:296
+msgid "Addressed"
+msgstr ""
