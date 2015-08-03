@@ -1,16 +1,15 @@
 language: python
 
 python:
-  - "2.6"
   - "2.7"
-  # - "3.2"  # @@@ Does not seem to be supported by Markdown/Pygments
+  - "3.2"
   - "3.3"
   - "3.4"
 
 env:
   - DJANGO=master
-  - DJANGO=1.6
   - DJANGO=1.7
+  - DJANGO=1.8
 
 install:
   - pip install tox coveralls
@@ -20,14 +19,10 @@ script:
 
 matrix:
   exclude:
-    - python: "2.6"
-      env: DJANGO=1.7
-    - python: "2.6"
-      env: DJANGO=master
     - python: "3.3"
       env: DJANGO=master
-    - python: "3.4"
-      env: DJANGO=1.6
+    - python: "3.2"
+      env: DJANGO=master
 
 after_success: coveralls
 
