@@ -32,6 +32,7 @@ setup(
     },
     install_requires=[
         "django-appconf>=1.0.1",
+        "pytz==2014.10",
         "Pillow>=2.0",
         "Markdown>=2.6",
         "Pygments>=2.0.2"
