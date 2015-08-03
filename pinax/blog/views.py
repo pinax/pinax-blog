@@ -16,13 +16,14 @@ from .conf import settings
 from .managers import PUBLISHED_STATE
 from .models import Post, FeedHit, Section
 from .signals import post_viewed, post_redirected
+from .utils import get_pagination
 
 
 class BlogIndexView(ListView):
     model = Post
     template_name = "pinax/blog/blog_list.html"
     search_parameter = "q"
-    paginate_by = 10
+    paginate_by = get_pagination()
 
     def get_current_section(self):
         return "all"

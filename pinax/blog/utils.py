@@ -13,6 +13,12 @@ except ImportError:
 from .conf import settings
 
 
+def get_pagination():
+    if hasattr(settings, 'PINAX_BLOG_PAGINATION'):
+        return settings.PINAX_BLOG_PAGINATION
+    else:
+        return 10
+
 def can_tweet():
     creds_available = (hasattr(settings, "TWITTER_USERNAME") and
                        hasattr(settings, "TWITTER_PASSWORD"))
