@@ -34,6 +34,7 @@ class PinaxBlogAppConf(AppConf):
     MARKUP_CHOICE_MAP = DEFAULT_MARKUP_CHOICE_MAP
     MARKUP_CHOICES = DEFAULT_MARKUP_CHOICE_MAP
     SLUG_UNIQUE = False
+    PAGINATE_BY = 10
 
     def configure_markup_choices(self, value):
         return [
