@@ -12,9 +12,8 @@ Upon donating the Pinax, the app was renamed to `pinax-blog`, making it easier
 to find and know what it is.
 
 
-.. image:: https://badges.gitter.im/Join%20Chat.svg
-   :alt: Join the chat at https://gitter.im/pinax/pinax-blog
-   :target: https://gitter.im/pinax/pinax-blog?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+.. image:: http://slack.pinaxproject.com/badge.svg
+   :target: http://slack.pinaxproject.com/
 
 .. image:: https://img.shields.io/travis/pinax/pinax-blog.svg
     :target: https://travis-ci.org/pinax/pinax-blog
