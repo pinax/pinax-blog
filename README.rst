@@ -1,15 +1,7 @@
 
-This app was developed as part of the Pinax ecosystem but is just a Django app
-and can be used independently of other Pinax apps. To learn more about Pinax,
-see http://pinaxproject.com/
-
 ==========
 pinax-blog
 ==========
-
-This app used to be named `biblion` when originally developed by Eldarion, Inc.
-Upon donating the Pinax, the app was renamed to `pinax-blog`, making it easier
-to find and know what it is.
 
 
 .. image:: http://slack.pinaxproject.com/badge.svg
@@ -32,7 +24,12 @@ to find and know what it is.
 
 .. image:: https://readthedocs.org/projects/pinax-blog/badge/?version=latest
     :target: https://pinax-blog.readthedocs.org/
+    
+pinax-blog is a blog app for Django.
 
+This app used to be named `biblion` when originally developed by Eldarion, Inc.
+Upon donating the Pinax, the app was renamed to `pinax-blog`, making it easier
+to find and know what it is.
 
 Current features include:
 
@@ -45,4 +42,15 @@ Current features include:
 * Control over opengraph and twitter card meta data per post
 * Review comments per post for multi-author workflows
 * public but secret urls for unpublished blog posts for easier review
+
+Pinax is an open-source platform built on the Django Web Framework. It is an ecosystem of reusable Django apps, themes, and starter project templates. 
+This collection can be found at http://pinaxproject.com.
+
+This app was developed as part of the Pinax ecosystem but is just a Django app and can be used independently of other Pinax apps.
+
+In order to foster a kind, inclusive, and harassment-free community, the Pinax Project has a code of conduct, which can be found here  http://pinaxproject.com/pinax/code_of_conduct/.
+
+The Pinax documentation is available at http://pinaxproject.com/pinax/.
+
+For updates and news regarding the Pinax Project, please follow us on Twitter at @pinaxproject and check out our blog http://blog.pinaxproject.com.
 
