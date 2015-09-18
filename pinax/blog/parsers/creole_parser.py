@@ -6,7 +6,7 @@ from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name, TextLexer
 from pygments.util import ClassNotFound
 
-from .models import Image
+from ..models import Image
 
 
 class Rules:
