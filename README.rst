@@ -67,7 +67,7 @@ to find and know what it is.
 Documentation
 ---------------
 
-The Pinax documentation is available at http://pinaxproject.com/pinax/.
+The pinax-blog documentation is available at https://pinax-blog.readthedocs.org/en/latest/. The Pinax documentation is available at http://pinaxproject.com/pinax/.
 
 
 Code of Conduct
