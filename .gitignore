@@ -9,3 +9,4 @@ MANIFEST
 docs/_build/
 htmlcov/
 site/
+.eggs/
