@@ -7,7 +7,6 @@ except ImportError:
 
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models
-from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
@@ -66,7 +65,7 @@ class Post(models.Model):
 
     title = models.CharField(_("Title"), max_length=90)
     slug = models.SlugField(_("Slug"), unique=settings.PINAX_BLOG_SLUG_UNIQUE)
-    author = models.ForeignKey(User, related_name="posts", verbose_name=_("Author"))
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="posts", verbose_name=_("Author"))
 
     markup = models.CharField(_("Markup"), max_length=25, choices=settings.PINAX_BLOG_MARKUP_CHOICES)
 
@@ -241,7 +240,7 @@ class Revision(models.Model):
 
     content = models.TextField(_("Content"))
 
-    author = models.ForeignKey(User, related_name="revisions", verbose_name=_("Author"))
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="revisions", verbose_name=_("Author"))
 
     updated = models.DateTimeField(_("Updated"), default=timezone.now)
     published = models.DateTimeField(_("Published"), null=True, blank=True)
