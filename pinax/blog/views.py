@@ -55,7 +55,8 @@ class BlogIndexView(ListView):
 class SectionIndexView(BlogIndexView):
 
     def get_current_section(self):
-        return Section.objects.get(slug__iexact=self.kwargs.get("section"))
+        section = get_object_or_404(Section, slug__iexact=self.kwargs.get("section"))
+        return section
 
     def get_queryset(self):
         queryset = super(SectionIndexView, self).get_queryset()
