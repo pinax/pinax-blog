@@ -24,6 +24,8 @@ Add `pinax-blog` to your `INSTALLED_APPS` setting:
         # ...
     )
 
+*Note*: Make sure you have `django.contrib.sites` also installed in `INSTALLED_APPS`
+
 Add entry to your `urls.py`:
 
     url(r"^blog/", include("pinax.blog.urls"))
