@@ -192,7 +192,7 @@ class Post(models.Model):
         """
         if not self.is_published:
             if self.secret_key:
-                return reverse("blog_post_secret", kwargs={"post_secret_key": self.secret_key})
+                return reverse("pinax_blog:blog_post_secret", kwargs={"post_secret_key": self.secret_key})
             else:
                 return "A secret sharable url for non-authenticated users is generated when you save this post."
         else:
@@ -201,12 +201,12 @@ class Post(models.Model):
     def get_absolute_url(self):
         if self.is_published:
             if settings.PINAX_BLOG_SLUG_UNIQUE:
-                name = "blog_post_slug"
+                name = "pinax_blog:blog_post_slug"
                 kwargs = {
                     "post_slug": self.slug
                 }
             else:
-                name = "blog_post"
+                name = "pinax_blog:blog_post"
                 if settings.USE_TZ and settings.TIME_ZONE:
                     published = pytz.timezone(settings.TIME_ZONE).normalize(self.published)
                 else:
@@ -218,7 +218,7 @@ class Post(models.Model):
                     "slug": self.slug,
                 }
         else:
-            name = "blog_post_pk"
+            name = "pinax_blog:blog_post_pk"
             kwargs = {
                 "post_pk": self.pk,
             }

@@ -45,7 +45,7 @@ class TestViewGetSection(TestBlog):
         Ensure invalid section slugs do not cause site crash.
         """
         invalid_slug = "bananas"
-        url = reverse("blog_section", kwargs={"section": invalid_slug})
+        url = reverse("pinax_blog:blog_section", kwargs={"section": invalid_slug})
         try:
             response = self.client.get(url)
         except Section.DoesNotExist:
@@ -57,7 +57,7 @@ class TestViewGetSection(TestBlog):
         Verify that existing section slug works fine
         """
         valid_slug = "oranges"
-        url = reverse("blog_section", kwargs={"section": valid_slug})
+        url = reverse("pinax_blog:blog_section", kwargs={"section": valid_slug})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
@@ -68,7 +68,7 @@ class TestViewGetPosts(TestBlog):
         """
         Verify only the expected Post is in context for section "orange".
         """
-        url = reverse("blog_section", kwargs={"section": "oranges"})
+        url = reverse("pinax_blog:blog_section", kwargs={"section": "oranges"})
         response = self.client.get(url)
         self.assertIn(self.orange_post, response.context_data["post_list"])
         self.assertNotIn(self.apple_post, response.context_data["post_list"])
@@ -77,7 +77,7 @@ class TestViewGetPosts(TestBlog):
         """
         Verify all Posts are in context for All.
         """
-        url = reverse("blog")
+        url = reverse("pinax_blog:blog")
         response = self.client.get(url)
         self.assertEqual(response.context_data["post_list"].count(), 2)
         self.assertIn(self.orange_post, response.context_data["post_list"])

@@ -31,11 +31,6 @@ setup(
         ]
     },
     tests_require=[
-        "django-appconf>=1.0.1",
-        "pytz==2015.7",
-        "Pillow>=3.0.0",
-        "Markdown>=2.6.5",
-        "Pygments>=2.0.2",
         "pinax-theme-bootstrap>=7.2.0",
     ],
     install_requires=[
