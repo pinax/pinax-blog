@@ -6,6 +6,7 @@ import django
 
 from django.conf import settings
 
+PACKAGE_ROOT = os.path.abspath(os.path.dirname(__file__))
 
 DEFAULT_SETTINGS = dict(
     INSTALLED_APPS=[
@@ -13,7 +14,8 @@ DEFAULT_SETTINGS = dict(
         "django.contrib.contenttypes",
         "django.contrib.sites",
         "pinax.blog",
-        "pinax.blog.tests"
+        "pinax.blog.tests",
+        "pinax_theme_bootstrap",
     ],
     DATABASES={
         "default": {
@@ -22,7 +24,7 @@ DEFAULT_SETTINGS = dict(
         }
     },
     SITE_ID=1,
-    ROOT_URLCONF="pinax.blog.tests.urls",
+    ROOT_URLCONF="pinax.blog.urls",
     SECRET_KEY="notasecret",
 )
 
