@@ -55,7 +55,8 @@ class BlogIndexView(ListView):
 class SectionIndexView(BlogIndexView):
 
     def get_current_section(self):
-        return Section.objects.get(slug__iexact=self.kwargs.get("section"))
+        section = get_object_or_404(Section, slug__iexact=self.kwargs.get("section"))
+        return section
 
     def get_queryset(self):
         queryset = super(SectionIndexView, self).get_queryset()
@@ -164,8 +165,9 @@ def blog_feed(request, section=None, feed_type=None):
         raise Http404()
 
     current_site = Site.objects.get_current()
-    blog_url = "http://%s%s" % (current_site.domain, reverse("blog"))
-    url_name, kwargs = "blog_feed", {"section": section.slug if section != "all" else "all", "feed_type": feed_type}
+    blog_url = "http://%s%s" % (current_site.domain, reverse("pinax_blog:blog"))
+    url_name = "pinax_blog:blog_feed",
+    kwargs = {"section": section.slug if section != "all" else "all", "feed_type": feed_type}
     feed_url = "http://%s%s" % (current_site.domain, reverse(url_name, kwargs=kwargs))
 
     if posts:
