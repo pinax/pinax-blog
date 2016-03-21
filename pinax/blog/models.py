@@ -105,6 +105,10 @@ class Post(models.Model):
             return next(iter(Post.objects.published().order_by("published").filter(published__gt=self.published)), None)
 
     @property
+    def is_future_published(self):
+        return self.is_published and self.published is not None and self.published <= timezone.now()
+
+    @property
     def is_published(self):
         return self.state == PINAX_BLOG_STATE_CHOICES[-1][0]
 
@@ -190,7 +194,7 @@ class Post(models.Model):
         An url to reach this post (there is a secret url for sharing unpublished
         posts to outside users).
         """
-        if not self.is_published:
+        if not self.is_published or self.is_future_published:
             if self.secret_key:
                 return reverse("pinax_blog:blog_post_secret", kwargs={"post_secret_key": self.secret_key})
             else:
