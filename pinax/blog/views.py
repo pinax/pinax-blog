@@ -125,7 +125,7 @@ class SecretKeyPostDetailView(DetailView):
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        if self.object.is_published:
+        if self.object.is_published and not self.object.is_future_published:
             return redirect(self.object.get_absolute_url())
         return super(SecretKeyPostDetailView, self).get(request, *args, **kwargs)
 
