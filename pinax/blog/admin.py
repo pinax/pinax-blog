@@ -40,7 +40,8 @@ class PostAdmin(admin.ModelAdmin):
         "description",
         "primary_image",
         "sharable_url",
-        "state"
+        "state",
+        "published"
     ]
     readonly_fields = ["sharable_url"]
 
