@@ -106,7 +106,7 @@ class Post(models.Model):
 
     @property
     def is_future_published(self):
-        return self.is_published and self.published is not None and self.published <= timezone.now()
+        return self.is_published and self.published is not None and self.published > timezone.now()
 
     @property
     def is_published(self):
