@@ -166,9 +166,8 @@ def blog_feed(request, section=None, feed_type=None):
 
     current_site = Site.objects.get_current()
     blog_url = "http://%s%s" % (current_site.domain, reverse("pinax_blog:blog"))
-    url_name = "pinax_blog:blog_feed",
     kwargs = {"section": section.slug if section != "all" else "all", "feed_type": feed_type}
-    feed_url = "http://%s%s" % (current_site.domain, reverse(url_name, kwargs=kwargs))
+    feed_url = "http://%s%s" % (current_site.domain, reverse("pinax_blog:blog_feed", kwargs=kwargs))
 
     if posts:
         feed_updated = posts[0].updated
