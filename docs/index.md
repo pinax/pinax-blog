@@ -16,17 +16,27 @@ Install the development version:
 
     pip install pinax-blog
 
-Add `pinax-blog` to your `INSTALLED_APPS` setting:
+Add `pinax-blog` to your `INSTALLED_APPS` setting. Also add the `sites` framework
+if you don't already use it:
 
     INSTALLED_APPS = (
         # ...
+        "django.contrib.sites"
         "pinax.blog",
         # ...
     )
 
+    SITE_ID = 1
+
+Run the migration `python manage.py migrate`
+
 Add entry to your `urls.py`:
 
-    url(r"^blog/", include("pinax.blog.urls", namespace="pinax_blog"))
+    urlpatterns = [
+        # ...
+        url(r"^blog/", include("pinax.blog.urls", namespace="pinax_blog")),
+        # ...
+    ]
 
 
 ## Dependencies
