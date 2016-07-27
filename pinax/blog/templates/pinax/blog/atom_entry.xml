@@ -10,10 +10,8 @@
          <name>{{ entry.author.get_full_name }}</name>
     </author>
 
-    <summary type="xhtml">
-        <div xmlns="http://www.w3.org/1999/xhtml">
-            {{ entry.teaser_html|safe }}
-        </div>
+    <summary type="html">
+            {{ entry.teaser_html }}
     </summary>
 
     <content type="html" xml:lang="en">
