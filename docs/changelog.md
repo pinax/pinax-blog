@@ -1,5 +1,10 @@
 # Change Log
 
+## 5.0.2
+
+* updated pytz version ([PR #92](https://github.com/pinax/pinax-blog/pull/92))
+* updated docs ([PR #87](https://github.com/pinax/pinax-blog/pull/87), [PR #89](https://github.com/pinax/pinax-blog/pull/89))
+
 ## 5.0.1
 
 * Fixed feed_url creation in blog_feed view ([PR #82](https://github.com/pinax/pinax-blog/pull/82))
