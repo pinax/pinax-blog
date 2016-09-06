@@ -4,13 +4,8 @@ from django.utils.functional import curry
 from django.utils.translation import ugettext_lazy as _
 
 from .forms import AdminPostForm
-from .models import Post, Image, ReviewComment, Section
+from .models import Post, ReviewComment, Section
 from .utils import can_tweet
-
-
-class ImageInline(admin.TabularInline):
-    model = Image
-    fields = ["image_path"]
 
 
 class ReviewInline(admin.TabularInline):
@@ -38,7 +33,6 @@ class PostAdmin(admin.ModelAdmin):
         "teaser",
         "content",
         "description",
-        "primary_image",
         "sharable_url",
         "state",
         "published"
@@ -49,7 +43,6 @@ class PostAdmin(admin.ModelAdmin):
         fields.append("tweet")
     prepopulated_fields = {"slug": ("title",)}
     inlines = [
-        ImageInline,
         ReviewInline,
     ]
 
@@ -83,5 +76,4 @@ class SectionAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Post, PostAdmin)
-admin.site.register(Image)
 admin.site.register(Section, SectionAdmin)

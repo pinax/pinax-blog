@@ -22,6 +22,8 @@ except ImportError:
 
 import pytz
 
+from pinax.images.models import ImageSet
+
 from .conf import settings
 from .managers import PostManager
 from .utils import can_tweet
@@ -73,8 +75,7 @@ class Post(models.Model):
     content_html = models.TextField(editable=False)
 
     description = models.TextField(_("Description"), blank=True)
-    primary_image = models.ForeignKey("Image", null=True, blank=True,
-                                      related_name="+", verbose_name=_("Primary Image"))
+    image_set = models.ForeignKey(ImageSet, related_name="+")
     tweet_text = models.CharField(_("Tweet text"), max_length=140, editable=False)
 
     created = models.DateTimeField(_("Created"), default=timezone.now, editable=False)  # when first revision was created
@@ -91,6 +92,10 @@ class Post(models.Model):
     )
 
     view_count = models.IntegerField(_("View count"), default=0, editable=False)
+
+    @property
+    def primary_image(self):
+        return self.image_set.primary_image
 
     @property
     def older_post(self):
@@ -181,6 +186,8 @@ class Post(models.Model):
 
     def save(self, **kwargs):
         self.updated_at = timezone.now()
+        if self.image_set is None:
+            self.image_set = ImageSet.objects.create(created_by=self.author)
         if not self.secret_key:
             # Generate a random secret key
             self.secret_key = "".join(choice(letters) for _ in range(8))
@@ -261,27 +268,6 @@ class Revision(models.Model):
     class Meta:
         verbose_name = _("Revision")
         verbose_name_plural = _("Revisions")
-
-
-@python_2_unicode_compatible
-class Image(models.Model):
-
-    post = models.ForeignKey(Post, related_name="images", verbose_name=_("Post"))
-
-    image_path = models.ImageField(upload_to="images/%Y/%m/%d")
-    url = models.CharField(_("Url"), max_length=150, blank=True)
-
-    timestamp = models.DateTimeField(_("Timestamp"), default=timezone.now, editable=False)
-
-    def __str__(self):
-        if self.pk is not None:
-            return "{{ %d }}" % self.pk
-        else:
-            return _("deleted image")
-
-    class Meta:
-        verbose_name = _("Image")
-        verbose_name_plural = _("Images")
 
 
 class FeedHit(models.Model):

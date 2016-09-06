@@ -18,7 +18,6 @@ FIELDS = [
     "teaser",
     "content",
     "description",
-    "primary_image",
     "state",
 ]
 

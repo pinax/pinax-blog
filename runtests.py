@@ -15,6 +15,7 @@ DEFAULT_SETTINGS = dict(
         "django.contrib.sites",
         "pinax.blog",
         "pinax.blog.tests",
+        "pinax.images",
         "pinax_theme_bootstrap",
     ],
     DATABASES={
