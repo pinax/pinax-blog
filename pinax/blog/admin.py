@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.utils.functional import curry
 from django.utils.translation import ugettext_lazy as _
 
+from .conf import settings
 from .forms import AdminPostForm
 from .models import Post, Image, ReviewComment, Section
 from .utils import can_tweet
@@ -26,7 +27,7 @@ make_published.short_description = _("Publish selected posts")
 
 class PostAdmin(admin.ModelAdmin):
     list_display = ["title", "state", "section", "published", "show_secret_share_url"]
-    list_filter = ["section", "state"]
+    list_filter = ["section", "state"] + ["scoped_for" if settings.PINAX_BLOG_SCOPING_MODEL else None]
     form = AdminPostForm
     actions = [make_published]
     fields = [
@@ -42,7 +43,7 @@ class PostAdmin(admin.ModelAdmin):
         "sharable_url",
         "state",
         "published"
-    ]
+    ] + ["scoped_for" if settings.PINAX_BLOG_SCOPING_MODEL else None]
     readonly_fields = ["sharable_url"]
 
     if can_tweet():

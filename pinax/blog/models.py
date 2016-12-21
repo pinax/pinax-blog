@@ -193,6 +193,12 @@ class Post(models.Model):
         super(Post, self).save(**kwargs)
 
     @property
+    def scoping_url_kwargs(self):
+        if getattr(self, "scoped_for", None) is not None:
+            return {settings.PINAX_BLOG_SCOPING_URL_VAR: self.scoped_for}
+        return {}
+
+    @property
     def sharable_url(self):
         """
         An url to reach this post (there is a secret url for sharing unpublished
@@ -200,7 +206,9 @@ class Post(models.Model):
         """
         if not self.is_published or self.is_future_published:
             if self.secret_key:
-                return reverse("pinax_blog:blog_post_secret", kwargs={"post_secret_key": self.secret_key})
+                kwargs = self.scoping_url_kwargs
+                kwargs.update({"post_secret_key": self.secret_key})
+                return reverse("pinax_blog:blog_post_secret", kwargs=kwargs)
             else:
                 return "A secret sharable url for non-authenticated users is generated when you save this post."
         else:
@@ -230,6 +238,7 @@ class Post(models.Model):
             kwargs = {
                 "post_pk": self.pk,
             }
+        kwargs.update(self.scoping_url_kwargs)
         return reverse(name, kwargs=kwargs)
 
     def inc_views(self):
