@@ -27,7 +27,7 @@ make_published.short_description = _("Publish selected posts")
 
 class PostAdmin(admin.ModelAdmin):
     list_display = ["title", "state", "section", "published", "show_secret_share_url"]
-    list_filter = ["section", "state"] + ["scoped_for" if settings.PINAX_BLOG_SCOPING_MODEL else None]
+    list_filter = ["section", "state"]
     form = AdminPostForm
     actions = [make_published]
     fields = [
@@ -43,7 +43,7 @@ class PostAdmin(admin.ModelAdmin):
         "sharable_url",
         "state",
         "published"
-    ] + ["scoped_for" if settings.PINAX_BLOG_SCOPING_MODEL else None]
+    ]
     readonly_fields = ["sharable_url"]
 
     if can_tweet():
@@ -77,6 +77,11 @@ class PostAdmin(admin.ModelAdmin):
         # this is done for explicitness that we want form.save to commit
         # form.save doesn't take a commit kwarg for this reason
         return form.save()
+
+
+if settings.PINAX_BLOG_SCOPING_MODEL:
+    PostAdmin.list_filter.append("scoped_for")
+    PostAdmin.fields.append("scoped_for")
 
 
 class SectionAdmin(admin.ModelAdmin):

@@ -8,19 +8,18 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    if settings.PINAX_BLOG_SCOPING_MODEL is not None:
-        dependencies = [
-            ('blog', '0006_auto_20160321_1527'),
-            migrations.swappable_dependency(settings.PINAX_BLOG_SCOPING_MODEL)
-        ]
+    dependencies = [('blog', '0006_auto_20160321_1527')]
+    operations = []
 
-        operations = [
+    if settings.PINAX_BLOG_SCOPING_MODEL is not None:
+        dependencies.append(
+            migrations.swappable_dependency(settings.PINAX_BLOG_SCOPING_MODEL)
+        )
+
+        operations.append(
             migrations.AddField(
                 model_name='post',
                 name='scoped_for',
                 field=models.ForeignKey(related_name='blog_posts', to=settings.PINAX_BLOG_SCOPING_MODEL)
             )
-        ]
-    else:
-        dependencies = []
-        operations = []
+        )
