@@ -39,7 +39,7 @@ class PinaxBlogAppConf(AppConf):
     SCOPING_URL_VAR = None
     SLUG_UNIQUE = False
     PAGINATE_BY = 10
-    HOOKSET = "pinax.blog.PinaxBlogDefaultHookSet"
+    HOOKSET = "pinax.blog.hooks.PinaxBlogDefaultHookSet"
 
     def configure_markup_choices(self, value):
         return [
