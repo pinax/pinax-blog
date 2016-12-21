@@ -13,6 +13,7 @@ from django.views.generic.dates import DateDetailView
 from django.contrib.sites.models import Site
 
 from .conf import settings
+from .hooks import hookset
 from .managers import PUBLISHED_STATE
 from .models import Post, FeedHit, Section
 from .signals import post_viewed, post_redirected
@@ -49,7 +50,11 @@ class BlogIndexView(ListView):
         return posts
 
     def get_queryset(self):
-        return self.search(Post.objects.current())
+        qs = Post.objects.current()
+        scoper = hookset.get_scoped_object(**self.kwargs)
+        if scoper is not None:
+            qs = qs.filter(scoped_for=scoper)
+        return self.search(qs)
 
 
 class SectionIndexView(BlogIndexView):
@@ -78,9 +83,12 @@ class SlugUniquePostDetailView(DetailView):
         return self.render_to_response(context)
 
     def get_queryset(self):
-        queryset = super(SlugUniquePostDetailView, self).get_queryset()
-        queryset = queryset.filter(state=PUBLISHED_STATE)
-        return queryset
+        qs = super(SlugUniquePostDetailView, self).get_queryset()
+        scoper = hookset.get_scoped_object(**self.kwargs)
+        if scoper is not None:
+            qs = qs.filter(scoped_for=scoper)
+        qs = qs.filter(state=PUBLISHED_STATE)
+        return qs
 
 
 class DateBasedPostDetailView(DateDetailView):
@@ -99,9 +107,12 @@ class DateBasedPostDetailView(DateDetailView):
         return self.render_to_response(context)
 
     def get_queryset(self):
-        queryset = super(DateBasedPostDetailView, self).get_queryset()
-        queryset = queryset.filter(state=PUBLISHED_STATE)
-        return queryset
+        qs = super(DateBasedPostDetailView, self).get_queryset()
+        scoper = hookset.get_scoped_object(**self.kwargs)
+        if scoper is not None:
+            qs = qs.filter(scoped_for=scoper)
+        qs = qs.filter(state=PUBLISHED_STATE)
+        return qs
 
 
 class StaffPostDetailView(DetailView):
@@ -144,9 +155,17 @@ def serialize_request(request):
     return json.dumps(data)
 
 
-def blog_feed(request, section=None, feed_type=None):
+def blog_feed(request, **kwargs):
+
+    section = kwargs.get("section", None)
+    feed_type = kwargs.get("feed_type", None)
 
     posts = Post.objects.published().order_by("-updated")
+
+    scoper = hookset.get_scoped_object(**kwargs)
+    if scoper is not None:
+        posts = posts.filter(scoped_for=scoper)
+
     if section and section != "all":
         section = get_object_or_404(Section, slug=section)
         feed_title = settings.PINAX_BLOG_SECTION_FEED_TITLE % section.name
@@ -164,6 +183,7 @@ def blog_feed(request, section=None, feed_type=None):
     else:
         raise Http404()
 
+    # @@@ how do we handle scoped kwarg here
     current_site = Site.objects.get_current()
     blog_url = "http://%s%s" % (current_site.domain, reverse("pinax_blog:blog"))
     kwargs = {"section": section.slug if section != "all" else "all", "feed_type": feed_type}

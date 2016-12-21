@@ -38,6 +38,7 @@ def ig(L, i):
     for x in L:
         yield x[i]
 
+
 STATES = settings.PINAX_BLOG_UNPUBLISHED_STATES + ["Published"]
 PINAX_BLOG_STATE_CHOICES = list(zip(range(1, 1 + len(STATES)), STATES))
 
@@ -60,6 +61,9 @@ class Section(models.Model):
 class Post(models.Model):
 
     STATE_CHOICES = PINAX_BLOG_STATE_CHOICES
+
+    if settings.PINAX_BLOG_SCOPING_MODEL is not None:
+        scoped_for = models.ForeignKey(settings.PINAX_BLOG_SCOPING_MODEL, related_name="blog_posts")
 
     section = models.ForeignKey(Section)
 

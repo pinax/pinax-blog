@@ -4,6 +4,8 @@ from django.conf import settings  # noqa
 
 from appconf import AppConf
 
+from .utils import load_path_attr
+
 
 def is_installed(package):
     try:
@@ -33,14 +35,19 @@ class PinaxBlogAppConf(AppConf):
     SECTION_FEED_TITLE = "Blog (%s)"
     MARKUP_CHOICE_MAP = DEFAULT_MARKUP_CHOICE_MAP
     MARKUP_CHOICES = DEFAULT_MARKUP_CHOICE_MAP
+    SCOPING_MODEL = None
     SLUG_UNIQUE = False
     PAGINATE_BY = 10
+    HOOKSET = "pinax.blog.PinaxBlogDefaultHookSet"
 
     def configure_markup_choices(self, value):
         return [
             (key, value[key]["label"])
             for key in value.keys()
         ]
+
+    def configure_hookset(self, value):
+        return load_path_attr(value)()
 
     class Meta:
         prefix = "pinax_blog"
