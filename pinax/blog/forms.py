@@ -7,7 +7,7 @@ from pinax.images.models import ImageSet
 
 from .conf import settings
 from .models import Post, Revision, Section
-from .utils import can_tweet, load_path_attr
+from .utils import load_path_attr
 from .signals import post_published
 
 
@@ -22,9 +22,6 @@ FIELDS = [
     "description",
     "state",
 ]
-
-if can_tweet():
-    FIELDS.append("tweet")
 
 
 class PostFormMixin(object):
@@ -101,12 +98,6 @@ class AdminPostForm(PostFormMixin, forms.ModelForm):
         widget=forms.Textarea(attrs={"style": "width: 80%;"}),
         required=False
     )
-    if can_tweet():
-        tweet = forms.BooleanField(
-            required=False,
-            help_text=_("Checking this will send out a tweet for this post"),
-            label=_("Can tweet?"),
-        )
 
     class Meta:
         model = Post
@@ -119,10 +110,7 @@ class AdminPostForm(PostFormMixin, forms.ModelForm):
         post = super(AdminPostForm, self).save(commit=False)
         if blog:
             post.blog = blog
-        post = self.save_post(post)
-        if can_tweet() and self.cleaned_data["tweet"]:
-            post.tweet()
-        return post
+        return self.save_post(post)
 
 
 class PostForm(PostFormMixin, forms.ModelForm):

@@ -1,24 +1,10 @@
 # -*- coding: utf8 -*-
-import json
-try:
-    from urllib2 import urlopen  # noqa
-except ImportError:
-    from urllib.request import urlopen  # noqa
-
-from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.html import strip_tags
 from django.utils.translation import ugettext_lazy as _
-
-from django.contrib.sites.models import Site
-
-try:
-    import twitter
-except ImportError:
-    twitter = None
 
 import pytz
 
@@ -27,7 +13,6 @@ from pinax.images.models import ImageSet
 from .conf import settings
 from .hooks import hookset
 from .managers import PostManager
-from .utils import can_tweet
 
 try:
     from string import letters
@@ -95,7 +80,6 @@ class Post(models.Model):
 
     description = models.TextField(_("Description"), blank=True)
     image_set = models.ForeignKey(ImageSet, related_name="blog_posts")
-    tweet_text = models.CharField(_("Tweet text"), max_length=140, editable=False)
 
     created = models.DateTimeField(_("Created"), default=timezone.now, editable=False)  # when first revision was created
     updated = models.DateTimeField(_("Updated"), null=True, blank=True, editable=False)  # when last revision was created (even if not published)
@@ -168,36 +152,6 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
-
-    def as_tweet(self):
-        if not self.tweet_text:
-            current_site = Site.objects.get_current()
-            api_url = "http://api.tr.im/api/trim_url.json"
-            u = urlopen("%s?url=http://%s%s" % (
-                api_url,
-                current_site.domain,
-                self.get_absolute_url(),
-            ))
-            result = json.loads(u.read())
-            self.tweet_text = "%s %s \u2014%s" % (
-                settings.TWITTER_TWEET_PREFIX,
-                self.title,
-                result["url"],
-            )
-        return self.tweet_text
-
-    def tweet(self):
-        if can_tweet():
-            account = twitter.Api(
-                username=settings.TWITTER_USERNAME,
-                password=settings.TWITTER_PASSWORD,
-            )
-            account.PostUpdate(self.as_tweet())
-        else:
-            raise ImproperlyConfigured(
-                "Unable to send tweet due to either "
-                "missing python-twitter or required settings."
-            )
 
     def save(self, **kwargs):
         self.updated_at = timezone.now()

@@ -4,20 +4,6 @@ try:
 except ImportError:
     from django.utils.importlib import import_module
 
-try:
-    import twitter
-except ImportError:
-    twitter = None
-
-
-from .conf import settings
-
-
-def can_tweet():
-    creds_available = (hasattr(settings, "TWITTER_USERNAME") and
-                       hasattr(settings, "TWITTER_PASSWORD"))
-    return twitter and creds_available
-
 
 def load_path_attr(path):
     i = path.rfind(".")
