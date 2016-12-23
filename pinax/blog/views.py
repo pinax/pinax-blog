@@ -50,10 +50,8 @@ class BlogIndexView(ListView):
         return posts
 
     def get_queryset(self):
-        qs = Post.objects.current()
-        scoper = hookset.get_scoped_object(**self.kwargs)
-        if scoper is not None:
-            qs = qs.filter(scoper=scoper)
+        blog = hookset.get_blog(**self.kwargs)
+        qs = Post.objects.current().filter(blog=blog)
         return self.search(qs)
 
 
@@ -83,12 +81,11 @@ class SlugUniquePostDetailView(DetailView):
         return self.render_to_response(context)
 
     def get_queryset(self):
-        qs = super(SlugUniquePostDetailView, self).get_queryset()
-        scoper = hookset.get_scoped_object(**self.kwargs)
-        if scoper is not None:
-            qs = qs.filter(scoper=scoper)
-        qs = qs.filter(state=PUBLISHED_STATE)
-        return qs
+        blog = hookset.get_blog(**self.kwargs)
+        return super(SlugUniquePostDetailView, self).get_queryset().filter(
+            blog=blog,
+            state=PUBLISHED_STATE
+        )
 
 
 class DateBasedPostDetailView(DateDetailView):
@@ -107,12 +104,11 @@ class DateBasedPostDetailView(DateDetailView):
         return self.render_to_response(context)
 
     def get_queryset(self):
-        qs = super(DateBasedPostDetailView, self).get_queryset()
-        scoper = hookset.get_scoped_object(**self.kwargs)
-        if scoper is not None:
-            qs = qs.filter(scoper=scoper)
-        qs = qs.filter(state=PUBLISHED_STATE)
-        return qs
+        blog = hookset.get_blog(**self.kwargs)
+        return super(DateBasedPostDetailView, self).get_queryset().filter(
+            blog=blog,
+            state=PUBLISHED_STATE
+        )
 
 
 class StaffPostDetailView(DetailView):
@@ -161,12 +157,11 @@ def blog_feed(request, **kwargs):
     feed_type = kwargs.get("feed_type", None)
     scoper_lookup = kwargs.get(settings.PINAX_BLOG_SCOPING_URL_VAR, None)
 
-    posts = Post.objects.published().order_by("-updated")
+    blog = hookset.get_blog(**kwargs)
+    posts = Post.objects.published().filter(blog=blog).order_by("-updated")
 
     blog_url_kwargs = {}
-    scoper = hookset.get_scoped_object(**kwargs)
-    if scoper is not None:
-        posts = posts.filter(scoper=scoper)
+    if scoper_lookup is not None:
         blog_url_kwargs = {settings.PINAX_BLOG_SCOPING_URL_VAR: scoper_lookup}
 
     if section and section != "all":

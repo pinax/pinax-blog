@@ -44,6 +44,19 @@ PINAX_BLOG_STATE_CHOICES = list(zip(range(1, 1 + len(STATES)), STATES))
 
 
 @python_2_unicode_compatible
+class Blog(models.Model):
+
+    if settings.PINAX_BLOG_SCOPING_MODEL is not None:
+        scoper = models.OneToOneField(settings.PINAX_BLOG_SCOPING_MODEL, related_name="blog")
+
+    @property
+    def scoping_url_kwargs(self):
+        if getattr(self, "scoper", None) is not None:
+            return {settings.PINAX_BLOG_SCOPING_URL_VAR: self.scoper}
+        return {}
+
+
+@python_2_unicode_compatible
 class Section(models.Model):
     name = models.CharField(max_length=150, unique=True)
     slug = models.SlugField(unique=True)
@@ -62,9 +75,7 @@ class Post(models.Model):
 
     STATE_CHOICES = PINAX_BLOG_STATE_CHOICES
 
-    if settings.PINAX_BLOG_SCOPING_MODEL is not None:
-        scoper = models.ForeignKey(settings.PINAX_BLOG_SCOPING_MODEL, related_name="blog_posts")
-
+    blog = models.ForeignKey(Blog)
     section = models.ForeignKey(Section)
 
     title = models.CharField(_("Title"), max_length=90)
@@ -193,12 +204,6 @@ class Post(models.Model):
         super(Post, self).save(**kwargs)
 
     @property
-    def scoping_url_kwargs(self):
-        if getattr(self, "scoper", None) is not None:
-            return {settings.PINAX_BLOG_SCOPING_URL_VAR: self.scoper}
-        return {}
-
-    @property
     def sharable_url(self):
         """
         An url to reach this post (there is a secret url for sharing unpublished
@@ -206,7 +211,7 @@ class Post(models.Model):
         """
         if not self.is_published or self.is_future_published:
             if self.secret_key:
-                kwargs = self.scoping_url_kwargs
+                kwargs = self.blog.scoping_url_kwargs
                 kwargs.update({"post_secret_key": self.secret_key})
                 return reverse("pinax_blog:blog_post_secret", kwargs=kwargs)
             else:
@@ -238,7 +243,7 @@ class Post(models.Model):
             kwargs = {
                 "post_pk": self.pk,
             }
-        kwargs.update(self.scoping_url_kwargs)
+        kwargs.update(self.blog.scoping_url_kwargs)
         return reverse(name, kwargs=kwargs)
 
     def inc_views(self):

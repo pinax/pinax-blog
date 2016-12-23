@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from .conf import settings
 from .forms import AdminPostForm
-from .models import Post, Image, ReviewComment, Section
+from .models import Blog, Post, Image, ReviewComment, Section
 from .utils import can_tweet
 
 
@@ -76,12 +76,12 @@ class PostAdmin(admin.ModelAdmin):
     def save_form(self, request, form, change):
         # this is done for explicitness that we want form.save to commit
         # form.save doesn't take a commit kwarg for this reason
-        return form.save()
+        return form.save(Blog.objects.first() if not settings.PINAX_BLOG_SCOPING_MODEL else None)
 
 
 if settings.PINAX_BLOG_SCOPING_MODEL:
-    PostAdmin.list_filter.append("scoper")
-    PostAdmin.fields.append("scoper")
+    PostAdmin.fields.insert(0, "blog")
+    PostAdmin.list_filter.append("blog__scoper")
 
 
 class SectionAdmin(admin.ModelAdmin):

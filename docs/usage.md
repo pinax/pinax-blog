@@ -46,7 +46,7 @@ partitioned by whatever domain object you would like.
 
 * `PINAX_BLOG_SCOPING_MODEL` - a string in the format `"app.Model"` that will set a ForeignKey on the `blog.Post` model
 * `PINAX_BLOG_SCOPING_URL_VAR` - the url variable name that you use in your url prefix that will allow you to look up your scoping object
-* `PINAX_BLOG_HOOKSET` - introducing the hookset pattern from other apps.  just a single method: `get_scoped_object(self, **kwargs)` is defined.  override this in your project to get the object to scope your posts by.
+* `PINAX_BLOG_HOOKSET` - introducing the hookset pattern from other apps.  just a single method: `get_blog(self, **kwargs)` is defined.  override this in your project to the `Blog` object that will scope your posts.  By default there is only one `Blog` instance and that is returned.
 * `pinax.blog.context_processors.scoped` - add to your context processors to put `scoper_lookup` in templates for url reversing
 
 ### Example
