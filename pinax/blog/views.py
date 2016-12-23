@@ -13,7 +13,7 @@ from django.views.generic.dates import DateDetailView
 from django.contrib.sites.models import Site
 
 from .conf import settings
-from .forms import AdminPostForm
+from .forms import PostForm
 from .hooks import hookset
 from .managers import PUBLISHED_STATE
 from .models import Post, FeedHit, Section
@@ -232,19 +232,19 @@ class ManagePostList(ListView):
 class ManageCreatePost(ManageSuccessUrlMixin, CreateView):
 
     model = Post
-    form_class = AdminPostForm
+    form_class = PostForm
     template_name = "pinax/blog/manage_post_create.html"
 
     def form_valid(self, form):
         blog = hookset.get_blog(**self.kwargs)
-        form.save(blog=blog)
+        form.save(blog=blog, author=self.request.user)
         return redirect(self.get_success_url())
 
 
 class ManageUpdatePost(ManageSuccessUrlMixin, UpdateView):
 
     model = Post
-    form_class = AdminPostForm
+    form_class = PostForm
     pk_url_kwarg = "post_pk"
     template_name = "pinax/blog/manage_post_update.html"
 
