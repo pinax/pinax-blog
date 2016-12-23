@@ -23,6 +23,7 @@ except ImportError:
 import pytz
 
 from .conf import settings
+from .hooks import hookset
 from .managers import PostManager
 from .utils import can_tweet
 
@@ -48,6 +49,9 @@ class Blog(models.Model):
 
     if settings.PINAX_BLOG_SCOPING_MODEL is not None:
         scoper = models.OneToOneField(settings.PINAX_BLOG_SCOPING_MODEL, related_name="blog")
+
+    def __str__(self):
+        return hookset.get_blog_str(self)
 
     @property
     def scoping_url_kwargs(self):
