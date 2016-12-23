@@ -1,6 +1,7 @@
 from django import forms
 from django.utils import timezone
 from django.utils.functional import curry
+from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 
 from pinax.images.models import ImageSet
@@ -137,6 +138,7 @@ class PostForm(PostFormMixin, forms.ModelForm):
             post.image_set = ImageSet.objects.create(created_by=author)
         if self.section:
             post.section = self.section
+        post.slug = slugify(post.title)
         return self.save_post(post)
 
     class Meta:
