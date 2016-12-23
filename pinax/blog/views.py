@@ -187,9 +187,10 @@ def blog_feed(request, **kwargs):
         raise Http404()
 
     current_site = Site.objects.get_current()
+    feed_url_kwargs = {"section": section.slug if section != "all" else "all", "feed_type": feed_type}
+    feed_url_kwargs.update(blog_url_kwargs)
     blog_url = "http://%s%s" % (current_site.domain, reverse("pinax_blog:blog", kwargs=blog_url_kwargs))
-    kwargs = {"section": section.slug if section != "all" else "all", "feed_type": feed_type}
-    feed_url = "http://%s%s" % (current_site.domain, reverse("pinax_blog:blog_feed", kwargs=kwargs))
+    feed_url = "http://%s%s" % (current_site.domain, reverse("pinax_blog:blog_feed", kwargs=feed_url_kwargs))
 
     if posts:
         feed_updated = posts[0].updated
