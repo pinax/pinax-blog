@@ -1,7 +1,7 @@
 from markdown import Markdown
 from markdown.inlinepatterns import ImagePattern, IMAGE_LINK_RE
 
-from ..models import Image
+from pinax.images.models import Image
 
 
 class ImageLookupImagePattern(ImagePattern):
@@ -12,7 +12,7 @@ class ImageLookupImagePattern(ImagePattern):
         else:
             try:
                 image = Image.objects.get(pk=int(url))
-                return image.image_path.url
+                return image.image.url
             except Image.DoesNotExist:
                 pass
             except ValueError:

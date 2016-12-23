@@ -6,7 +6,7 @@ from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name, TextLexer
 from pygments.util import ClassNotFound
 
-from ..models import Image
+from pinax.images.models import Image
 
 
 class Rules:
@@ -180,7 +180,7 @@ class ImageLookupHtmlEmitter(HtmlEmitter):
             except Image.DoesNotExist:
                 # @@@ do something better here
                 return ""
-            return "<img src=\"%s\" />" % (image.image_path.url,)
+            return "<img src=\"%s\" />" % (image.image.url,)
 
 
 class PinaxBlogHtmlEmitter(PygmentsHtmlEmitter, ImageLookupHtmlEmitter):
