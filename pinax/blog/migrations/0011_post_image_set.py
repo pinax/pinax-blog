@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('pinax_images', '0001_initial'),
-        ('blog', '0007_scoped'),
+        ('blog', '0010_auto_20161223_1014'),
     ]
 
     operations = [

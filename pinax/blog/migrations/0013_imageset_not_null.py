@@ -9,7 +9,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('blog', '0009_set_default_imagesets'),
+        ('blog', '0012_set_default_imagesets'),
     ]
 
     operations = [

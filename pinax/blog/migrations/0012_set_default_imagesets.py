@@ -18,7 +18,7 @@ def image_sets(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('blog', '0008_post_image_set'),
+        ('blog', '0011_post_image_set'),
     ]
 
     operations = [
