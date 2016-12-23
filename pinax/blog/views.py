@@ -159,12 +159,15 @@ def blog_feed(request, **kwargs):
 
     section = kwargs.get("section", None)
     feed_type = kwargs.get("feed_type", None)
+    scoper_lookup = kwargs.get(settings.PINAX_BLOG_SCOPING_URL_VAR, None)
 
     posts = Post.objects.published().order_by("-updated")
 
+    blog_url_kwargs = {}
     scoper = hookset.get_scoped_object(**kwargs)
     if scoper is not None:
         posts = posts.filter(scoper=scoper)
+        blog_url_kwargs = {settings.PINAX_BLOG_SCOPING_URL_VAR: scoper_lookup}
 
     if section and section != "all":
         section = get_object_or_404(Section, slug=section)
@@ -183,9 +186,8 @@ def blog_feed(request, **kwargs):
     else:
         raise Http404()
 
-    # @@@ how do we handle scoped kwarg here
     current_site = Site.objects.get_current()
-    blog_url = "http://%s%s" % (current_site.domain, reverse("pinax_blog:blog"))
+    blog_url = "http://%s%s" % (current_site.domain, reverse("pinax_blog:blog", kwargs=blog_url_kwargs))
     kwargs = {"section": section.slug if section != "all" else "all", "feed_type": feed_type}
     feed_url = "http://%s%s" % (current_site.domain, reverse("pinax_blog:blog_feed", kwargs=kwargs))
 
