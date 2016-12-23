@@ -7,12 +7,13 @@ from django.db.models import Q
 from django.http import HttpResponse, Http404
 from django.shortcuts import redirect, get_object_or_404
 from django.template.loader import render_to_string
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, DeleteView, CreateView, UpdateView
 from django.views.generic.dates import DateDetailView
 
 from django.contrib.sites.models import Site
 
 from .conf import settings
+from .forms import AdminPostForm
 from .hooks import hookset
 from .managers import PUBLISHED_STATE
 from .models import Post, FeedHit, Section
@@ -207,3 +208,57 @@ def blog_feed(request, **kwargs):
         "current_site": current_site,
     })
     return HttpResponse(feed, content_type=feed_mimetype)
+
+
+class ManageSuccessUrlMixin(object):
+
+    def get_success_url(self):
+        scoping_lookup = self.kwargs.get(settings.PINAX_BLOG_SCOPING_URL_VAR, None)
+        if scoping_lookup:
+            return reverse("pinax_blog:manage_post_list", kwargs={settings.PINAX_BLOG_SCOPING_URL_VAR: scoping_lookup})
+        return reverse("pinax_blog:manage_post_list")
+
+
+class ManagePostList(ListView):
+
+    model = Post
+    template_name = "pinax/blog/manage_post_list.html"
+
+    def get_queryset(self):
+        blog = hookset.get_blog(**self.kwargs)
+        return super(ManagePostList, self).get_queryset().filter(blog=blog)
+
+
+class ManageCreatePost(ManageSuccessUrlMixin, CreateView):
+
+    model = Post
+    form_class = AdminPostForm
+    template_name = "pinax/blog/manage_post_create.html"
+
+    def form_valid(self, form):
+        blog = hookset.get_blog(**self.kwargs)
+        form.save(blog=blog)
+        return redirect(self.get_success_url())
+
+
+class ManageUpdatePost(ManageSuccessUrlMixin, UpdateView):
+
+    model = Post
+    form_class = AdminPostForm
+    pk_url_kwarg = "post_pk"
+    template_name = "pinax/blog/manage_post_update.html"
+
+    def get_queryset(self):
+        blog = hookset.get_blog(**self.kwargs)
+        return super(ManageUpdatePost, self).get_queryset().filter(blog=blog)
+
+
+class ManageDeletePost(ManageSuccessUrlMixin, DeleteView):
+
+    model = Post
+    pk_url_kwarg = "post_pk"
+    template_name = "pinax/blog/manage_post_delete_confirm.html"
+
+    def get_queryset(self):
+        blog = hookset.get_blog(**self.kwargs)
+        return super(ManageDeletePost, self).get_queryset().filter(blog=blog)

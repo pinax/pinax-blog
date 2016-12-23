@@ -1,0 +1,11 @@
+{% extends "pinax/blog/blog_base.html" %}
+
+{% load bootstrap %}
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        <div>Delete <em>{{ post.title }}</em>?</div>
+        <button class="btn btn-danger">Yes, Delete</button>
+    </form>
+{% endblock %}
