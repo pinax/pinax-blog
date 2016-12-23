@@ -7,26 +7,26 @@ register = template.Library()
 
 
 @register.assignment_tag
-def latest_blog_posts(scoped_for=None):
+def latest_blog_posts(scoper=None):
     qs = Post.objects.current()
-    if scoped_for:
-        qs = qs.filter(scoped_for=scoped_for)
+    if scoper:
+        qs = qs.filter(scoper=scoper)
     return qs[:5]
 
 
 @register.assignment_tag
-def latest_blog_post(scoped_for=None):
+def latest_blog_post(scoper=None):
     qs = Post.objects.current()
-    if scoped_for:
-        qs = qs.filter(scoped_for=scoped_for)
+    if scoper:
+        qs = qs.filter(scoper=scoper)
     return qs[0]
 
 
 @register.assignment_tag
-def latest_section_post(section, scoped_for=None):
+def latest_section_post(section, scoper=None):
     qs = Post.objects.published().filter(section__name=section).order_by("-published")
-    if scoped_for:
-        qs = qs.filter(scoped_for=scoped_for)
+    if scoper:
+        qs = qs.filter(scoper=scoper)
     return qs[0] if qs.count() > 0 else None
 
 

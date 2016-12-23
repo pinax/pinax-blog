@@ -53,7 +53,7 @@ class BlogIndexView(ListView):
         qs = Post.objects.current()
         scoper = hookset.get_scoped_object(**self.kwargs)
         if scoper is not None:
-            qs = qs.filter(scoped_for=scoper)
+            qs = qs.filter(scoper=scoper)
         return self.search(qs)
 
 
@@ -86,7 +86,7 @@ class SlugUniquePostDetailView(DetailView):
         qs = super(SlugUniquePostDetailView, self).get_queryset()
         scoper = hookset.get_scoped_object(**self.kwargs)
         if scoper is not None:
-            qs = qs.filter(scoped_for=scoper)
+            qs = qs.filter(scoper=scoper)
         qs = qs.filter(state=PUBLISHED_STATE)
         return qs
 
@@ -110,7 +110,7 @@ class DateBasedPostDetailView(DateDetailView):
         qs = super(DateBasedPostDetailView, self).get_queryset()
         scoper = hookset.get_scoped_object(**self.kwargs)
         if scoper is not None:
-            qs = qs.filter(scoped_for=scoper)
+            qs = qs.filter(scoper=scoper)
         qs = qs.filter(state=PUBLISHED_STATE)
         return qs
 
@@ -164,7 +164,7 @@ def blog_feed(request, **kwargs):
 
     scoper = hookset.get_scoped_object(**kwargs)
     if scoper is not None:
-        posts = posts.filter(scoped_for=scoper)
+        posts = posts.filter(scoper=scoper)
 
     if section and section != "all":
         section = get_object_or_404(Section, slug=section)

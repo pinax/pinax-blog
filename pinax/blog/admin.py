@@ -80,8 +80,8 @@ class PostAdmin(admin.ModelAdmin):
 
 
 if settings.PINAX_BLOG_SCOPING_MODEL:
-    PostAdmin.list_filter.append("scoped_for")
-    PostAdmin.fields.append("scoped_for")
+    PostAdmin.list_filter.append("scoper")
+    PostAdmin.fields.append("scoper")
 
 
 class SectionAdmin(admin.ModelAdmin):

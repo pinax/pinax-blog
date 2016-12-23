@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
         operations.append(
             migrations.AddField(
                 model_name='post',
-                name='scoped_for',
+                name='scoper',
                 field=models.ForeignKey(related_name='blog_posts', to=settings.PINAX_BLOG_SCOPING_MODEL)
             )
         )

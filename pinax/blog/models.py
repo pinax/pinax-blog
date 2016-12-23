@@ -63,7 +63,7 @@ class Post(models.Model):
     STATE_CHOICES = PINAX_BLOG_STATE_CHOICES
 
     if settings.PINAX_BLOG_SCOPING_MODEL is not None:
-        scoped_for = models.ForeignKey(settings.PINAX_BLOG_SCOPING_MODEL, related_name="blog_posts")
+        scoper = models.ForeignKey(settings.PINAX_BLOG_SCOPING_MODEL, related_name="blog_posts")
 
     section = models.ForeignKey(Section)
 
@@ -194,8 +194,8 @@ class Post(models.Model):
 
     @property
     def scoping_url_kwargs(self):
-        if getattr(self, "scoped_for", None) is not None:
-            return {settings.PINAX_BLOG_SCOPING_URL_VAR: self.scoped_for}
+        if getattr(self, "scoper", None) is not None:
+            return {settings.PINAX_BLOG_SCOPING_URL_VAR: self.scoper}
         return {}
 
     @property
