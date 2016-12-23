@@ -47,7 +47,7 @@ partitioned by whatever domain object you would like.
 * `PINAX_BLOG_SCOPING_MODEL` - a string in the format `"app.Model"` that will set a ForeignKey on the `blog.Post` model
 * `PINAX_BLOG_SCOPING_URL_VAR` - the url variable name that you use in your url prefix that will allow you to look up your scoping object
 * `PINAX_BLOG_HOOKSET` - introducing the hookset pattern from other apps.  just a single method: `get_scoped_object(self, **kwargs)` is defined.  override this in your project to get the object to scope your posts by.
-* `pinax.blog.context_processors.scoped` - add to your context processors to put `scoped_var` in templates for url reversing
+* `pinax.blog.context_processors.scoped` - add to your context processors to put `scoper_lookup` in templates for url reversing
 
 ### Example
 
@@ -101,7 +101,7 @@ so you can either use them directly or use them as a reference.  If you need to
 reverse a URL for any of the `pinax-blog` urls you can simply do:
 
 ```django
-{% url "pinax_blog:blog" scoped_var %}
+{% url "pinax_blog:blog" scoper_lookup %}
 ```
 
 Now that you have the context processor installed.
