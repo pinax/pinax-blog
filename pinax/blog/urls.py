@@ -12,7 +12,8 @@ from .views import (
     ManagePostList,
     ManageCreatePost,
     ManageUpdatePost,
-    ManageDeletePost
+    ManageDeletePost,
+    ajax_preview
 )
 
 
@@ -28,6 +29,8 @@ urlpatterns = [
     url(r"^manage/posts/create/$", ManageCreatePost.as_view(), name="manage_post_create"),
     url(r"^manage/posts/(?P<post_pk>\d+)/update/$", ManageUpdatePost.as_view(), name="manage_post_update"),
     url(r"^manage/posts/(?P<post_pk>\d+)/delete/$", ManageDeletePost.as_view(), name="manage_post_delete"),
+
+    url(r"^ajax/markdown/preview/$", ajax_preview, name="ajax_preview")
 ]
 
 

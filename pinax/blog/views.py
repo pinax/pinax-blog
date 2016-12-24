@@ -4,9 +4,10 @@ from datetime import datetime
 
 from django.core.urlresolvers import reverse
 from django.db.models import Q
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, JsonResponse
 from django.shortcuts import redirect, get_object_or_404
 from django.template.loader import render_to_string
+from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, ListView, DeleteView, CreateView, UpdateView
 from django.views.generic.dates import DateDetailView
 
@@ -18,6 +19,7 @@ from .hooks import hookset
 from .managers import PUBLISHED_STATE
 from .models import Post, FeedHit, Section
 from .signals import post_viewed, post_redirected
+from .parsers.markdown_parser import parse
 
 
 class BlogIndexView(ListView):
@@ -262,3 +264,16 @@ class ManageDeletePost(ManageSuccessUrlMixin, DeleteView):
     def get_queryset(self):
         blog = hookset.get_blog(**self.kwargs)
         return super(ManageDeletePost, self).get_queryset().filter(blog=blog)
+
+
+@require_POST
+def ajax_preview(request, **kwargs):
+    """
+    Currently only supports markdown
+    """
+    data = {
+        "html": render_to_string("pinax/blog/_preview.html", {
+            "content": parse(request.POST.get("markup"))
+        })
+    }
+    return JsonResponse(data)

@@ -3,9 +3,25 @@
 {% load bootstrap %}
 
 {% block content %}
+    {% if scoper_lookup %}
+        {% url "pinax_blog:ajax_preview" scoper_lookup as preview_url %}
+    {% else %}
+        {% url "pinax_blog:ajax_preview" as preview_url %}
+    {% endif %}
     <form method="post">
         {% csrf_token %}
-        {{ form|bootstrap }}
+        {{ form.title|bootstrap }}
+        <div class="form-group">
+            <label class="control-label  " for="id_teaser">Teaser</label>
+            <a href="{{ preview_url }}" class="ajax btn btn-sm btn-default" data-method="post" data-replace-inner="#teaser-preview" data-data="markup:#id_teaser">Preview</a>
+            <div class=" ">
+                <textarea class=" form-control" cols="40" id="id_teaser" name="teaser" rows="10" required=""></textarea>
+            </div>
+            <div id="teaser-preview"></div>
+        </div>
+        {{ form.content|bootstrap }}
+        {{ form.description|bootstrap }}
+        {{ form.state|bootstrap }}
         <button class="btn btn-primary">Submit</button>
     </form>
 {% endblock %}
