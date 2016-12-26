@@ -206,7 +206,7 @@ class Post(models.Model):
             self.secret_key = "".join(choice(letters) for _ in range(8))
         if self.is_published and self.published is None:
             self.published = timezone.now()
-        if self.image_set is None:
+        if not ImageSet.objects.filter(blog_posts=self).exists():
             self.image_set = ImageSet.objects.create(created_by=self.author)
         super(Post, self).save(**kwargs)
 
