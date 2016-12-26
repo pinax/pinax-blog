@@ -23,6 +23,7 @@ except ImportError:
 import pytz
 
 from .conf import settings
+from .hooks import hookset
 from .managers import PostManager
 from .utils import can_tweet
 
@@ -38,8 +39,25 @@ def ig(L, i):
     for x in L:
         yield x[i]
 
+
 STATES = settings.PINAX_BLOG_UNPUBLISHED_STATES + ["Published"]
 PINAX_BLOG_STATE_CHOICES = list(zip(range(1, 1 + len(STATES)), STATES))
+
+
+@python_2_unicode_compatible
+class Blog(models.Model):
+
+    if settings.PINAX_BLOG_SCOPING_MODEL is not None:
+        scoper = models.OneToOneField(settings.PINAX_BLOG_SCOPING_MODEL, related_name="blog")
+
+    def __str__(self):
+        return hookset.get_blog_str(self)
+
+    @property
+    def scoping_url_kwargs(self):
+        if getattr(self, "scoper", None) is not None:
+            return {settings.PINAX_BLOG_SCOPING_URL_VAR: self.scoper}
+        return {}
 
 
 @python_2_unicode_compatible
@@ -61,6 +79,7 @@ class Post(models.Model):
 
     STATE_CHOICES = PINAX_BLOG_STATE_CHOICES
 
+    blog = models.ForeignKey(Blog)
     section = models.ForeignKey(Section)
 
     title = models.CharField(_("Title"), max_length=90)
@@ -196,7 +215,9 @@ class Post(models.Model):
         """
         if not self.is_published or self.is_future_published:
             if self.secret_key:
-                return reverse("pinax_blog:blog_post_secret", kwargs={"post_secret_key": self.secret_key})
+                kwargs = self.blog.scoping_url_kwargs
+                kwargs.update({"post_secret_key": self.secret_key})
+                return reverse("pinax_blog:blog_post_secret", kwargs=kwargs)
             else:
                 return "A secret sharable url for non-authenticated users is generated when you save this post."
         else:
@@ -226,6 +247,7 @@ class Post(models.Model):
             kwargs = {
                 "post_pk": self.pk,
             }
+        kwargs.update(self.blog.scoping_url_kwargs)
         return reverse(name, kwargs=kwargs)
 
     def inc_views(self):

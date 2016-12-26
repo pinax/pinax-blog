@@ -13,6 +13,7 @@ from django.views.generic.dates import DateDetailView
 from django.contrib.sites.models import Site
 
 from .conf import settings
+from .hooks import hookset
 from .managers import PUBLISHED_STATE
 from .models import Post, FeedHit, Section
 from .signals import post_viewed, post_redirected
@@ -49,7 +50,9 @@ class BlogIndexView(ListView):
         return posts
 
     def get_queryset(self):
-        return self.search(Post.objects.current())
+        blog = hookset.get_blog(**self.kwargs)
+        qs = Post.objects.current().filter(blog=blog)
+        return self.search(qs)
 
 
 class SectionIndexView(BlogIndexView):
@@ -78,9 +81,11 @@ class SlugUniquePostDetailView(DetailView):
         return self.render_to_response(context)
 
     def get_queryset(self):
-        queryset = super(SlugUniquePostDetailView, self).get_queryset()
-        queryset = queryset.filter(state=PUBLISHED_STATE)
-        return queryset
+        blog = hookset.get_blog(**self.kwargs)
+        return super(SlugUniquePostDetailView, self).get_queryset().filter(
+            blog=blog,
+            state=PUBLISHED_STATE
+        )
 
 
 class DateBasedPostDetailView(DateDetailView):
@@ -99,9 +104,11 @@ class DateBasedPostDetailView(DateDetailView):
         return self.render_to_response(context)
 
     def get_queryset(self):
-        queryset = super(DateBasedPostDetailView, self).get_queryset()
-        queryset = queryset.filter(state=PUBLISHED_STATE)
-        return queryset
+        blog = hookset.get_blog(**self.kwargs)
+        return super(DateBasedPostDetailView, self).get_queryset().filter(
+            blog=blog,
+            state=PUBLISHED_STATE
+        )
 
 
 class StaffPostDetailView(DetailView):
@@ -144,9 +151,19 @@ def serialize_request(request):
     return json.dumps(data)
 
 
-def blog_feed(request, section=None, feed_type=None):
+def blog_feed(request, **kwargs):
 
-    posts = Post.objects.published().order_by("-updated")
+    section = kwargs.get("section", None)
+    feed_type = kwargs.get("feed_type", None)
+    scoper_lookup = kwargs.get(settings.PINAX_BLOG_SCOPING_URL_VAR, None)
+
+    blog = hookset.get_blog(**kwargs)
+    posts = Post.objects.published().filter(blog=blog).order_by("-updated")
+
+    blog_url_kwargs = {}
+    if scoper_lookup is not None:
+        blog_url_kwargs = {settings.PINAX_BLOG_SCOPING_URL_VAR: scoper_lookup}
+
     if section and section != "all":
         section = get_object_or_404(Section, slug=section)
         feed_title = settings.PINAX_BLOG_SECTION_FEED_TITLE % section.name
@@ -165,9 +182,10 @@ def blog_feed(request, section=None, feed_type=None):
         raise Http404()
 
     current_site = Site.objects.get_current()
-    blog_url = "http://%s%s" % (current_site.domain, reverse("pinax_blog:blog"))
-    kwargs = {"section": section.slug if section != "all" else "all", "feed_type": feed_type}
-    feed_url = "http://%s%s" % (current_site.domain, reverse("pinax_blog:blog_feed", kwargs=kwargs))
+    feed_url_kwargs = {"section": section.slug if section != "all" else "all", "feed_type": feed_type}
+    feed_url_kwargs.update(blog_url_kwargs)
+    blog_url = "http://%s%s" % (current_site.domain, reverse("pinax_blog:blog", kwargs=blog_url_kwargs))
+    feed_url = "http://%s%s" % (current_site.domain, reverse("pinax_blog:blog_feed", kwargs=feed_url_kwargs))
 
     if posts:
         feed_updated = posts[0].updated

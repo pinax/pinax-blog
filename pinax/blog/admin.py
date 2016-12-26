@@ -3,8 +3,9 @@ from django.utils import timezone
 from django.utils.functional import curry
 from django.utils.translation import ugettext_lazy as _
 
+from .conf import settings
 from .forms import AdminPostForm
-from .models import Post, Image, ReviewComment, Section
+from .models import Blog, Post, Image, ReviewComment, Section
 from .utils import can_tweet
 
 
@@ -21,6 +22,8 @@ def make_published(modeladmin, request, queryset):
     queryset = queryset.exclude(state=Post.STATE_CHOICES[-1][0], published__isnull=False)
     queryset.update(state=Post.STATE_CHOICES[-1][0])
     queryset.filter(published__isnull=True).update(published=timezone.now())
+
+
 make_published.short_description = _("Publish selected posts")
 
 
@@ -75,7 +78,12 @@ class PostAdmin(admin.ModelAdmin):
     def save_form(self, request, form, change):
         # this is done for explicitness that we want form.save to commit
         # form.save doesn't take a commit kwarg for this reason
-        return form.save()
+        return form.save(Blog.objects.first() if not settings.PINAX_BLOG_SCOPING_MODEL else None)
+
+
+if settings.PINAX_BLOG_SCOPING_MODEL:
+    PostAdmin.fields.insert(0, "blog")
+    PostAdmin.list_filter.append("blog__scoper")
 
 
 class SectionAdmin(admin.ModelAdmin):

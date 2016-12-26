@@ -77,7 +77,7 @@ class AdminPostForm(forms.ModelForm):
             self.fields["teaser"].initial = latest_revision.teaser
             self.fields["content"].initial = latest_revision.content
 
-    def save(self):
+    def save(self, blog=None):
         published = False
         post = super(AdminPostForm, self).save(commit=False)
 
@@ -95,6 +95,8 @@ class AdminPostForm(forms.ModelForm):
         post.teaser_html = render_func(self.cleaned_data["teaser"])
         post.content_html = render_func(self.cleaned_data["content"])
         post.updated = timezone.now()
+        if blog:
+            post.blog = blog
         post.save()
 
         r = Revision()

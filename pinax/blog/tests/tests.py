@@ -3,7 +3,7 @@ from django.test import TestCase
 
 from django.contrib.auth import get_user_model
 
-from ..models import Post, Section
+from ..models import Blog, Post, Section
 
 
 class TestBlog(TestCase):
@@ -12,6 +12,7 @@ class TestBlog(TestCase):
         """
         Create default Sections and Posts.
         """
+        blog = Blog.objects.first()
         apples = Section.objects.create(name="Apples", slug="apples")
         oranges = Section.objects.create(name="Oranges", slug="oranges")
 
@@ -24,14 +25,16 @@ class TestBlog(TestCase):
 
         # Create two published Posts, one in each section.
         self.orange_title = "Orange You Wonderful"
-        self.orange_post = Post.objects.create(section=oranges,
+        self.orange_post = Post.objects.create(blog=blog,
+                                               section=oranges,
                                                title=self.orange_title,
                                                slug=self.orange_title,
                                                author=self.user,
                                                state=Post.STATE_CHOICES[-1][0])
 
         self.apple_title = "Apple of My Eye"
-        self.apple_post = Post.objects.create(section=apples,
+        self.apple_post = Post.objects.create(blog=blog,
+                                              section=apples,
                                               title=self.apple_title,
                                               slug=self.apple_title,
                                               author=self.user,
