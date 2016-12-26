@@ -38,7 +38,8 @@ setup(
         "pytz>=2016.6.1",
         "Pillow>=3.0.0",
         "Markdown>=2.6.5",
-        "Pygments>=2.0.2"
+        "Pygments>=2.0.2",
+        "pinax-images>=2.0.0"
     ],
     test_suite="runtests.runtests",
     classifiers=[
