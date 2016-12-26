@@ -15,6 +15,9 @@ class PinaxBlogDefaultHookSet(object):
         from .models import Blog
         return Blog.objects.first()  # By default there is only a single blog
 
+    def get_url_var(self, scoper):
+        return None
+
     def get_blog_str(self, blog):
         return "Blog {}".format(blog.pk)
 

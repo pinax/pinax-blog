@@ -43,7 +43,7 @@ class Blog(models.Model):
     @property
     def scoping_url_kwargs(self):
         if getattr(self, "scoper", None) is not None:
-            return {settings.PINAX_BLOG_SCOPING_URL_VAR: self.scoper}
+            return {settings.PINAX_BLOG_SCOPING_URL_VAR: hookset.get_url_var(self.scoper)}
         return {}
 
 
