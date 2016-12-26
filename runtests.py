@@ -13,6 +13,7 @@ DEFAULT_SETTINGS = dict(
         "django.contrib.auth",
         "django.contrib.contenttypes",
         "django.contrib.sites",
+        "pinax.images",
         "pinax.blog",
         "pinax.blog.tests",
         "pinax_theme_bootstrap",

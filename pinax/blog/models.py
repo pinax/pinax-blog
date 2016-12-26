@@ -22,6 +22,8 @@ except ImportError:
 
 import pytz
 
+from pinax.images.models import ImageSet
+
 from .conf import settings
 from .hooks import hookset
 from .managers import PostManager
@@ -92,8 +94,7 @@ class Post(models.Model):
     content_html = models.TextField(editable=False)
 
     description = models.TextField(_("Description"), blank=True)
-    primary_image = models.ForeignKey("Image", null=True, blank=True,
-                                      related_name="+", verbose_name=_("Primary Image"))
+    image_set = models.ForeignKey(ImageSet, related_name="blog_posts")
     tweet_text = models.CharField(_("Tweet text"), max_length=140, editable=False)
 
     created = models.DateTimeField(_("Created"), default=timezone.now, editable=False)  # when first revision was created
@@ -140,8 +141,8 @@ class Post(models.Model):
 
     @property
     def meta_image(self):
-        if self.primary_image:
-            return self.primary_image.image_path.url
+        if self.image_set.primary_image:
+            return self.image_set.primary_image.image_path.url
 
     def rev(self, rev_id):
         return self.revisions.get(pk=rev_id)
@@ -205,6 +206,8 @@ class Post(models.Model):
             self.secret_key = "".join(choice(letters) for _ in range(8))
         if self.is_published and self.published is None:
             self.published = timezone.now()
+        if not ImageSet.objects.filter(blog_posts=self).exists():
+            self.image_set = ImageSet.objects.create(created_by=self.author)
         super(Post, self).save(**kwargs)
 
     @property
@@ -283,27 +286,6 @@ class Revision(models.Model):
     class Meta:
         verbose_name = _("Revision")
         verbose_name_plural = _("Revisions")
-
-
-@python_2_unicode_compatible
-class Image(models.Model):
-
-    post = models.ForeignKey(Post, related_name="images", verbose_name=_("Post"))
-
-    image_path = models.ImageField(upload_to="images/%Y/%m/%d")
-    url = models.CharField(_("Url"), max_length=150, blank=True)
-
-    timestamp = models.DateTimeField(_("Timestamp"), default=timezone.now, editable=False)
-
-    def __str__(self):
-        if self.pk is not None:
-            return "{{ %d }}" % self.pk
-        else:
-            return _("deleted image")
-
-    class Meta:
-        verbose_name = _("Image")
-        verbose_name_plural = _("Images")
 
 
 class FeedHit(models.Model):
