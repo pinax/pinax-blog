@@ -6,6 +6,15 @@ from django.conf import settings
 from django.db import migrations, models
 
 
+def initial_blogs(apps, schema_editor):
+    if settings.PINAX_BLOG_SCOPING_MODEL is not None:
+        db_alias = schema_editor.connection.alias
+        Blog = apps.get_model("blog", "Blog")
+        ScopingModel = apps.get_model(*settings.PINAX_BLOG_SCOPING_MODEL.split("."))  # should be app.Model syntax
+        for scoper in ScopingModel.objects.using(db_alias).all():
+            Blog.objects.create(scoper=scoper)
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -26,4 +35,7 @@ class Migration(migrations.Migration):
                 name='scoper',
                 field=models.OneToOneField(related_name='blog', to=settings.PINAX_BLOG_SCOPING_MODEL)
             )
+        )
+        operations.append(
+            migrations.RunPython(initial_blogs)
         )
