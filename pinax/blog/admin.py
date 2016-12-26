@@ -22,6 +22,8 @@ def make_published(modeladmin, request, queryset):
     queryset = queryset.exclude(state=Post.STATE_CHOICES[-1][0], published__isnull=False)
     queryset.update(state=Post.STATE_CHOICES[-1][0])
     queryset.filter(published__isnull=True).update(published=timezone.now())
+
+
 make_published.short_description = _("Publish selected posts")
 
 
