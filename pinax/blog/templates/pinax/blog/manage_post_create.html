@@ -28,6 +28,13 @@
         {{ form.content|bootstrap }}
         {{ form.description|bootstrap }}
         {{ form.state|bootstrap }}
+        {% if post.image_set %}
+            {% url "pinax_images:imageset_upload" post.image_set.pk as upload_url %}
+            {% url "pinax_images:imageset_detail" post.image_set.pk as detail_url %}
+        {% else %}
+            {% url "pinax_images:imageset_new_upload" as upload_url %}
+        {% endif %}
+        <div id="image-panel" data-image-set-id="{{ post.image_set.id }}" data-images-url="{{ detail_url }}" data-upload-url="{{ upload_url }}"></div>
         <button class="btn btn-primary">Submit</button>
     </form>
 {% endblock %}
