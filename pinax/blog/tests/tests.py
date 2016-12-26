@@ -12,7 +12,7 @@ class TestBlog(TestCase):
         """
         Create default Sections and Posts.
         """
-        blog = Blog.objects.create()
+        blog = Blog.objects.first()
         apples = Section.objects.create(name="Apples", slug="apples")
         oranges = Section.objects.create(name="Oranges", slug="oranges")
 
