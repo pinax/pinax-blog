@@ -8,7 +8,12 @@ from .views import (
     SectionIndexView,
     SlugUniquePostDetailView,
     StaffPostDetailView,
-    blog_feed
+    blog_feed,
+    ManagePostList,
+    ManageCreatePost,
+    ManageUpdatePost,
+    ManageDeletePost,
+    ajax_preview
 )
 
 
@@ -16,9 +21,16 @@ urlpatterns = [
     url(r"^$", BlogIndexView.as_view(), name="blog"),
     url(r"^section/(?P<section>[-\w]+)/$", SectionIndexView.as_view(), name="blog_section"),
     url(r"^post/(?P<post_pk>\d+)/$", StaffPostDetailView.as_view(), name="blog_post_pk"),
-    url(r"^post/(?P<post_secret_key>\w+)/$", SecretKeyPostDetailView.as_view(),
-        name="blog_post_secret"),
+    url(r"^post/(?P<post_secret_key>\w+)/$", SecretKeyPostDetailView.as_view(), name="blog_post_secret"),
     url(r"^feed/(?P<section>[-\w]+)/(?P<feed_type>[-\w]+)/$", blog_feed, name="blog_feed"),
+
+    # authoring
+    url(r"^manage/posts/$", ManagePostList.as_view(), name="manage_post_list"),
+    url(r"^manage/posts/create/$", ManageCreatePost.as_view(), name="manage_post_create"),
+    url(r"^manage/posts/(?P<post_pk>\d+)/update/$", ManageUpdatePost.as_view(), name="manage_post_update"),
+    url(r"^manage/posts/(?P<post_pk>\d+)/delete/$", ManageDeletePost.as_view(), name="manage_post_delete"),
+
+    url(r"^ajax/markdown/preview/$", ajax_preview, name="ajax_preview")
 ]
 
 

@@ -9,6 +9,8 @@ The `description` field in the admin represents the text that will be used in
 different HTML META header tags that are useful for controlling the display
 on social networks like Twitter and Facebook.
 
+This is the same idea behind the `primary_image` field in the admin.
+
 
 ## Images
 
@@ -89,9 +91,9 @@ from django.contrib.auth.models import User
 
 class HookSet(object):
 
-    def get_scoped_object(self, **kwargs):
+    def get_blog(self, **kwargs):
         username = kwargs.get("username", None)
-        return User.objects.get(username=username)
+        return User.objects.get(username=username).blog
 ```
 
 This is designed to work out of the box with templates in `pinax-theme-bootstrap`

@@ -1,0 +1,11 @@
+{% extends "pinax/blog/blog_base.html" %}
+
+{% load bootstrap %}
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form|bootstrap }}
+        <button class="btn btn-primary">Submit</button>
+    </form>
+{% endblock %}

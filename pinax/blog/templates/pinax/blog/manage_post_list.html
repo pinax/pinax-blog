@@ -1,0 +1,43 @@
+{% extends "pinax/blog/blog_base.html" %}
+
+{% load bootstrap %}
+
+{% block content %}
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                {% if scoper_lookup %}
+                    {% url "pinax_blog:manage_post_create" scoper_lookup as create_url %}
+                {% else %}
+                    {% url "pinax_blog:manage_post_create" as create_url %}
+                {% endif %}
+                <th><a class="btn btn-xs btn-primary" href="{{ create_url }}"><i class="fa fa-fw fa-plus"></i> Add</a></th>
+                <th>Title</th>
+                <th>State</th>
+                <th>Section</th>
+                <th>Published</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for post in post_list %}
+                {% if scoper_lookup %}
+                    {% url "pinax_blog:manage_post_update" scoper_lookup post.pk as update_url %}
+                    {% url "pinax_blog:manage_post_delete" scoper_lookup post.pk as delete_url %}
+                {% else %}
+                    {% url "pinax_blog:manage_post_update" post.pk as update_url %}
+                    {% url "pinax_blog:manage_post_delete" post.pk as delete_url %}
+                {% endif %}
+                <tr>
+                    <td>
+                        <a class="btn btn-xs btn-default" href="{{ update_url }}">Edit</a>
+                        <a class="btn btn-xs btn-default" href="{{ delete_url }}">Delete</a>
+                    </td>
+                    <td><a href="{{ post.sharable_url }}">{{ post.title }}</a></td>
+                    <td>{{ post.get_state_display }}</td>
+                    <td>{{ post.section }}</td>
+                    <td>{{ post.published }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

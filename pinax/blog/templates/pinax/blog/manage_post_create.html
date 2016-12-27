@@ -1,0 +1,40 @@
+{% extends "pinax/blog/blog_base.html" %}
+
+{% load bootstrap %}
+
+{% block content %}
+    {% if scoper_lookup %}
+        {% url "pinax_blog:ajax_preview" scoper_lookup as preview_url %}
+    {% else %}
+        {% url "pinax_blog:ajax_preview" as preview_url %}
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.title|bootstrap }}
+        <div class="form-group">
+            <label class="control-label  " for="id_teaser">Teaser</label>
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#teaser" data-toggle="tab">Write</a></li>
+                <li><a href="#teaser-preview" data-toggle="tab" onclick="$('#teaser-preview-ajax-link').click();">Preview</a></li>
+            </ul>
+            <a href="{{ preview_url }}" id="teaser-preview-ajax-link" class="ajax" data-method="post" data-replace-inner="#teaser-preview" data-data="markup:#id_teaser"></a>
+            <div class="tab-content">
+                <div class="tab-pane active" id="teaser">
+                    <textarea class=" form-control" cols="40" id="id_teaser" name="teaser" rows="10" required=""></textarea>
+                </div>
+                <div class="tab-pane" id="teaser-preview"></div>
+            </div>
+        </div>
+        {{ form.content|bootstrap }}
+        {{ form.description|bootstrap }}
+        {{ form.state|bootstrap }}
+        {% if post.image_set %}
+            {% url "pinax_images:imageset_upload" post.image_set.pk as upload_url %}
+            {% url "pinax_images:imageset_detail" post.image_set.pk as detail_url %}
+        {% else %}
+            {% url "pinax_images:imageset_new_upload" as upload_url %}
+        {% endif %}
+        <div id="image-panel" data-image-set-id="{{ post.image_set.id }}" data-images-url="{{ detail_url }}" data-upload-url="{{ upload_url }}"></div>
+        <button class="btn btn-primary">Submit</button>
+    </form>
+{% endblock %}

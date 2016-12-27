@@ -1,3 +1,5 @@
+from django.http import Http404
+
 from pinax.blog.conf import settings
 
 
@@ -15,8 +17,22 @@ class PinaxBlogDefaultHookSet(object):
         from .models import Blog
         return Blog.objects.first()  # By default there is only a single blog
 
+    def get_url_var(self, scoper):
+        return None
+
     def get_blog_str(self, blog):
         return "Blog {}".format(blog.pk)
+
+    def can_manage(self, request, *args, **kwargs):
+        return request.user.is_staff
+
+    def response_cannot_manage(self, request, *args, **kwargs):
+        """
+        The response to return when `can_manage` returns `False` for all of the
+        manage views.  You may want to return a `redirect` or raise some HTTP
+        error.
+        """
+        raise Http404()
 
 
 class HookProxy(object):

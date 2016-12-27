@@ -4,19 +4,22 @@ from datetime import datetime
 
 from django.core.urlresolvers import reverse
 from django.db.models import Q
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, JsonResponse
 from django.shortcuts import redirect, get_object_or_404
 from django.template.loader import render_to_string
-from django.views.generic import DetailView, ListView
+from django.views.decorators.http import require_POST
+from django.views.generic import DetailView, ListView, DeleteView, CreateView, UpdateView
 from django.views.generic.dates import DateDetailView
 
 from django.contrib.sites.models import Site
 
 from .conf import settings
+from .forms import PostForm
 from .hooks import hookset
 from .managers import PUBLISHED_STATE
 from .models import Post, FeedHit, Section
 from .signals import post_viewed, post_redirected
+from .parsers.markdown_parser import parse
 
 
 class BlogIndexView(ListView):
@@ -207,3 +210,78 @@ def blog_feed(request, **kwargs):
         "current_site": current_site,
     })
     return HttpResponse(feed, content_type=feed_mimetype)
+
+
+class ManageBlogMixin(object):
+
+    def dispatch(self, request, *args, **kwargs):
+        self.request = request
+        self.args = args
+        self.kwargs = kwargs
+        if hookset.can_manage(request, *args, **kwargs):
+            self.blog = hookset.get_blog(**kwargs)
+            return super(ManageBlogMixin, self).dispatch(request, *args, **kwargs)
+        return hookset.response_cannot_manage(request, *args, **kwargs)
+
+
+class ManageSuccessUrlMixin(object):
+
+    def get_success_url(self):
+        scoping_lookup = self.kwargs.get(settings.PINAX_BLOG_SCOPING_URL_VAR, None)
+        if scoping_lookup:
+            return reverse("pinax_blog:manage_post_list", kwargs={settings.PINAX_BLOG_SCOPING_URL_VAR: scoping_lookup})
+        return reverse("pinax_blog:manage_post_list")
+
+
+class ManagePostList(ManageBlogMixin, ListView):
+
+    model = Post
+    template_name = "pinax/blog/manage_post_list.html"
+
+    def get_queryset(self):
+        return super(ManagePostList, self).get_queryset().filter(blog=self.blog)
+
+
+class ManageCreatePost(ManageBlogMixin, ManageSuccessUrlMixin, CreateView):
+
+    model = Post
+    form_class = PostForm
+    template_name = "pinax/blog/manage_post_create.html"
+
+    def form_valid(self, form):
+        form.save(blog=self.blog, author=self.request.user)
+        return redirect(self.get_success_url())
+
+
+class ManageUpdatePost(ManageBlogMixin, ManageSuccessUrlMixin, UpdateView):
+
+    model = Post
+    form_class = PostForm
+    pk_url_kwarg = "post_pk"
+    template_name = "pinax/blog/manage_post_update.html"
+
+    def get_queryset(self):
+        return super(ManageUpdatePost, self).get_queryset().filter(blog=self.blog)
+
+
+class ManageDeletePost(ManageBlogMixin, ManageSuccessUrlMixin, DeleteView):
+
+    model = Post
+    pk_url_kwarg = "post_pk"
+    template_name = "pinax/blog/manage_post_delete_confirm.html"
+
+    def get_queryset(self):
+        return super(ManageDeletePost, self).get_queryset().filter(blog=self.blog)
+
+
+@require_POST
+def ajax_preview(request, **kwargs):
+    """
+    Currently only supports markdown
+    """
+    data = {
+        "html": render_to_string("pinax/blog/_preview.html", {
+            "content": parse(request.POST.get("markup"))
+        })
+    }
+    return JsonResponse(data)

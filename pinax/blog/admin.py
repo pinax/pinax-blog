@@ -6,7 +6,6 @@ from django.utils.translation import ugettext_lazy as _
 from .conf import settings
 from .forms import AdminPostForm
 from .models import Blog, Post, ReviewComment, Section
-from .utils import can_tweet
 
 
 class ReviewInline(admin.TabularInline):
@@ -42,8 +41,6 @@ class PostAdmin(admin.ModelAdmin):
     ]
     readonly_fields = ["sharable_url"]
 
-    if can_tweet():
-        fields.append("tweet")
     prepopulated_fields = {"slug": ("title",)}
     inlines = [
         ReviewInline,
