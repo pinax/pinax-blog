@@ -212,6 +212,18 @@ def blog_feed(request, **kwargs):
     return HttpResponse(feed, content_type=feed_mimetype)
 
 
+class ManageBlogMixin(object):
+
+    def dispatch(self, request, *args, **kwargs):
+        self.request = request
+        self.args = args
+        self.kwargs = kwargs
+        if hookset.can_manage(request, *args, **kwargs):
+            self.blog = hookset.get_blog(**kwargs)
+            return super(ManageBlogMixin, self).dispatch(request, *args, **kwargs)
+        return hookset.response_cannot_manage(request, *args, **kwargs)
+
+
 class ManageSuccessUrlMixin(object):
 
     def get_success_url(self):
@@ -221,29 +233,27 @@ class ManageSuccessUrlMixin(object):
         return reverse("pinax_blog:manage_post_list")
 
 
-class ManagePostList(ListView):
+class ManagePostList(ManageBlogMixin, ListView):
 
     model = Post
     template_name = "pinax/blog/manage_post_list.html"
 
     def get_queryset(self):
-        blog = hookset.get_blog(**self.kwargs)
-        return super(ManagePostList, self).get_queryset().filter(blog=blog)
+        return super(ManagePostList, self).get_queryset().filter(blog=self.blog)
 
 
-class ManageCreatePost(ManageSuccessUrlMixin, CreateView):
+class ManageCreatePost(ManageBlogMixin, ManageSuccessUrlMixin, CreateView):
 
     model = Post
     form_class = PostForm
     template_name = "pinax/blog/manage_post_create.html"
 
     def form_valid(self, form):
-        blog = hookset.get_blog(**self.kwargs)
-        form.save(blog=blog, author=self.request.user)
+        form.save(blog=self.blog, author=self.request.user)
         return redirect(self.get_success_url())
 
 
-class ManageUpdatePost(ManageSuccessUrlMixin, UpdateView):
+class ManageUpdatePost(ManageBlogMixin, ManageSuccessUrlMixin, UpdateView):
 
     model = Post
     form_class = PostForm
@@ -251,19 +261,17 @@ class ManageUpdatePost(ManageSuccessUrlMixin, UpdateView):
     template_name = "pinax/blog/manage_post_update.html"
 
     def get_queryset(self):
-        blog = hookset.get_blog(**self.kwargs)
-        return super(ManageUpdatePost, self).get_queryset().filter(blog=blog)
+        return super(ManageUpdatePost, self).get_queryset().filter(blog=self.blog)
 
 
-class ManageDeletePost(ManageSuccessUrlMixin, DeleteView):
+class ManageDeletePost(ManageBlogMixin, ManageSuccessUrlMixin, DeleteView):
 
     model = Post
     pk_url_kwarg = "post_pk"
     template_name = "pinax/blog/manage_post_delete_confirm.html"
 
     def get_queryset(self):
-        blog = hookset.get_blog(**self.kwargs)
-        return super(ManageDeletePost, self).get_queryset().filter(blog=blog)
+        return super(ManageDeletePost, self).get_queryset().filter(blog=self.blog)
 
 
 @require_POST
