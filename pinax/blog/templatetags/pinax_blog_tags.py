@@ -10,7 +10,7 @@ register = template.Library()
 def latest_blog_posts(scoper=None):
     qs = Post.objects.current()
     if scoper:
-        qs = qs.filter(scoper=scoper)
+        qs = qs.filter(blog__scoper=scoper)
     return qs[:5]
 
 
@@ -18,7 +18,7 @@ def latest_blog_posts(scoper=None):
 def latest_blog_post(scoper=None):
     qs = Post.objects.current()
     if scoper:
-        qs = qs.filter(scoper=scoper)
+        qs = qs.filter(blog__scoper=scoper)
     return qs[0]
 
 
@@ -26,7 +26,7 @@ def latest_blog_post(scoper=None):
 def latest_section_post(section, scoper=None):
     qs = Post.objects.published().filter(section__name=section).order_by("-published")
     if scoper:
-        qs = qs.filter(scoper=scoper)
+        qs = qs.filter(blog__scoper=scoper)
     return qs[0] if qs.count() > 0 else None
 
 
