@@ -1,5 +1,13 @@
 # Change Log
 
+## 6.0.0
+
+* added support for frontend editing
+* removed twitter integrations
+* swapped out internal image management for pinax-images
+* added a `Blog` scoping model and enabled site defined one to one relationship
+  custom site-defined scoping.
+
 ## 5.0.2
 
 * updated pytz version ([PR #92](https://github.com/pinax/pinax-blog/pull/92))
