@@ -70,10 +70,10 @@ class Post(models.Model):
     section = models.ForeignKey(Section)
 
     title = models.CharField(_("Title"), max_length=90)
-    slug = models.SlugField(_("Slug"), unique=settings.PINAX_BLOG_SLUG_UNIQUE)
+    slug = models.SlugField(_("Slug"), max_length=90, unique=settings.PINAX_BLOG_SLUG_UNIQUE)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="posts", verbose_name=_("Author"))
 
-    markup = models.CharField(_("Markup"), max_length=25, choices=settings.PINAX_BLOG_MARKUP_CHOICES)
+    markup = models.CharField(_("Markup"), max_length=25, choices=settings.PINAX_BLOG_MARKUP_CHOICES, blank=True)
 
     teaser_html = models.TextField(editable=False)
     content_html = models.TextField(editable=False)
@@ -162,6 +162,7 @@ class Post(models.Model):
             self.published = timezone.now()
         if not ImageSet.objects.filter(blog_posts=self).exists():
             self.image_set = ImageSet.objects.create(created_by=self.author)
+        self.full_clean()
         super(Post, self).save(**kwargs)
 
     @property

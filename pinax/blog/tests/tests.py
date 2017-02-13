@@ -1,7 +1,7 @@
+from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse
 from django.test import TestCase
-
-from django.contrib.auth import get_user_model
+from django.utils.text import slugify
 
 from ..models import Blog, Post, Section
 
@@ -25,18 +25,20 @@ class TestBlog(TestCase):
 
         # Create two published Posts, one in each section.
         self.orange_title = "Orange You Wonderful"
+        self.orange_slug = slugify(self.orange_title)
         self.orange_post = Post.objects.create(blog=blog,
                                                section=oranges,
                                                title=self.orange_title,
-                                               slug=self.orange_title,
+                                               slug=self.orange_slug,
                                                author=self.user,
                                                state=Post.STATE_CHOICES[-1][0])
 
         self.apple_title = "Apple of My Eye"
+        self.apple_slug = slugify(self.apple_title)
         self.apple_post = Post.objects.create(blog=blog,
                                               section=apples,
                                               title=self.apple_title,
-                                              slug=self.apple_title,
+                                              slug=self.apple_slug,
                                               author=self.user,
                                               state=Post.STATE_CHOICES[-1][0])
 
