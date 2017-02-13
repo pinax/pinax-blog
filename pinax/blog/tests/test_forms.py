@@ -1,6 +1,4 @@
 from __future__ import absolute_import
-import random
-import string
 
 from django.contrib.auth import get_user_model
 from django.test import TestCase
@@ -11,10 +9,7 @@ from ..models import (
     Post,
     Section,
 )
-
-
-def randomword(length):
-    return ''.join(random.choice(string.lowercase) for i in range(length))
+from .tests import randomword
 
 
 class TestForms(TestCase):
