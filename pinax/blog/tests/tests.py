@@ -1,7 +1,6 @@
 from __future__ import absolute_import
 
 import random
-import string
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
@@ -12,8 +11,11 @@ from django.utils.text import slugify
 from ..models import Blog, Post, Section
 
 
+ascii_lowercase = 'abcdefghijklmnopqrstuvwxyz'
+
+
 def randomword(length):
-    return ''.join(random.choice(string.lowercase) for i in range(length))
+    return ''.join(random.choice(ascii_lowercase) for i in range(length))
 
 
 class TestBlog(TestCase):
