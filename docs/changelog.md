@@ -1,5 +1,13 @@
 # Change Log
 
+## 6.0.2
+
+* increased max_length of Post.slug field from 50 to 90 chars, matching Post.title field length.
+
+## 6.0.1
+
+* fix templatetag scoping
+
 ## 6.0.0
 
 * added support for frontend editing
