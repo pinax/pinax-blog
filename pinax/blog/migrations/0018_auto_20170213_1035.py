@@ -14,11 +14,6 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterField(
             model_name='post',
-            name='markup',
-            field=models.CharField(blank=True, choices=[('markdown', 'Markdown')], max_length=25, verbose_name='Markup'),
-        ),
-        migrations.AlterField(
-            model_name='post',
             name='slug',
             field=models.SlugField(max_length=90, verbose_name='Slug'),
         ),
