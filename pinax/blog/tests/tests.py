@@ -34,6 +34,7 @@ class TestBlog(TestCase):
             password=self.password
         )
         self.user.save()
+        self.markup = "markdown"
 
         # Create two published Posts, one in each section.
         self.orange_title = "Orange You Wonderful"
@@ -43,6 +44,7 @@ class TestBlog(TestCase):
                                                title=self.orange_title,
                                                slug=self.orange_slug,
                                                author=self.user,
+                                               markup=self.markup,
                                                state=Post.STATE_CHOICES[-1][0])
 
         self.apple_title = "Apple of My Eye"
@@ -52,6 +54,7 @@ class TestBlog(TestCase):
                                               title=self.apple_title,
                                               slug=self.apple_slug,
                                               author=self.user,
+                                              markup=self.markup,
                                               state=Post.STATE_CHOICES[-1][0])
 
 
