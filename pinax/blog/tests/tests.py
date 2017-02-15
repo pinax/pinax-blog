@@ -1,9 +1,21 @@
-from django.core.urlresolvers import reverse
-from django.test import TestCase
+from __future__ import absolute_import
+
+import random
 
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
+from django.core.urlresolvers import reverse
+from django.test import TestCase
+from django.utils.text import slugify
 
 from ..models import Blog, Post, Section
+
+
+ascii_lowercase = 'abcdefghijklmnopqrstuvwxyz'
+
+
+def randomword(length):
+    return ''.join(random.choice(ascii_lowercase) for i in range(length))
 
 
 class TestBlog(TestCase):
@@ -12,9 +24,9 @@ class TestBlog(TestCase):
         """
         Create default Sections and Posts.
         """
-        blog = Blog.objects.first()
-        apples = Section.objects.create(name="Apples", slug="apples")
-        oranges = Section.objects.create(name="Oranges", slug="oranges")
+        self.blog = Blog.objects.first()
+        self.apples = Section.objects.create(name="Apples", slug="apples")
+        self.oranges = Section.objects.create(name="Oranges", slug="oranges")
 
         self.password = "eldarion"
         self.user = get_user_model().objects.create_user(
@@ -22,22 +34,27 @@ class TestBlog(TestCase):
             password=self.password
         )
         self.user.save()
+        self.markup = "markdown"
 
         # Create two published Posts, one in each section.
         self.orange_title = "Orange You Wonderful"
-        self.orange_post = Post.objects.create(blog=blog,
-                                               section=oranges,
+        self.orange_slug = slugify(self.orange_title)
+        self.orange_post = Post.objects.create(blog=self.blog,
+                                               section=self.oranges,
                                                title=self.orange_title,
-                                               slug=self.orange_title,
+                                               slug=self.orange_slug,
                                                author=self.user,
+                                               markup=self.markup,
                                                state=Post.STATE_CHOICES[-1][0])
 
         self.apple_title = "Apple of My Eye"
-        self.apple_post = Post.objects.create(blog=blog,
-                                              section=apples,
+        self.apple_slug = slugify(self.apple_title)
+        self.apple_post = Post.objects.create(blog=self.blog,
+                                              section=self.apples,
                                               title=self.apple_title,
-                                              slug=self.apple_title,
+                                              slug=self.apple_slug,
                                               author=self.user,
+                                              markup=self.markup,
                                               state=Post.STATE_CHOICES[-1][0])
 
 
@@ -85,3 +102,28 @@ class TestViewGetPosts(TestBlog):
         self.assertEqual(response.context_data["post_list"].count(), 2)
         self.assertIn(self.orange_post, response.context_data["post_list"])
         self.assertIn(self.apple_post, response.context_data["post_list"])
+
+
+class TestModelFieldValidation(TestBlog):
+
+    def test_overlong_slug(self):
+        title_len = Post._meta.get_field("title").max_length
+        title = randomword(title_len)
+        slug_len = Post._meta.get_field("slug").max_length
+        slug = randomword(slug_len + 1)
+        slug_post = Post(blog=self.blog,
+                         section=self.apples,
+                         title=title,
+                         slug=slug,
+                         author=self.user,
+                         state=Post.STATE_CHOICES[-1][0])
+
+        with self.assertRaises(ValidationError) as context_manager:
+            slug_post.save()
+
+        the_exception = context_manager.exception
+        self.assertIn(
+            "Ensure this value has at most {} characters (it has {})."
+            .format(slug_len, len(slug)),
+            the_exception.messages
+        )

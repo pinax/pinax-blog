@@ -139,6 +139,7 @@ class PostForm(PostFormMixin, forms.ModelForm):
         if self.section:
             post.section = self.section
         post.slug = slugify(post.title)
+        post.markup = self.markup_choice
         return self.save_post(post)
 
     class Meta:

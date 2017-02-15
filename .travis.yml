@@ -8,13 +8,13 @@ python:
 env:
   - DJANGO=1.8
   - DJANGO=1.9
-  - DJANGO=master
+  - DJANGO=1.10
 matrix:
   exclude:
     - python: "3.3"
       env: DJANGO=1.9
     - python: "3.3"
-      env: DJANGO=master
+      env: DJANGO=1.10
 install:
   - pip install tox coveralls
 script:
