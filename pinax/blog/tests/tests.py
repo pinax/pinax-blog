@@ -5,11 +5,12 @@ import random
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
+from django.http.request import HttpRequest
 from django.test import TestCase
 from django.utils.text import slugify
 
 from ..models import Blog, Post, Section
-
+from ..context_processors import scoped
 
 ascii_lowercase = 'abcdefghijklmnopqrstuvwxyz'
 
@@ -127,3 +128,15 @@ class TestModelFieldValidation(TestBlog):
             .format(slug_len, len(slug)),
             the_exception.messages
         )
+
+
+class TestContextProcessors(TestBlog):
+
+    def test_no_resolver_match(self):
+        """
+        Ensure no problem when `request.resolver_match` is None
+        """
+        request = HttpRequest()
+        self.assertEqual(request.resolver_match, None)
+        result = scoped(request)
+        self.assertEqual(result, {"scoper_lookup": ""})
