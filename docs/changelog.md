@@ -1,5 +1,9 @@
 # Change Log
 
+## 6.0.3
+
+* `scoped` context processor handles case when `request.resolver_match` is None
+
 ## 6.0.2
 
 * increased max_length of Post.slug field from 50 to 90 chars, matching Post.title field length.

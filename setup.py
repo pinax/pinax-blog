@@ -19,7 +19,7 @@ URL = "https://github.com/pinax/pinax-blog"
 
 setup(
     name=NAME,
-    version="6.0.2",
+    version="6.0.3",
     description=DESCRIPTION,
     long_description=read("README.rst"),
     url=URL,
