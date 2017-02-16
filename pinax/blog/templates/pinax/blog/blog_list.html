@@ -1,0 +1,41 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load tz %}
+
+{% block head_title %}{% trans "Announcements" %}{% endblock %}
+
+{% block body_class %}blog{% endblock %}
+
+{% block body %}
+    {% localtime off %}
+    <h1>{% trans "Announcements" %}</h1>
+    
+    <div class="row">
+        <div class="span7">
+            {% if posts %}
+                {% for post in posts %}
+                    <div class="newsitem{% if forloop.last %} last{% endif %}">
+                        
+                        <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
+                        
+                        <div class="newsdate">
+                            {% if post.published %}
+                                {{ post.published|date }}
+                            {% else %}
+                                {% trans "Not published yet" %}
+                            {% endif %}
+                            by {{ post.author.get_full_name }}
+                        </div>
+                        
+                        <div class="blog-list-teaser">{{ post.teaser_html|safe }}</div>
+                        <p class="more"><a href="{{ post.get_absolute_url }}" class="read-more">{% trans "Read more..." %}</a></p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>{% trans "No posts have been published." %}</p>
+            {% endif %}
+        </div>
+    </div>
+    {% endlocaltime %}
+{% endblock %}
