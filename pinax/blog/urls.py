@@ -4,18 +4,19 @@ from .conf import settings
 from .views import (
     BlogIndexView,
     DateBasedPostDetailView,
+    ManageCreatePost,
+    ManageDeletePost,
+    ManagePostList,
+    ManageUpdatePost,
     SecretKeyPostDetailView,
     SectionIndexView,
     SlugUniquePostDetailView,
     StaffPostDetailView,
-    blog_feed,
-    ManagePostList,
-    ManageCreatePost,
-    ManageUpdatePost,
-    ManageDeletePost,
-    ajax_preview
+    ajax_preview,
+    blog_feed
 )
 
+app_name = "pinax_blog"
 
 urlpatterns = [
     url(r"^$", BlogIndexView.as_view(), name="blog"),

@@ -4,19 +4,19 @@ import random
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from django.core.urlresolvers import reverse
 from django.http.request import HttpRequest
 from django.test import TestCase
 from django.utils.text import slugify
 
-from ..models import Blog, Post, Section
+from ..compat import reverse
 from ..context_processors import scoped
+from ..models import Blog, Post, Section
 
-ascii_lowercase = 'abcdefghijklmnopqrstuvwxyz'
+ascii_lowercase = "abcdefghijklmnopqrstuvwxyz"
 
 
 def randomword(length):
-    return ''.join(random.choice(ascii_lowercase) for i in range(length))
+    return "".join(random.choice(ascii_lowercase) for i in range(length))
 
 
 class TestBlog(TestCase):

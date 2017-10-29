@@ -1,25 +1,29 @@
 import json
-
 from datetime import datetime
 
-from django.core.urlresolvers import reverse
+from django.contrib.sites.models import Site
 from django.db.models import Q
-from django.http import HttpResponse, Http404, JsonResponse
-from django.shortcuts import redirect, get_object_or_404
+from django.http import Http404, HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404, redirect
 from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
-from django.views.generic import DetailView, ListView, DeleteView, CreateView, UpdateView
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    UpdateView
+)
 from django.views.generic.dates import DateDetailView
 
-from django.contrib.sites.models import Site
-
+from .compat import reverse
 from .conf import settings
 from .forms import PostForm
 from .hooks import hookset
 from .managers import PUBLISHED_STATE
-from .models import Post, FeedHit, Section
-from .signals import post_viewed, post_redirected
+from .models import FeedHit, Post, Section
 from .parsers.markdown_parser import parse
+from .signals import post_redirected, post_viewed
 
 
 class BlogIndexView(ListView):

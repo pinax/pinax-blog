@@ -8,9 +8,8 @@ from pinax.images.models import ImageSet
 
 from .conf import settings
 from .models import Post, Revision, Section
-from .utils import load_path_attr
 from .signals import post_published
-
+from .utils import load_path_attr
 
 FIELDS = [
     "section",
