@@ -36,7 +36,7 @@ class HtmlEmitter(object):
         """Try to emit whatever text is in the node."""
         try:
             return node.children[0].content or ""
-        except:
+        except (AttributeError, IndexError):
             return node.content or ""
 
     def html_escape(self, text):
