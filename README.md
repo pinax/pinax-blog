@@ -40,6 +40,7 @@ Current features include:
 * [Usage](#usage)
 * [Customizing Admin](#customizing-admin)
 * [Templates](#templates)
+* [Dependencies](#dependencies)
 * [Change Log](#change-log)
 * [Project History](#project-history)
 * [About Pinax](#about-pinax)
@@ -47,36 +48,31 @@ Current features include:
 
 ## Installation
 
-To install pinax-announcements:
+To install pinax-blog:
 
-    pip install pinax-announcements
+    pip install pinax-blog
 
-Add `pinax.announcements` to your `INSTALLED_APPS` setting:
+Add `pinax.blog` to your `INSTALLED_APPS` setting:
 
     INSTALLED_APPS = (
         ...
-        "pinax.announcements",
+        "pinax.blog",
         ...
     )
 
-Optionally, if you want someone other than staff to manage announcements,
-enable this authentication backend:
-
-    AUTHENTICATION_BACKENDS = [
-        ...
-        "pinax.announcements.auth_backends.AnnouncementPermissionsBackend",
-        ...
-    ]
-
-then enable permission `"announcements.can_manage"` for these managers.
-
-Lastly add `pinax.announcements.urls` to your project urlpatterns:
+Add `pinax.blog.urls` to your project urlpatterns:
 
     urlpatterns = [
         ...
-        url(r"^announcements/", include("pinax.announcements.urls", namespace="pinax_announcements")),
+        url(r"^blog/", include("pinax.blog.urls", namespace="pinax_blog")),
         ...
     ]
+
+Optionally, if you want `creole` support for a mark up choice:
+
+    pip install creole
+
+NOTE: the `creole` package does not support Python 3
 
 
 ## Usage
@@ -277,6 +273,18 @@ both templates the context variables of `feed_id`, `feed_title`, `blog_url`,
 `feed_url`, `feed_updated`, `entries`, and `current_site`.
 
 Both templates ship already configured to work out of the box.
+
+
+## Dependencies
+
+* django-appconf
+* pytz
+* pillow
+* markdown
+* pygments
+* pinax-images
+
+See `setup.py` for specific required versions of these packages.
 
 
 ## Change Log
