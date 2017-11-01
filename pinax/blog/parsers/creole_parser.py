@@ -1,7 +1,6 @@
 import re
 
 from creole import Parser
-
 from pinax.images.models import Image
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
