@@ -37,7 +37,8 @@ jobs:
     docker:
       - image: circleci/python:3.6.1
         environment:
-          TOXENV=checkqa
+          - TOXENV=checkqa
+          - UPLOAD_COVERAGE=0
   py27dj18:
     <<: *common
     docker:
