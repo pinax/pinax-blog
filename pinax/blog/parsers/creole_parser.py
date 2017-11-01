@@ -1,12 +1,11 @@
 import re
 
 from creole import Parser
+from pinax.images.models import Image
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
-from pygments.lexers import get_lexer_by_name, TextLexer
+from pygments.lexers import TextLexer, get_lexer_by_name
 from pygments.util import ClassNotFound
-
-from pinax.images.models import Image
 
 
 class Rules:
@@ -37,7 +36,7 @@ class HtmlEmitter(object):
         """Try to emit whatever text is in the node."""
         try:
             return node.children[0].content or ""
-        except:
+        except (AttributeError, IndexError):
             return node.content or ""
 
     def html_escape(self, text):

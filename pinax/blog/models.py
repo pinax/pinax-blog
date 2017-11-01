@@ -1,15 +1,16 @@
 # -*- coding: utf8 -*-
+from random import choice
+
 from django.db import models
-from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.html import strip_tags
 from django.utils.translation import ugettext_lazy as _
 
 import pytz
-
 from pinax.images.models import ImageSet
 
+from .compat import reverse
 from .conf import settings
 from .hooks import hookset
 from .managers import PostManager
@@ -18,8 +19,6 @@ try:
     from string import letters
 except ImportError:
     from string import ascii_letters as letters
-
-from random import choice
 
 
 def ig(L, i):
@@ -35,7 +34,11 @@ PINAX_BLOG_STATE_CHOICES = list(zip(range(1, 1 + len(STATES)), STATES))
 class Blog(models.Model):
 
     if settings.PINAX_BLOG_SCOPING_MODEL is not None:
-        scoper = models.OneToOneField(settings.PINAX_BLOG_SCOPING_MODEL, related_name="blog")
+        scoper = models.OneToOneField(
+            settings.PINAX_BLOG_SCOPING_MODEL,
+            related_name="blog",
+            on_delete=models.CASCADE,
+        )
 
     def __str__(self):
         return hookset.get_blog_str(self)
@@ -66,12 +69,17 @@ class Post(models.Model):
 
     STATE_CHOICES = PINAX_BLOG_STATE_CHOICES
 
-    blog = models.ForeignKey(Blog)
-    section = models.ForeignKey(Section)
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
+    section = models.ForeignKey(Section, on_delete=models.CASCADE)
 
     title = models.CharField(_("Title"), max_length=90)
     slug = models.SlugField(_("Slug"), max_length=90, unique=settings.PINAX_BLOG_SLUG_UNIQUE)
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="posts", verbose_name=_("Author"))
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name="posts",
+        verbose_name=_("Author"),
+        on_delete=models.CASCADE
+    )
 
     markup = models.CharField(_("Markup"), max_length=25, choices=settings.PINAX_BLOG_MARKUP_CHOICES)
 
@@ -79,7 +87,7 @@ class Post(models.Model):
     content_html = models.TextField(editable=False)
 
     description = models.TextField(_("Description"), blank=True)
-    image_set = models.ForeignKey(ImageSet, related_name="blog_posts")
+    image_set = models.ForeignKey(ImageSet, related_name="blog_posts", on_delete=models.CASCADE)
 
     created = models.DateTimeField(_("Created"), default=timezone.now, editable=False)  # when first revision was created
     updated = models.DateTimeField(_("Updated"), null=True, blank=True, editable=False)  # when last revision was created (even if not published)
@@ -217,14 +225,24 @@ class Post(models.Model):
 @python_2_unicode_compatible
 class Revision(models.Model):
 
-    post = models.ForeignKey(Post, related_name="revisions", verbose_name=_("Post"))
+    post = models.ForeignKey(
+        Post,
+        related_name="revisions",
+        verbose_name=_("Post"),
+        on_delete=models.CASCADE
+    )
 
     title = models.CharField(_("Title"), max_length=90)
     teaser = models.TextField(_("Teaser"))
 
     content = models.TextField(_("Content"))
 
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="revisions", verbose_name=_("Author"))
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name="revisions",
+        verbose_name=_("Author"),
+        on_delete=models.CASCADE
+    )
 
     updated = models.DateTimeField(_("Updated"), default=timezone.now)
     published = models.DateTimeField(_("Published"), null=True, blank=True)
@@ -232,7 +250,7 @@ class Revision(models.Model):
     view_count = models.IntegerField(_("View count"), default=0, editable=False)
 
     def __str__(self):
-        return _("Revision %(time)s for %(slug)s") % {'time': self.updated.strftime('%Y%m%d-%H%M'), 'slug': self.post.slug}
+        return _("Revision %(time)s for %(slug)s") % {"time": self.updated.strftime("%Y%m%d-%H%M"), "slug": self.post.slug}
 
     def inc_views(self):
         self.view_count += 1
@@ -251,7 +269,12 @@ class FeedHit(models.Model):
 
 class ReviewComment(models.Model):
 
-    post = models.ForeignKey(Post, related_name="review_comments", verbose_name=_("Post"))
+    post = models.ForeignKey(
+        Post,
+        related_name="review_comments",
+        verbose_name=_("Post"),
+        on_delete=models.CASCADE
+    )
 
     review_text = models.TextField(_("Review text"))
     timestamp = models.DateTimeField(_("Timestamp"), default=timezone.now)

@@ -4,11 +4,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 
 from ..forms import PostForm
-from ..models import (
-    Blog,
-    Post,
-    Section,
-)
+from ..models import Blog, Post, Section
 from .tests import randomword
 
 
