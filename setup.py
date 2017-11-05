@@ -55,7 +55,7 @@ setup(
     description="Blogging app for the Django web framework",
     name="pinax-blog",
     long_description=LONG_DESCRIPTION,
-    version="6.1.0",
+    version="6.1.1",
     url="http://github.com/pinax/pinax-blog/",
     license="MIT",
     packages=find_packages(),

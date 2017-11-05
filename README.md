@@ -289,6 +289,10 @@ See `setup.py` for specific required versions of these packages.
 
 ## Change Log
 
+### 6.1.1
+
+* remove inadvertently included IDE file
+
 ### 6.1.0
 
 * Add Django 2.0 compatibility testing
