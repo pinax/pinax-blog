@@ -104,7 +104,7 @@ class AdminPostForm(PostFormMixin, forms.ModelForm):
         fields = FIELDS
 
     class Media:
-        js = ("js/admin_post_form.js",)
+        js = settings.PINAX_BLOG_ADMIN_JS
 
     def save(self, blog=None):
         post = super(AdminPostForm, self).save(commit=False)

@@ -40,6 +40,7 @@ class PinaxBlogAppConf(AppConf):
     SLUG_UNIQUE = False
     PAGINATE_BY = 10
     HOOKSET = "pinax.blog.hooks.PinaxBlogDefaultHookSet"
+    ADMIN_JS = ("js/admin_post_form.js",)
 
     def configure_markup_choices(self, value):
         return [
