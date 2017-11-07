@@ -87,7 +87,7 @@ class Post(models.Model):
     content_html = models.TextField(editable=False)
 
     description = models.TextField(_("Description"), blank=True)
-    image_set = models.ForeignKey(ImageSet, related_name="blog_posts", on_delete=models.CASCADE)
+    image_set = models.OneToOneField(ImageSet, related_name="blog_post", on_delete=models.CASCADE)
 
     created = models.DateTimeField(_("Created"), default=timezone.now, editable=False)  # when first revision was created
     updated = models.DateTimeField(_("Updated"), null=True, blank=True, editable=False)  # when last revision was created (even if not published)
@@ -134,7 +134,7 @@ class Post(models.Model):
     @property
     def meta_image(self):
         if self.image_set.primary_image:
-            return self.image_set.primary_image.image_path.url
+            return self.image_set.primary_image.image.url
 
     def rev(self, rev_id):
         return self.revisions.get(pk=rev_id)
@@ -168,7 +168,7 @@ class Post(models.Model):
             self.secret_key = "".join(choice(letters) for _ in range(8))
         if self.is_published and self.published is None:
             self.published = timezone.now()
-        if not ImageSet.objects.filter(blog_posts=self).exists():
+        if not ImageSet.objects.filter(blog_post=self).exists():
             self.image_set = ImageSet.objects.create(created_by=self.author)
         self.full_clean()
         super(Post, self).save(**kwargs)

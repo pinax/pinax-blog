@@ -20,7 +20,7 @@ FIELDS = [
     "teaser",
     "content",
     "description",
-    "state",
+    "state"
 ]
 
 

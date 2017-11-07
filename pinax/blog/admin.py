@@ -3,9 +3,17 @@ from django.utils import timezone
 from django.utils.functional import curry
 from django.utils.translation import ugettext_lazy as _
 
+from pinax.images.admin import ImageInline
+from pinax.images.models import ImageSet
+
 from .conf import settings
 from .forms import AdminPostForm
 from .models import Blog, Post, ReviewComment, Section
+
+
+class PostImageSet(ImageSet):
+    class Meta:
+        proxy = True
 
 
 class ReviewInline(admin.TabularInline):
@@ -37,7 +45,8 @@ class PostAdmin(admin.ModelAdmin):
         "description",
         "sharable_url",
         "state",
-        "published"
+        "published",
+        # "image_set"  # maybe this https://github.com/anziem/django_reverse_admin
     ]
     readonly_fields = ["sharable_url"]
 
@@ -82,3 +91,9 @@ class SectionAdmin(admin.ModelAdmin):
 
 admin.site.register(Post, PostAdmin)
 admin.site.register(Section, SectionAdmin)
+admin.site.register(
+    PostImageSet,
+    list_display=["blog_post", "primary_image", "created_by", "created_at"],
+    raw_id_fields=["created_by"],
+    inlines=[ImageInline],
+)
