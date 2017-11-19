@@ -298,6 +298,18 @@ See `setup.py` for specific required versions of these packages.
 
 ## Change Log
 
+### 6.3.1
+
+* Bump minimum required version of pinax-images
+
+### 6.3.0
+
+* Add image support in admin
+
+### 6.2.0
+
+* Make the js inclusions a setting
+
 ### 6.1.1
 
 * remove inadvertently included IDE file
