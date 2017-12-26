@@ -1,8 +1,8 @@
 from setuptools import find_packages, setup
 
 LONG_DESCRIPTION = """
-.. image:: http://pinaxproject.com/pinax-design/patches/pinax-blog.svg
-    :target: https://pypi.python.org/pypi/pinax-blog/
+.. image:: http://pinaxproject.com/pinax-design/patches/pinax-app.svg
+    :target: https://pypi.python.org/pypi/pinax-app/
 
 ==========
 Pinax Blog
@@ -10,8 +10,8 @@ Pinax Blog
 
 .. image:: https://img.shields.io/pypi/v/pinax-blog.svg
     :target: https://pypi.python.org/pypi/pinax-blog/
-.. image:: https://img.shields.io/badge/license-MIT-blue.svg
-    :target: https://pypi.python.org/pypi/pinax-blog/
+
+\ 
 
 .. image:: https://img.shields.io/circleci/project/github/pinax/pinax-blog.svg
     :target: https://circleci.com/gh/pinax/pinax-blog
@@ -24,8 +24,14 @@ Pinax Blog
 .. image:: https://img.shields.io/github/issues-pr-closed/pinax/pinax-blog.svg
     :target: https://github.com/pinax/pinax-blog/pulls?q=is%3Apr+is%3Aclosed
 
+\ 
+
 .. image:: http://slack.pinaxproject.com/badge.svg
     :target: http://slack.pinaxproject.com/
+.. image:: https://img.shields.io/badge/license-MIT-blue.svg
+    :target: https://pypi.python.org/pypi/pinax-app/
+
+\
 
 ``pinax-blog`` is a blog app for Django.
 
@@ -45,8 +51,13 @@ Features
 Supported Django and Python Versions
 ------------------------------------
 
-* Django 1.8, 1.10, 1.11, and 2.0
-* Python 2.7, 3.4, 3.5, and 3.6
++-----------------+-----+-----+-----+-----+
+| Django / Python | 2.7 | 3.4 | 3.5 | 3.6 |
++=================+=====+=====+=====+=====+
+|  1.11           |  *  |  *  |  *  |  *  |
++-----------------+-----+-----+-----+-----+
+|  2.0            |     |  *  |  *  |  *  |
++-----------------+-----+-----+-----+-----+
 """
 
 setup(
@@ -55,7 +66,7 @@ setup(
     description="Blogging app for the Django web framework",
     name="pinax-blog",
     long_description=LONG_DESCRIPTION,
-    version="6.3.1",
+    version="6.4.0",
     url="http://github.com/pinax/pinax-blog/",
     license="MIT",
     packages=find_packages(),
@@ -68,8 +79,6 @@ setup(
         "Development Status :: 5 - Production/Stable",
         "Environment :: Web Environment",
         "Framework :: Django",
-        'Framework :: Django :: 1.8',
-        'Framework :: Django :: 1.10',
         'Framework :: Django :: 1.11',
         'Framework :: Django :: 2.0',
         "Intended Audience :: Developers",

@@ -1,6 +1,7 @@
+from pinax.images.models import Image
+
 from markdown import Markdown
 from markdown.inlinepatterns import IMAGE_LINK_RE, ImagePattern
-from pinax.images.models import Image
 
 
 class ImageLookupImagePattern(ImagePattern):

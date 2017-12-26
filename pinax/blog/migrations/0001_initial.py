@@ -53,8 +53,8 @@ class Migration(migrations.Migration):
                 ('published', models.DateTimeField(null=True, editable=False, blank=True)),
                 ('secret_key', models.CharField(help_text=b'allows url for sharing unpublished posts to unauthenticated users', unique=True, max_length=8, blank=True)),
                 ('view_count', models.IntegerField(default=0, editable=False)),
-                ('author', models.ForeignKey(related_name='posts', to=settings.AUTH_USER_MODEL)),
-                ('primary_image', models.ForeignKey(related_name='+', blank=True, to='blog.Image', null=True)),
+                ('author', models.ForeignKey(related_name='posts', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
+                ('primary_image', models.ForeignKey(related_name='+', blank=True, to='blog.Image', null=True, on_delete=models.CASCADE)),
             ],
             options={
                 'ordering': ('-published',),
@@ -69,7 +69,7 @@ class Migration(migrations.Migration):
                 ('review_text', models.TextField()),
                 ('timestamp', models.DateTimeField(default=timezone.now)),
                 ('addressed', models.BooleanField(default=False)),
-                ('post', models.ForeignKey(related_name='review_comments', to='blog.Post')),
+                ('post', models.ForeignKey(related_name='review_comments', to='blog.Post', on_delete=models.CASCADE)),
             ],
             options={
             },
@@ -85,8 +85,8 @@ class Migration(migrations.Migration):
                 ('updated', models.DateTimeField(default=timezone.now)),
                 ('published', models.DateTimeField(null=True, blank=True)),
                 ('view_count', models.IntegerField(default=0, editable=False)),
-                ('author', models.ForeignKey(related_name='revisions', to=settings.AUTH_USER_MODEL)),
-                ('post', models.ForeignKey(related_name='revisions', to='blog.Post')),
+                ('author', models.ForeignKey(related_name='revisions', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
+                ('post', models.ForeignKey(related_name='revisions', to='blog.Post', on_delete=models.CASCADE)),
             ],
             options={
             },
@@ -95,7 +95,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='image',
             name='post',
-            field=models.ForeignKey(related_name='images', to='blog.Post'),
+            field=models.ForeignKey(related_name='images', to='blog.Post', on_delete=models.CASCADE),
             preserve_default=True,
         ),
     ]
