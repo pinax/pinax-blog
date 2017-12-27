@@ -37,7 +37,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='post',
             name='section',
-            field=models.ForeignKey(to='blog.Section'),
+            field=models.ForeignKey(to='blog.Section', on_delete=models.CASCADE),
             preserve_default=True,
         ),
     ]
