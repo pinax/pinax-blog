@@ -17,7 +17,6 @@
 
 * [About Pinax](#about-pinax)
 * [Overview](#overview)
-  * [History](#history)
   * [Features](#features)
   * [Dependencies](#dependencies)
   * [Supported Django and Python versions](#supported-django-and-python-versions)
@@ -27,6 +26,7 @@
   * [Customizing Admin](#customizing-admin)
   * [Templates](#templates)
 * [Change Log](#change-log)
+* [History](#history)
 * [Contribute](#contribute)
 * [Code of Conduct](#code-of-conduct)
 * [Connect with Pinax](#connect-with-pinax)
@@ -42,12 +42,6 @@ Django apps, themes, and starter project templates. This collection can be found
 ### Overview
 
 `pinax-blog` is a blog app for Django.
-
-#### History
-
-This app used to be named `biblion` when originally developed by Eldarion, Inc.
-After donation to Pinax, the app was renamed to `pinax-blog`, making it easier
-to find and know what it is.
 
 #### Features
 
@@ -92,11 +86,11 @@ To install pinax-blog:
 Add `pinax.blog` to your `INSTALLED_APPS` setting:
 
 ```python
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     ...
     "pinax.blog",
     ...
-)
+]
 ```
 
 Add `pinax.blog.urls` to your project urlpatterns:
@@ -388,6 +382,13 @@ Both templates ship already configured to work out of the box.
 ### 5.0.0
 
 * Initial version for core distribution
+
+
+## History
+
+This app was named `biblion` when originally developed by Eldarion, Inc.
+After donation to Pinax, the app was renamed to `pinax-blog`, making it easier
+to find and know what it is.
 
 
 ## Contribute
