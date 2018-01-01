@@ -13,7 +13,7 @@ from .views import (
     SlugUniquePostDetailView,
     StaffPostDetailView,
     ajax_preview,
-    blog_feed
+    blog_feed,
 )
 
 app_name = "pinax_blog"

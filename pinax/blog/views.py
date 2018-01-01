@@ -12,7 +12,7 @@ from django.views.generic import (
     DeleteView,
     DetailView,
     ListView,
-    UpdateView
+    UpdateView,
 )
 from django.views.generic.dates import DateDetailView
 
