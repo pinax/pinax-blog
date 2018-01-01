@@ -1,5 +1,6 @@
 from setuptools import find_packages, setup
 
+VERSION = "6.4.0"
 LONG_DESCRIPTION = """
 .. image:: http://pinaxproject.com/pinax-design/patches/pinax-app.svg
     :target: https://pypi.python.org/pypi/pinax-app/
@@ -66,7 +67,7 @@ setup(
     description="Blogging app for the Django web framework",
     name="pinax-blog",
     long_description=LONG_DESCRIPTION,
-    version="6.4.0",
+    version=VERSION,
     url="http://github.com/pinax/pinax-blog/",
     license="MIT",
     packages=find_packages(),
