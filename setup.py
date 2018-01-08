@@ -95,13 +95,13 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
     install_requires=[
-        "django>=1.8",
+        "django>=1.11",
         "django-appconf>=1.0.1",
         "pytz>=2016.6.1",
         "Pillow>=3.0.0",
         "Markdown>=2.6.5",
         "Pygments>=2.0.2",
-        "pinax-images>=2.1.0",
+        "pinax-images>=3.0.0",
     ],
     tests_require=[
         "pinax-theme-bootstrap>=7.4.0",
