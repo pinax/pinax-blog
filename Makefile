@@ -1,4 +1,4 @@
-all: init docs test
+all: init test
 
 init:
 	python setup.py develop
@@ -8,8 +8,3 @@ test:
 	coverage erase
 	detox
 	coverage html
-
-docs: documentation
-
-documentation:
-	python setup.py build_sphinx
