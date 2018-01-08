@@ -3,18 +3,47 @@
 # Pinax Blog
 
 [![](https://img.shields.io/pypi/v/pinax-blog.svg)](https://pypi.python.org/pypi/pinax-blog/)
-[![](https://img.shields.io/badge/license-MIT-blue.svg)](https://pypi.python.org/pypi/pinax-blog/)
 
 [![CircleCi](https://img.shields.io/circleci/project/github/pinax/pinax-blog.svg)](https://circleci.com/gh/pinax/pinax-blog)
 [![Codecov](https://img.shields.io/codecov/c/github/pinax/pinax-blog.svg)](https://codecov.io/gh/pinax/pinax-blog)
-![](https://img.shields.io/github/contributors/pinax/pinax-blog.svg)
-![](https://img.shields.io/github/issues-pr/pinax/pinax-blog.svg)
-![](https://img.shields.io/github/issues-pr-closed/pinax/pinax-blog.svg)
+[![](https://img.shields.io/github/contributors/pinax/pinax-blog.svg)](https://github.com/pinax/pinax-blog/graphs/contributors)
+[![](https://img.shields.io/github/issues-pr/pinax/pinax-blog.svg)](https://github.com/pinax/pinax-blog/pulls)
+[![](https://img.shields.io/github/issues-pr-closed/pinax/pinax-blog.svg)](https://github.com/pinax/pinax-blog/pulls?q=is%3Apr+is%3Aclosed)
 
 [![](http://slack.pinaxproject.com/badge.svg)](http://slack.pinaxproject.com/)
+[![](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
+## Table of Contents
+
+* [About Pinax](#about-pinax)
+* [Overview](#overview)
+  * [Features](#features)
+  * [Dependencies](#dependencies)
+  * [Supported Django and Python versions](#supported-django-and-python-versions)
+* [Documentation](#documentation)
+  * [Installation](#installation)
+  * [Usage](#usage)
+  * [Customizing Admin](#customizing-admin)
+  * [Templates](#templates)
+* [Change Log](#change-log)
+* [History](#history)
+* [Contribute](#contribute)
+* [Code of Conduct](#code-of-conduct)
+* [Connect with Pinax](#connect-with-pinax)
+* [License](#license)
+
+## About Pinax
+
+Pinax is an open-source platform built on the Django Web Framework. It is an ecosystem of reusable
+Django apps, themes, and starter project templates. This collection can be found at http://pinaxproject.com.
+
+## pinax-blog
+
+### Overview
 
 `pinax-blog` is a blog app for Django.
+
+#### Features
 
 Current features include:
 
@@ -28,25 +57,27 @@ Current features include:
 * Review comments per post for multi-author workflows
 * public but secret urls for unpublished blog posts for easier review
 
-### Supported Django and Python Versions
+#### Dependencies
 
-* Django 1.8, 1.10, 1.11, and 2.0
-* Python 2.7, 3.4, 3.5, and 3.6
+* django-appconf
+* pytz
+* pillow
+* markdown
+* pygments
+* pinax-images
 
+See `setup.py` for specific required versions of these packages.
 
-## Table of Contents
+#### Supported Django and Python versions
 
-* [Installation](#installation)
-* [Usage](#usage)
-* [Customizing Admin](#customizing-admin)
-* [Templates](#templates)
-* [Dependencies](#dependencies)
-* [Change Log](#change-log)
-* [Project History](#project-history)
-* [About Pinax](#about-pinax)
+Django \ Python | 2.7 | 3.4 | 3.5 | 3.6
+--------------- | --- | --- | --- | ---
+1.11 |  *  |  *  |  *  |  *  
+2.0  |     |  *  |  *  |  *
 
+## Documentation
 
-## Installation
+### Installation
 
 To install pinax-blog:
 
@@ -55,20 +86,18 @@ To install pinax-blog:
 Add `pinax.blog` to your `INSTALLED_APPS` setting:
 
 ```python
-INSTALLED_APPS = (
-    ...
+INSTALLED_APPS = [
+    # other apps
     "pinax.blog",
-    ...
-)
+]
 ```
 
 Add `pinax.blog.urls` to your project urlpatterns:
 
 ```python
 urlpatterns = [
-    ...
+    # other urls
     url(r"^blog/", include("pinax.blog.urls", namespace="pinax_blog")),
-    ...
 ]
 ```
 
@@ -79,7 +108,7 @@ Optionally, if you want `creole` support for a mark up choice:
 NOTE: the `creole` package does not support Python 3
 
 
-## Usage
+### Usage
 
 You work with this app as an author via the Django Admin.
 
@@ -93,7 +122,7 @@ on social networks like Twitter and Facebook.
 This is the same idea behind the `primary_image` field in the admin.
 
 
-### Images
+#### Images
 
 There are custom `markdown` and `creole` extensions for embedding images that
 have been uploaded via the inline on the post create or edit form in the admin.
@@ -122,19 +151,19 @@ or without alt text:
 Adjusting for the number of the image, of course.
 
 
-### Scoping
+#### Scoping
 
 The idea of scoping allows you to setup your project to have multiple blogs
 partitioned by whatever domain object you would like.
 
-#### Settings
+##### Settings
 
 * `PINAX_BLOG_SCOPING_MODEL` - a string in the format `"app.Model"` that will set a ForeignKey on the `blog.Post` model
 * `PINAX_BLOG_SCOPING_URL_VAR` - the url variable name that you use in your url prefix that will allow you to look up your scoping object
 * `PINAX_BLOG_HOOKSET` - introducing the hookset pattern from other apps.  just a single method: `get_blog(self, **kwargs)` is defined.  override this in your project to the `Blog` object that will scope your posts.  By default there is only one `Blog` instance and that is returned.
 * `pinax.blog.context_processors.scoped` - add to your context processors to put `scoper_lookup` in templates for url reversing
 
-#### Example
+##### Example
 
 To demonstrate how to set all this up let's walk through an example where we
 will scope by `auth.User` so that each user has their own blog at `/users/:username/`.
@@ -190,7 +219,7 @@ reverse a URL for any of the `pinax-blog` urls you can simply do:
 ```
 
 
-## Customizing Admin
+### Customizing Admin
 
 Customizing the admin functionality can be as complex as overriding the `ModelAdmin`
 and `ModelForm` that ships with `pinax-blog` or as simple as just overriding
@@ -199,7 +228,7 @@ the `admin/blog/post/change_form.html` template.
 Here is an example of an actual customization to use the [ACE Editor](http://ace.c9.io/) for
 teaser and body content:
 
-```django
+```djangotemplate
 {% extends "admin/change_form.html" %}
 {% load i18n admin_urls %}
 {% block extrahead %}
@@ -246,12 +275,12 @@ teaser and body content:
 {% endblock %}
 ```
 
-## Templates
+### Templates
 
 All templates for this app should be located in the subfolder of `pinax/blog/`
 in your template search path.
 
-## Blog List
+### Blog List
 
 The `BlogIndexView` and `SectionIndexView` both render the template
 `pinax/blog/blog_list.html` with `post_list`, `search_query`, `current_section`
@@ -263,7 +292,7 @@ The `post_list` variable is a queryset of current blog posts. If the `GET` param
 assigns the value to `search_query`.
 
 
-## Post Detail
+### Post Detail
 
 The four blog detail views (`DateBasedPostDetailView`, `SecretKeyPostDetailView`,
 `SlugUniquePostDetailView`, and `StaffPostDetailView`) all render the template
@@ -274,7 +303,7 @@ The `post` is the requested post. It may or may not be public depending on the
 url requested.
 
 
-## Blog Feeds
+### Blog Feeds
 
 The url `blog_feed` will either render `pinax/blog/atom_feed.xml` or
 `pinax/blog/rss_feed.xml` depending on the parameters in the URL. It will pass
@@ -284,19 +313,15 @@ both templates the context variables of `feed_id`, `feed_title`, `blog_url`,
 Both templates ship already configured to work out of the box.
 
 
-## Dependencies
-
-* django-appconf
-* pytz
-* pillow
-* markdown
-* pygments
-* pinax-images
-
-See `setup.py` for specific required versions of these packages.
-
-
 ## Change Log
+
+### 6.4.0
+
+* Add Django 2.0 compatibility testing
+* Drop Django 1.8, 1.9, 1.10 and Python 3.3 support
+* Move documentation into README, and standardize layout
+* Convert CI and coverage to CircleCi and CodeCov
+* Add PyPi-compatible long description
 
 ### 6.3.1
 
@@ -356,17 +381,40 @@ See `setup.py` for specific required versions of these packages.
 
 * Initial version for core distribution
 
-## Project History
 
-This app used to be named `biblion` when originally developed by Eldarion, Inc.
+## History
+
+This app was named `biblion` when originally developed by Eldarion, Inc.
 After donation to Pinax, the app was renamed to `pinax-blog`, making it easier
 to find and know what it is.
 
 
-## About Pinax
+## Contribute
 
-Pinax is an open-source platform built on the Django Web Framework. It is an ecosystem of reusable Django apps, themes, and starter project templates. This collection can be found at http://pinaxproject.com.
+For an overview on how contributing to Pinax works read this [blog post](http://blog.pinaxproject.com/2016/02/26/recap-february-pinax-hangout/)
+and watch the included video, or read our [How to Contribute](http://pinaxproject.com/pinax/how_to_contribute/) section.
+For concrete contribution ideas, please see our
+[Ways to Contribute/What We Need Help With](http://pinaxproject.com/pinax/ways_to_contribute/) section.
 
-The Pinax documentation is available at http://pinaxproject.com/pinax/. If you would like to help us improve our documentation or write more documentation, please join our Pinax Project Slack team and let us know!
+In case of any questions we recommend you join our [Pinax Slack team](http://slack.pinaxproject.com)
+and ping us there instead of creating an issue on GitHub. Creating issues on GitHub is of course
+also valid but we are usually able to help you faster if you ping us in Slack.
 
-For updates and news regarding the Pinax Project, please follow us on Twitter at @pinaxproject and check out our blog http://blog.pinaxproject.com.
+We also highly recommend reading our blog post on [Open Source and Self-Care](http://blog.pinaxproject.com/2016/01/19/open-source-and-self-care/).
+
+## Code of Conduct
+
+In order to foster a kind, inclusive, and harassment-free community, the Pinax Project
+has a [code of conduct](http://pinaxproject.com/pinax/code_of_conduct/).
+We ask you to treat everyone as a smart human programmer that shares an interest in Python, Django, and Pinax with you.
+
+
+## Connect with Pinax
+
+For updates and news regarding the Pinax Project, please follow us on Twitter [@pinaxproject](https://twitter.com/pinaxproject)
+and check out our [Pinax Project blog](http://blog.pinaxproject.com).
+
+
+## License
+
+Copyright (c) 2012-2018 James Tauber and contributors under the [MIT license](https://opensource.org/licenses/MIT).
