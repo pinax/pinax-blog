@@ -6,6 +6,7 @@ from django.db.models import Q
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.template.loader import render_to_string
+from django.urls import reverse
 from django.views.decorators.http import require_POST
 from django.views.generic import (
     CreateView,
@@ -16,7 +17,6 @@ from django.views.generic import (
 )
 from django.views.generic.dates import DateDetailView
 
-from .compat import reverse
 from .conf import settings
 from .forms import PostForm
 from .hooks import hookset
@@ -58,7 +58,7 @@ class BlogIndexView(ListView):
 
     def get_queryset(self):
         blog = hookset.get_blog(**self.kwargs)
-        qs = Post.objects.current().filter(blog=blog)
+        qs = Post.objects.current().filter(blog=blog).select_related("section", "blog")
         return self.search(qs)
 
 
@@ -165,7 +165,10 @@ def blog_feed(request, **kwargs):
     scoper_lookup = kwargs.get(settings.PINAX_BLOG_SCOPING_URL_VAR, None)
 
     blog = hookset.get_blog(**kwargs)
-    posts = Post.objects.published().filter(blog=blog).order_by("-updated")
+    posts = (Post.objects.published()
+             .filter(blog=blog)
+             .order_by("-updated")
+             .select_related("section", "blog"))
 
     blog_url_kwargs = {}
     if scoper_lookup is not None:

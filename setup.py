@@ -97,11 +97,11 @@ setup(
     install_requires=[
         "django>=1.11",
         "django-appconf>=1.0.1",
+        "pinax-images>=3.0.0",
         "pytz>=2016.6.1",
         "Pillow>=3.0.0",
         "Markdown>=2.6.5",
         "Pygments>=2.0.2",
-        "pinax-images>=3.0.0",
     ],
     tests_require=[
         "pinax-theme-bootstrap>=7.4.0",

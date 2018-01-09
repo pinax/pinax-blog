@@ -6,9 +6,9 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.http.request import HttpRequest
 from django.test import TestCase
+from django.urls import reverse
 from django.utils.text import slugify
 
-from ..compat import reverse
 from ..context_processors import scoped
 from ..models import Blog, Post, Section
 
