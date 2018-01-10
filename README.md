@@ -315,7 +315,7 @@ Both templates ship already configured to work out of the box.
 
 ## Change Log
 
-### 6.4.0
+### 7.0.0
 
 * Add Django 2.0 compatibility testing
 * Drop Django 1.8, 1.9, 1.10 and Python 3.3 support
