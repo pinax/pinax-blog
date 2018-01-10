@@ -98,7 +98,6 @@ Here is an example of these rules applied:
     from tagging.fields import TagField
 
     # fourth set of imports are local apps
-    from .compat import reverse
     from .fields import MarkupField
 
 

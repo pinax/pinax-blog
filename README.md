@@ -86,19 +86,19 @@ To install pinax-blog:
 Add `pinax.blog` to your `INSTALLED_APPS` setting:
 
 ```python
-INSTALLED_APPS = [
-    # other apps
-    "pinax.blog",
-]
+    INSTALLED_APPS = [
+        # other apps
+        "pinax.blog",
+    ]
 ```
 
 Add `pinax.blog.urls` to your project urlpatterns:
 
 ```python
-urlpatterns = [
-    # other urls
-    url(r"^blog/", include("pinax.blog.urls", namespace="pinax_blog")),
-]
+    urlpatterns = [
+        # other urls
+        url(r"^blog/", include("pinax.blog.urls", namespace="pinax_blog")),
+    ]
 ```
 
 Optionally, if you want `creole` support for a mark up choice:
