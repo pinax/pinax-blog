@@ -322,6 +322,7 @@ Both templates ship already configured to work out of the box.
 * Move documentation into README, and standardize layout
 * Convert CI and coverage to CircleCi and CodeCov
 * Add PyPi-compatible long description
+* Bump minimum required version of pinax-images to v3.0.0 for Django 2.0 compatibility
 
 ### 6.3.1
 
