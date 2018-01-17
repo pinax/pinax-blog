@@ -16,7 +16,7 @@ DEFAULT_SETTINGS = dict(
         "pinax.images",
         "pinax.blog",
         "pinax.blog.tests",
-        "pinax_theme_bootstrap",
+        "pinax.templates",
     ],
     DATABASES={
         "default": {
@@ -35,7 +35,6 @@ DEFAULT_SETTINGS = dict(
                 "debug": True,
                 "context_processors": [
                     "django.contrib.auth.context_processors.auth",
-                    "pinax_theme_bootstrap.context_processors.theme",
                 ]
             }
         },

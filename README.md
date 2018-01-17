@@ -315,6 +315,10 @@ Both templates ship already configured to work out of the box.
 
 ## Change Log
 
+### 7.0.1
+
+* Replace pinax-theme-bootstrap test dependency with pinax-templates
+
 ### 7.0.0
 
 * Add Django 2.0 compatibility testing

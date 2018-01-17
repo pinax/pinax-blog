@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-VERSION = "7.0.0"
+VERSION = "7.0.1"
 LONG_DESCRIPTION = """
 .. image:: http://pinaxproject.com/pinax-design/patches/pinax-app.svg
     :target: https://pypi.python.org/pypi/pinax-app/
@@ -97,14 +97,14 @@ setup(
     install_requires=[
         "django>=1.11",
         "django-appconf>=1.0.1",
-        "pinax-images>=3.0.0",
+        "pinax-images>=3.0.1",
         "pytz>=2016.6.1",
         "Pillow>=3.0.0",
         "Markdown>=2.6.5",
         "Pygments>=2.0.2",
     ],
     tests_require=[
-        "pinax-theme-bootstrap>=7.4.0",
+        "pinax-templates>=1.0.0",
     ],
     test_suite="runtests.runtests",
     zip_safe=False
