@@ -13,6 +13,7 @@
 [![](http://slack.pinaxproject.com/badge.svg)](http://slack.pinaxproject.com/)
 [![](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
+
 ## Table of Contents
 
 * [About Pinax](#about-pinax)
@@ -32,10 +33,12 @@
 * [Connect with Pinax](#connect-with-pinax)
 * [License](#license)
 
+
 ## About Pinax
 
 Pinax is an open-source platform built on the Django Web Framework. It is an ecosystem of reusable
 Django apps, themes, and starter project templates. This collection can be found at http://pinaxproject.com.
+
 
 ## pinax-blog
 
@@ -75,6 +78,7 @@ Django \ Python | 2.7 | 3.4 | 3.5 | 3.6
 1.11 |  *  |  *  |  *  |  *  
 2.0  |     |  *  |  *  |  *
 
+
 ## Documentation
 
 ### Installation
@@ -107,7 +111,6 @@ Optionally, if you want `creole` support for a mark up choice:
 
 NOTE: the `creole` package does not support Python 3
 
-
 ### Usage
 
 You work with this app as an author via the Django Admin.
@@ -120,7 +123,6 @@ different HTML META header tags that are useful for controlling the display
 on social networks like Twitter and Facebook.
 
 This is the same idea behind the `primary_image` field in the admin.
-
 
 #### Images
 
@@ -149,7 +151,6 @@ or without alt text:
 ```
 
 Adjusting for the number of the image, of course.
-
 
 #### Scoping
 
@@ -217,7 +218,6 @@ reverse a URL for any of the `pinax-blog` urls you can simply do:
 ```django
 {% url "pinax_blog:blog" scoper_lookup %}
 ```
-
 
 ### Customizing Admin
 
@@ -291,7 +291,6 @@ The `post_list` variable is a queryset of current blog posts. If the `GET` param
 `q` is found, it filters the queryset create a simple search mechanism, then
 assigns the value to `search_query`.
 
-
 ### Post Detail
 
 The four blog detail views (`DateBasedPostDetailView`, `SecretKeyPostDetailView`,
@@ -301,7 +300,6 @@ variables.
 
 The `post` is the requested post. It may or may not be public depending on the
 url requested.
-
 
 ### Blog Feeds
 
@@ -406,6 +404,7 @@ and ping us there instead of creating an issue on GitHub. Creating issues on Git
 also valid but we are usually able to help you faster if you ping us in Slack.
 
 We also highly recommend reading our blog post on [Open Source and Self-Care](http://blog.pinaxproject.com/2016/01/19/open-source-and-self-care/).
+
 
 ## Code of Conduct
 
