@@ -2,8 +2,8 @@ from setuptools import find_packages, setup
 
 VERSION = "7.0.1"
 LONG_DESCRIPTION = """
-.. image:: http://pinaxproject.com/pinax-design/patches/pinax-app.svg
-    :target: https://pypi.python.org/pypi/pinax-app/
+.. image:: http://pinaxproject.com/pinax-design/patches/pinax-blog.svg
+    :target: https://pypi.python.org/pypi/pinax-blog/
 
 ==========
 Pinax Blog
@@ -30,7 +30,7 @@ Pinax Blog
 .. image:: http://slack.pinaxproject.com/badge.svg
     :target: http://slack.pinaxproject.com/
 .. image:: https://img.shields.io/badge/license-MIT-blue.svg
-    :target: https://pypi.python.org/pypi/pinax-app/
+    :target: https://opensource.org/licenses/MIT/
 
 \
 
