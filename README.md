@@ -86,7 +86,7 @@ Django \ Python | 2.7 | 3.4 | 3.5 | 3.6
 To install pinax-blog:
 
 ```shell
-$ pip install pinax-blog
+    $ pip install pinax-blog
 ```
 
 Add `pinax.blog` to your `INSTALLED_APPS` setting:
@@ -110,7 +110,7 @@ Add `pinax.blog.urls` to your project urlpatterns:
 Optionally, if you want `creole` support for a mark up choice:
 
 ```shell
-$ pip install creole
+    $ pip install creole
 ```
 
 NOTE: the `creole` package does not support Python 3
