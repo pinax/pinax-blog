@@ -232,7 +232,7 @@ the `admin/blog/post/change_form.html` template.
 Here is an example of an actual customization to use the [ACE Editor](http://ace.c9.io/) for
 teaser and body content:
 
-```djangotemplate
+```django
 {% extends "admin/change_form.html" %}
 {% load i18n admin_urls %}
 {% block extrahead %}
