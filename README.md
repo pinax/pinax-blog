@@ -24,8 +24,11 @@
 * [Documentation](#documentation)
   * [Installation](#installation)
   * [Usage](#usage)
+  * [Settings](#settings)
+  * [Scoping](#scoping)
   * [Customizing Admin](#customizing-admin)
   * [Templates](#templates)
+  * [Blog Feed Templates](#blog-feed-templates)
 * [Change Log](#change-log)
 * [History](#history)
 * [Contribute](#contribute)
@@ -113,11 +116,11 @@ Optionally, if you want `creole` support for a mark up choice:
     $ pip install creole
 ```
 
-NOTE: the `creole` package does not support Python 3
+NOTE: the `creole` package does not support Python 3.
 
 ### Usage
 
-You work with this app as an author via the Django Admin.
+As an author, you work with this app via the Django Admin.
 
 You can [customize](customize-admin.md) the editor for the admin at the site
 level or just use the stock text areas.
@@ -156,19 +159,32 @@ or without alt text:
 
 Adjusting for the number of the image, of course.
 
-#### Scoping
+
+### Settings
+
+#### PINAX_BLOG_SCOPING_MODEL
+ 
+String in the format `"app.Model"` that will set a ForeignKey on the `blog.Post` model
+
+#### PINAX_BLOG_SCOPING_URL_VAR
+
+URL variable name used in your url prefix that will allow you to look up your scoping object
+
+#### PINAX_BLOG_HOOKSET
+
+A hookset pattern common to other Pinax apps.  Just a single method: `get_blog(self, **kwargs)` is defined.
+Override this in your project to the `Blog` object that will scope your posts.
+By default there is only one `Blog` instance and that is returned.
+
+
+### Scoping
 
 The idea of scoping allows you to setup your project to have multiple blogs
 partitioned by whatever domain object you would like.
 
-##### Settings
+Add `pinax.blog.context_processors.scoped` to your context processors to put `scoper_lookup` in templates for url reversing.
 
-* `PINAX_BLOG_SCOPING_MODEL` - a string in the format `"app.Model"` that will set a ForeignKey on the `blog.Post` model
-* `PINAX_BLOG_SCOPING_URL_VAR` - the url variable name that you use in your url prefix that will allow you to look up your scoping object
-* `PINAX_BLOG_HOOKSET` - introducing the hookset pattern from other apps.  just a single method: `get_blog(self, **kwargs)` is defined.  override this in your project to the `Blog` object that will scope your posts.  By default there is only one `Blog` instance and that is returned.
-* `pinax.blog.context_processors.scoped` - add to your context processors to put `scoper_lookup` in templates for url reversing
-
-##### Example
+#### Example
 
 To demonstrate how to set all this up let's walk through an example where we
 will scope by `auth.User` so that each user has their own blog at `/users/:username/`.
@@ -279,14 +295,34 @@ teaser and body content:
 {% endblock %}
 ```
 
+
 ### Templates
 
-All templates for this app should be located in the subfolder of `pinax/blog/`
-in your template search path.
+Default templates are provided by the `pinax-templates` app in the
+[blog](https://github.com/pinax/pinax-templates/tree/master/pinax/templates/templates/pinax/blog)
+section of that project.
 
-### Blog List
+Reference pinax-templates
+[installation instructions](https://github.com/pinax/pinax-templates/blob/master/README.md#installation)
+to include these templates in your project.
 
-The `BlogIndexView` and `SectionIndexView` both render the template
+#### Customizing Templates
+
+Override the default `pinax-templates` templates by copying them into your project
+subdirectory `pinax/blog/` on the template path and modifying as needed.
+
+For example if your project doesn't use Bootstrap, copy the desired templates
+then remove Bootstrap and Font Awesome class names from your copies.
+Remove class references like `class="btn btn-success"` and `class="icon icon-pencil"` as well as
+`bootstrap` from the `{% load i18n bootstrap %}` statement.
+Since `bootstrap` template tags and filters are no longer loaded, you'll also need to update
+`{{ form|bootstrap }}` to `{{ form }}` since the "bootstrap" filter is no longer available.
+
+#### `blog_base.html`
+
+#### `blog_list.html`
+
+`BlogIndexView` and `SectionIndexView` both render the template
 `pinax/blog/blog_list.html` with `post_list`, `search_query`, `current_section`
 context variables, where `current_section` is either a `Section` object or the
 string `"all"`.
@@ -295,7 +331,7 @@ The `post_list` variable is a queryset of current blog posts. If the `GET` param
 `q` is found, it filters the queryset create a simple search mechanism, then
 assigns the value to `search_query`.
 
-### Post Detail
+#### `blog_post.html`
 
 The four blog detail views (`DateBasedPostDetailView`, `SecretKeyPostDetailView`,
 `SlugUniquePostDetailView`, and `StaffPostDetailView`) all render the template
@@ -305,7 +341,14 @@ variables.
 The `post` is the requested post. It may or may not be public depending on the
 url requested.
 
-### Blog Feeds
+#### `dateline.html`
+
+#### `dateline_stale.html`
+
+
+### Blog Feed Templates
+
+#### `atom_feed.xml` and `rss_feed.xml`
 
 The url `blog_feed` will either render `pinax/blog/atom_feed.xml` or
 `pinax/blog/rss_feed.xml` depending on the parameters in the URL. It will pass
