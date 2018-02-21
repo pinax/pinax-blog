@@ -12,11 +12,18 @@ DEFAULT_SETTINGS = dict(
     INSTALLED_APPS=[
         "django.contrib.auth",
         "django.contrib.contenttypes",
+        "django.contrib.sessions",
         "django.contrib.sites",
-        "pinax.images",
+
+        "bootstrapform",
         "pinax.blog",
         "pinax.blog.tests",
+        "pinax.images",
         "pinax.templates",
+    ],
+    MIDDLEWARE=[
+        "django.contrib.sessions.middleware.SessionMiddleware",
+        "django.contrib.auth.middleware.AuthenticationMiddleware",
     ],
     DATABASES={
         "default": {
@@ -30,11 +37,21 @@ DEFAULT_SETTINGS = dict(
     TEMPLATES=[
         {
             "BACKEND": "django.template.backends.django.DjangoTemplates",
+            "DIRS": [
+                os.path.join(PACKAGE_ROOT, "templates"),
+            ],
             "APP_DIRS": True,
             "OPTIONS": {
                 "debug": True,
                 "context_processors": [
                     "django.contrib.auth.context_processors.auth",
+                    "django.template.context_processors.debug",
+                    "django.template.context_processors.i18n",
+                    "django.template.context_processors.media",
+                    "django.template.context_processors.static",
+                    "django.template.context_processors.tz",
+                    "django.template.context_processors.request",
+                    "django.contrib.messages.context_processors.messages",
                 ]
             }
         },

@@ -92,12 +92,13 @@ To install pinax-blog:
     $ pip install pinax-blog
 ```
 
-Add `pinax.blog` to your `INSTALLED_APPS` setting:
+Add `pinax.blog` and dependency `pinax.images` to your `INSTALLED_APPS` setting:
 
 ```python
     INSTALLED_APPS = [
         # other apps
         "pinax.blog",
+        "pinax.images",
     ]
 ```
 
@@ -110,7 +111,35 @@ Add `pinax.blog.urls` to your project urlpatterns:
     ]
 ```
 
-Optionally, if you want `creole` support for a mark up choice:
+### Optional Requirements
+
+`pinax-blog` ships with a few management view templates. These templates reference pinax-images
+URLs for adding and viewing images. They also use "bootstrap" formatting.
+
+In order to use these built-in templates, add `django-bootstrap-form` to your project requirements
+and ``"bootstrapform",` to your INSTALLED_APPS:
+
+```python
+    INSTALLED_APPS = [
+        # other apps
+        "pinax.blog",
+        "pinax.images",
+        "bootstrapform",
+    ]
+```
+
+Then add pinax.images.urls` to your project urlpatterns:
+
+```python
+    urlpatterns = [
+        # other urls
+        url(r"^blog/", include("pinax.blog.urls", namespace="pinax_blog")),
+        url(r"^ajax/images/", include("pinax.images.urls", namespace="pinax_images")),
+    ]
+```
+
+
+If you want `creole` support for mark-up:
 
 ```shell
     $ pip install creole
@@ -362,6 +391,10 @@ Both templates ship already configured to work out of the box.
 
 
 ## Change Log
+
+### 7.0.2
+
+* Restore and improve documentation guidance for pinax-images usage
 
 ### 7.0.1
 
