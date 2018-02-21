@@ -117,7 +117,7 @@ Add `pinax.blog.urls` to your project urlpatterns:
 URLs for adding and viewing images. They also use "bootstrap" formatting.
 
 In order to use these built-in templates, add `django-bootstrap-form` to your project requirements
-and ``"bootstrapform",` to your INSTALLED_APPS:
+and `"bootstrapform",` to your INSTALLED_APPS:
 
 ```python
     INSTALLED_APPS = [
@@ -128,7 +128,7 @@ and ``"bootstrapform",` to your INSTALLED_APPS:
     ]
 ```
 
-Then add pinax.images.urls` to your project urlpatterns:
+Then add `pinax.images.urls` to your project urlpatterns:
 
 ```python
     urlpatterns = [
