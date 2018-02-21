@@ -2,12 +2,12 @@ from __future__ import absolute_import
 
 import random
 
-from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.http.request import HttpRequest
-from django.test import TestCase
 from django.urls import reverse
 from django.utils.text import slugify
+
+from test_plus import TestCase
 
 from ..context_processors import scoped
 from ..models import Blog, Post, Section
@@ -29,12 +29,7 @@ class TestBlog(TestCase):
         self.apples = Section.objects.create(name="Apples", slug="apples")
         self.oranges = Section.objects.create(name="Oranges", slug="oranges")
 
-        self.password = "eldarion"
-        self.user = get_user_model().objects.create_user(
-            username="patrick",
-            password=self.password
-        )
-        self.user.save()
+        self.user = self.make_user("patrick")
         self.markup = "markdown"
 
         # Create two published Posts, one in each section.
@@ -68,7 +63,7 @@ class TestViewGetSection(TestBlog):
         invalid_slug = "bananas"
         url = reverse("pinax_blog:blog_section", kwargs={"section": invalid_slug})
         try:
-            response = self.client.get(url)
+            response = self.get(url)
         except Section.DoesNotExist:
             self.fail("section '{}' does not exist".format(invalid_slug))
         self.assertEqual(response.status_code, 404)
@@ -140,3 +135,45 @@ class TestContextProcessors(TestBlog):
         self.assertEqual(request.resolver_match, None)
         result = scoped(request)
         self.assertEqual(result, {"scoper_lookup": ""})
+
+
+class TestViews(TestBlog):
+
+    def test_manage_post_create_get(self):
+        """
+        Ensure template with external URL references renders properly
+        for user with proper credentials.
+        """
+        with self.login(self.user):
+            response = self.client.get("pinax_blog:manage_post_create")
+            self.assertEqual(response.status_code, 404)
+
+        self.user.is_staff = True
+        self.user.save()
+        with self.login(self.user):
+            self.get("pinax_blog:manage_post_create")
+            self.response_200()
+            self.assertTemplateUsed("pinax/blog/manage_post_create")
+            pinax_images_upload_url = reverse("pinax_images:imageset_new_upload")
+            self.assertResponseContains(pinax_images_upload_url, html=False)
+
+    def test_manage_post_create_post(self):
+        """
+        Ensure template with external URL references renders properly
+        for user with proper credentials.
+        """
+        self.user.is_staff = True
+        self.user.save()
+        post_title = "You'll never believe what happened next!"
+        post_data = dict(
+            section=self.apples.pk,
+            title=post_title,
+            teaser="teaser",
+            content="content",
+            description="description",
+            state=Post.STATE_CHOICES[-1][0],
+        )
+        with self.login(self.user):
+            self.post("pinax_blog:manage_post_create", data=post_data)
+            self.assertRedirects(self.last_response, reverse("pinax_blog:manage_post_list"))
+            self.assertTrue(Post.objects.get(title=post_title))

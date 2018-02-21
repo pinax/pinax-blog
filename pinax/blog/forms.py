@@ -120,13 +120,24 @@ class PostForm(PostFormMixin, forms.ModelForm):
     teaser = forms.CharField(widget=forms.Textarea())
     content = forms.CharField(widget=forms.Textarea())
 
+    class Meta:
+        model = Post
+        fields = [
+            "section",
+            "title",
+            "teaser",
+            "content",
+            "description",
+            "state"
+        ]
+
     def __init__(self, *args, **kwargs):
         super(PostForm, self).__init__(*args, **kwargs)
         if Section.objects.count() < 2:
             self.section = Section.objects.first()
             del self.fields["section"]
         else:
-            self.section is None
+            self.section = None
 
     def save(self, blog=None, author=None):
         post = super(PostForm, self).save(commit=False)
@@ -140,14 +151,3 @@ class PostForm(PostFormMixin, forms.ModelForm):
         post.slug = slugify(post.title)
         post.markup = self.markup_choice
         return self.save_post(post)
-
-    class Meta:
-        model = Post
-        fields = [
-            "section",
-            "title",
-            "teaser",
-            "content",
-            "description",
-            "state"
-        ]
