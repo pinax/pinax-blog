@@ -392,6 +392,10 @@ Both templates ship already configured to work out of the box.
 
 ## Change Log
 
+### 7.0.3
+
+* Fix migration missing on_delete=
+
 ### 7.0.2
 
 * Restore and improve documentation guidance for pinax-images usage

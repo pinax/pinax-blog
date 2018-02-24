@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 
 from django.conf import settings
 from django.db import migrations, models
+import django.db.models.deletion
 
 
 def initial_blogs(apps, schema_editor):
@@ -33,7 +34,11 @@ class Migration(migrations.Migration):
             migrations.AddField(
                 model_name='blog',
                 name='scoper',
-                field=models.OneToOneField(related_name='blog', to=settings.PINAX_BLOG_SCOPING_MODEL)
+                field=models.OneToOneField(
+                    related_name='blog',
+                    to=settings.PINAX_BLOG_SCOPING_MODEL,
+                    on_delete=django.db.models.deletion.CASCADE,
+                )
             )
         )
         operations.append(
