@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-VERSION = "7.0.3"
+VERSION = "7.0.4"
 LONG_DESCRIPTION = """
 .. image:: http://pinaxproject.com/pinax-design/patches/pinax-blog.svg
     :target: https://pypi.python.org/pypi/pinax-blog/
@@ -12,7 +12,7 @@ Pinax Blog
 .. image:: https://img.shields.io/pypi/v/pinax-blog.svg
     :target: https://pypi.python.org/pypi/pinax-blog/
 
-\ 
+\
 
 .. image:: https://img.shields.io/circleci/project/github/pinax/pinax-blog.svg
     :target: https://circleci.com/gh/pinax/pinax-blog
@@ -25,7 +25,7 @@ Pinax Blog
 .. image:: https://img.shields.io/github/issues-pr-closed/pinax/pinax-blog.svg
     :target: https://github.com/pinax/pinax-blog/pulls?q=is%3Apr+is%3Aclosed
 
-\ 
+\
 
 .. image:: http://slack.pinaxproject.com/badge.svg
     :target: http://slack.pinaxproject.com/
@@ -74,6 +74,7 @@ setup(
     package_data={
         "pinax.blog": [
             "templates/pinax/blog/*.xml",
+            "static/js/admin_post_form.js"
         ]
     },
     classifiers=[

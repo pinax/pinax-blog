@@ -2,3 +2,4 @@ include README.md
 include LICENSE
 recursive-include pinax/blog/templates/pinax *.xml
 recursive-include pinax/blog/locale *
+recursive-include pinax/blog/static *
