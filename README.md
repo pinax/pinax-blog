@@ -12,6 +12,8 @@
 
 [![](http://slack.pinaxproject.com/badge.svg)](http://slack.pinaxproject.com/)
 [![](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Code Quality: Python](https://img.shields.io/lgtm/grade/python/g/pinax/pinax-blog.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/pinax/pinax-blog/context:python)
+[![Total Alerts](https://img.shields.io/lgtm/alerts/g/pinax/pinax-blog.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/pinax/pinax-blog/alerts)
 
 
 ## Table of Contents
