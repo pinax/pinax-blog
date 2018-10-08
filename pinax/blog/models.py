@@ -1,5 +1,6 @@
 # -*- coding: utf8 -*-
 from random import choice
+import pytz
 
 from django.db import models
 from django.urls import reverse
@@ -8,7 +9,6 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.html import strip_tags
 from django.utils.translation import ugettext_lazy as _
 
-import pytz
 from pinax.images.models import ImageSet
 
 from .conf import settings
@@ -250,7 +250,10 @@ class Revision(models.Model):
     view_count = models.IntegerField(_("View count"), default=0, editable=False)
 
     def __str__(self):
-        return _("Revision %(time)s for %(slug)s") % {"time": self.updated.strftime("%Y%m%d-%H%M"), "slug": self.post.slug}
+        return _("Revision %(time)s for %(slug)s") % {
+            "time": self.updated.strftime("%Y%m%d-%H%M"), 
+            "slug": self.post.slug
+        }
 
     def inc_views(self):
         self.view_count += 1
