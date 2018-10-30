@@ -147,7 +147,6 @@ If you want `creole` support for mark-up:
 
 NOTE: the `creole` package does not support Python 3.
 
-
 ### Usage
 
 As an author, you work with this app via the Django Admin.
@@ -189,7 +188,6 @@ or without alt text:
 
 Adjusting for the number of the image, of course.
 
-
 ### Settings
 
 #### PINAX_BLOG_SCOPING_MODEL
@@ -205,7 +203,6 @@ URL variable name used in your url prefix that will allow you to look up your sc
 A hookset pattern common to other Pinax apps.  Just a single method: `get_blog(self, **kwargs)` is defined.
 Override this in your project to the `Blog` object that will scope your posts.
 By default there is only one `Blog` instance and that is returned.
-
 
 ### Scoping
 
@@ -325,7 +322,6 @@ teaser and body content:
 {% endblock %}
 ```
 
-
 ### Templates
 
 Default templates are provided by the `pinax-templates` app in the
@@ -376,7 +372,6 @@ url requested.
 #### `dateline.html`
 
 #### `dateline_stale.html`
-
 
 ### Blog Feed Templates
 
