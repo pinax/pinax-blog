@@ -98,7 +98,7 @@ setup(
     install_requires=[
         "django>=1.11",
         "django-appconf>=1.0.1",
-        "markdown>=2.6.5",
+        "markdown==2.6.11",
         "pillow>=3.0.0",
         "pinax-images>=3.0.1",
         "pygments>=2.0.2",
