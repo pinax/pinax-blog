@@ -46,7 +46,7 @@ class PostAdmin(admin.ModelAdmin):
         "sharable_url",
         "state",
         "published",
-        # "image_set"  # maybe this https://github.com/anziem/django_reverse_admin
+        "image_set"  # maybe this https://github.com/anziem/django_reverse_admin
     ]
     readonly_fields = ["sharable_url"]
 
