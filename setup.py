@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-VERSION = "7.0.4"
+VERSION = "7.0.4-image-reenabled"
 LONG_DESCRIPTION = """
 .. image:: http://pinaxproject.com/pinax-design/patches/pinax-blog.svg
     :target: https://pypi.python.org/pypi/pinax-blog/
@@ -98,7 +98,7 @@ setup(
     install_requires=[
         "django>=1.11",
         "django-appconf>=1.0.1",
-        "markdown>=2.6.5",
+        "markdown==2.6.11",
         "pillow>=3.0.0",
         "pinax-images>=3.0.1",
         "pygments>=2.0.2",
