@@ -387,6 +387,11 @@ Both templates ship already configured to work out of the box.
 
 ## Change Log
 
+### 7.0.4-image-reenabled
+
+* Reenable imagesets to be inline in the post creation
+* Fix Markdown 3 installation exception by changing to 2.6.11 which is the latest working version
+
 ### 7.0.3
 
 * Fix migration missing on_delete=
