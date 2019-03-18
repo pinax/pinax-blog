@@ -508,4 +508,4 @@ and check out our [Pinax Project blog](http://blog.pinaxproject.com).
 
 ## License
 
-Copyright (c) 2012-2018 James Tauber and contributors under the [MIT license](https://opensource.org/licenses/MIT).
+Copyright (c) 2012-2019 James Tauber and contributors under the [MIT license](https://opensource.org/licenses/MIT).
