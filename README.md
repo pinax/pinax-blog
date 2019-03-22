@@ -387,6 +387,10 @@ Both templates ship already configured to work out of the box.
 
 ## Change Log
 
+### 7.0.5
+
+* Enable installation of both .html and .xml template files via egg
+
 ### 7.0.4-image-reenabled
 
 * Reenable imagesets to be inline in the post creation
