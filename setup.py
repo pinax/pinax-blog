@@ -73,7 +73,7 @@ setup(
     packages=find_packages(),
     package_data={
         "pinax.blog": [
-            "templates/pinax/blog/*.xml",
+            "templates/pinax/blog/*ml",
             "static/js/admin_post_form.js"
         ]
     },
