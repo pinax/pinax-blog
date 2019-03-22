@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-VERSION = "7.0.4-image-reenabled"
+VERSION = "7.0.5"
 LONG_DESCRIPTION = """
 .. image:: http://pinaxproject.com/pinax-design/patches/pinax-blog.svg
     :target: https://pypi.python.org/pypi/pinax-blog/
