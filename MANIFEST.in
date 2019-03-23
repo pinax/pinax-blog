@@ -1,6 +1,6 @@
 include AUTHORS
-include README.md
 include LICENSE
+include README.md
 recursive-include pinax/blog/templates/pinax *.xml
 recursive-include pinax/blog/locale *
 recursive-include pinax/blog/static *
