@@ -36,7 +36,7 @@ class BlogIndexView(ListView):
         return "all"
 
     def get_context_data(self, **kwargs):
-        context = super(BlogIndexView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context.update({
             "current_section": self.get_current_section(),
             "search_term": self.search_term()
@@ -67,7 +67,7 @@ class SectionIndexView(BlogIndexView):
         return section
 
     def get_queryset(self):
-        queryset = super(SectionIndexView, self).get_queryset()
+        queryset = super().get_queryset()
         queryset = queryset.filter(section__slug__iexact=self.kwargs.get("section"))
         return queryset
 
@@ -87,7 +87,7 @@ class SlugUniquePostDetailView(DetailView):
 
     def get_queryset(self):
         blog = hookset.get_blog(**self.kwargs)
-        return super(SlugUniquePostDetailView, self).get_queryset().filter(
+        return super().get_queryset().filter(
             blog=blog,
             state=PUBLISHED_STATE
         )
@@ -110,7 +110,7 @@ class DateBasedPostDetailView(DateDetailView):
 
     def get_queryset(self):
         blog = hookset.get_blog(**self.kwargs)
-        return super(DateBasedPostDetailView, self).get_queryset().filter(
+        return super().get_queryset().filter(
             blog=blog,
             state=PUBLISHED_STATE
         )
@@ -139,7 +139,7 @@ class SecretKeyPostDetailView(DetailView):
         self.object = self.get_object()
         if self.object.is_published and not self.object.is_future_published:
             return redirect(self.object.get_absolute_url())
-        return super(SecretKeyPostDetailView, self).get(request, *args, **kwargs)
+        return super().get(request, *args, **kwargs)
 
 
 def serialize_request(request):
@@ -217,7 +217,7 @@ def blog_feed(request, **kwargs):
     return HttpResponse(feed, content_type=feed_mimetype)
 
 
-class ManageBlogMixin(object):
+class ManageBlogMixin:
 
     def dispatch(self, request, *args, **kwargs):
         self.request = request
@@ -225,11 +225,11 @@ class ManageBlogMixin(object):
         self.kwargs = kwargs
         if hookset.can_manage(request, *args, **kwargs):
             self.blog = hookset.get_blog(**kwargs)
-            return super(ManageBlogMixin, self).dispatch(request, *args, **kwargs)
+            return super().dispatch(request, *args, **kwargs)
         return hookset.response_cannot_manage(request, *args, **kwargs)
 
 
-class ManageSuccessUrlMixin(object):
+class ManageSuccessUrlMixin:
 
     def get_success_url(self):
         scoping_lookup = self.kwargs.get(settings.PINAX_BLOG_SCOPING_URL_VAR, None)
@@ -244,7 +244,7 @@ class ManagePostList(ManageBlogMixin, ListView):
     template_name = "pinax/blog/manage_post_list.html"
 
     def get_queryset(self):
-        return super(ManagePostList, self).get_queryset().filter(blog=self.blog)
+        return super().get_queryset().filter(blog=self.blog)
 
 
 class ManageCreatePost(ManageBlogMixin, ManageSuccessUrlMixin, CreateView):
@@ -266,7 +266,7 @@ class ManageUpdatePost(ManageBlogMixin, ManageSuccessUrlMixin, UpdateView):
     template_name = "pinax/blog/manage_post_update.html"
 
     def get_queryset(self):
-        return super(ManageUpdatePost, self).get_queryset().filter(blog=self.blog)
+        return super().get_queryset().filter(blog=self.blog)
 
 
 class ManageDeletePost(ManageBlogMixin, ManageSuccessUrlMixin, DeleteView):
@@ -276,7 +276,7 @@ class ManageDeletePost(ManageBlogMixin, ManageSuccessUrlMixin, DeleteView):
     template_name = "pinax/blog/manage_post_delete_confirm.html"
 
     def get_queryset(self):
-        return super(ManageDeletePost, self).get_queryset().filter(blog=self.blog)
+        return super().get_queryset().filter(blog=self.blog)
 
 
 @require_POST

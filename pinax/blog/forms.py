@@ -24,14 +24,14 @@ FIELDS = [
 ]
 
 
-class PostFormMixin(object):
+class PostFormMixin:
 
     @property
     def markup_choice(self):
         return self.cleaned_data["markup"]
 
     def __init__(self, *args, **kwargs):
-        super(PostFormMixin, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         post = self.instance
         latest_revision = post.latest()
         if latest_revision:
@@ -107,7 +107,7 @@ class AdminPostForm(PostFormMixin, forms.ModelForm):
         js = settings.PINAX_BLOG_ADMIN_JS
 
     def save(self, blog=None):
-        post = super(AdminPostForm, self).save(commit=False)
+        post = super().save(commit=False)
         if blog:
             post.blog = blog
         return self.save_post(post)
@@ -132,7 +132,7 @@ class PostForm(PostFormMixin, forms.ModelForm):
         ]
 
     def __init__(self, *args, **kwargs):
-        super(PostForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         if Section.objects.count() < 2:
             self.section = Section.objects.first()
             del self.fields["section"]
@@ -140,7 +140,7 @@ class PostForm(PostFormMixin, forms.ModelForm):
             self.section = None
 
     def save(self, blog=None, author=None):
-        post = super(PostForm, self).save(commit=False)
+        post = super().save(commit=False)
         if blog:
             post.blog = blog
         if author:

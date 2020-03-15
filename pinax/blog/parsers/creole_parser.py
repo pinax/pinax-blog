@@ -18,7 +18,7 @@ class Rules:
     """
 
 
-class HtmlEmitter(object):
+class HtmlEmitter:
     """
     Generate HTML output for the document
     tree consisting of DocNodes.
@@ -172,7 +172,7 @@ class ImageLookupHtmlEmitter(HtmlEmitter):
     def image_emit(self, node):
         target = node.content
         if not re.match(r"^\d+$", target):
-            return super(ImageLookupHtmlEmitter, self).image_emit(node)
+            return super().image_emit(node)
         else:
             try:
                 image = Image.objects.get(pk=int(target))

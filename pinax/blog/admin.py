@@ -63,16 +63,16 @@ class PostAdmin(admin.ModelAdmin):
     def formfield_for_dbfield(self, db_field, **kwargs):
         request = kwargs.get("request")
         if db_field.name == "author":
-            ff = super(PostAdmin, self).formfield_for_dbfield(db_field, **kwargs)
+            ff = super().formfield_for_dbfield(db_field, **kwargs)
             ff.initial = request.user.id
             return ff
-        return super(PostAdmin, self).formfield_for_dbfield(db_field, **kwargs)
+        return super().formfield_for_dbfield(db_field, **kwargs)
 
     def get_form(self, request, obj=None, **kwargs):
         kwargs.update({
             "formfield_callback": curry(self.formfield_for_dbfield, request=request),
         })
-        return super(PostAdmin, self).get_form(request, obj, **kwargs)
+        return super().get_form(request, obj, **kwargs)
 
     def save_form(self, request, form, change):
         # this is done for explicitness that we want form.save to commit
