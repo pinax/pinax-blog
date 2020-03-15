@@ -50,9 +50,7 @@ class BlogIndexView(ListView):
         q = self.search_term()
         if q:
             posts = posts.filter(
-                Q(title__icontains=q) |
-                Q(teaser_html__icontains=q) |
-                Q(content_html__icontains=q)
+                Q(title__icontains=q) | Q(teaser_html__icontains=q) | Q(content_html__icontains=q)
             )
         return posts
 

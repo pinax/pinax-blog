@@ -1,10 +1,8 @@
-# -*- coding: utf8 -*-
 from random import choice
 
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.html import strip_tags
 from django.utils.translation import ugettext_lazy as _
 
@@ -30,7 +28,6 @@ STATES = settings.PINAX_BLOG_UNPUBLISHED_STATES + ["Published"]
 PINAX_BLOG_STATE_CHOICES = list(zip(range(1, 1 + len(STATES)), STATES))
 
 
-@python_2_unicode_compatible
 class Blog(models.Model):
 
     if settings.PINAX_BLOG_SCOPING_MODEL is not None:
@@ -50,7 +47,6 @@ class Blog(models.Model):
         return {}
 
 
-@python_2_unicode_compatible
 class Section(models.Model):
     name = models.CharField(max_length=150, unique=True)
     slug = models.SlugField(unique=True)
@@ -64,7 +60,6 @@ class Section(models.Model):
         verbose_name_plural = _("Sections")
 
 
-@python_2_unicode_compatible
 class Post(models.Model):
 
     STATE_CHOICES = PINAX_BLOG_STATE_CHOICES
@@ -140,11 +135,11 @@ class Post(models.Model):
         return self.revisions.get(pk=rev_id)
 
     def current(self):
-        "the currently visible (latest published) revision"
+        """the currently visible (latest published) revision"""
         return self.revisions.exclude(published=None).order_by("-published")[0]
 
     def latest(self):
-        "the latest modified (even if not published) revision"
+        """the latest modified (even if not published) revision"""
         try:
             return self.revisions.order_by("-updated")[0]
         except IndexError:
@@ -222,7 +217,6 @@ class Post(models.Model):
         self.current().inc_views()
 
 
-@python_2_unicode_compatible
 class Revision(models.Model):
 
     post = models.ForeignKey(

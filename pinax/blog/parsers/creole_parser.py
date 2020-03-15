@@ -43,7 +43,7 @@ class HtmlEmitter(object):
         return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
     def attr_escape(self, text):
-        return self.html_escape(text).replace("\"", "&quot")
+        return self.html_escape(text).replace('"', "&quot")
 
     # *_emit methods for emitting nodes of the document
 
@@ -102,11 +102,11 @@ class HtmlEmitter(object):
         m = self.addr_re.match(target)
         if m:
             if m.group("extern_addr"):
-                return "<a href=\"%s\">%s</a>" % (
+                return '<a href="%s">%s</a>' % (
                     self.attr_escape(target), inside)
             elif m.group("inter_wiki"):
                 raise NotImplementedError
-        return "<a href=\"%s\">%s</a>" % (
+        return '<a href="%s">%s</a>' % (
             self.attr_escape(target), inside)
 
     def image_emit(self, node):
@@ -115,11 +115,11 @@ class HtmlEmitter(object):
         m = self.addr_re.match(target)
         if m:
             if m.group("extern_addr"):
-                return "<img src=\"%s\" alt=\"%s\">" % (
+                return '<img src="%s" alt="%s">' % (
                     self.attr_escape(target), self.attr_escape(text))
             elif m.group("inter_wiki"):
                 raise NotImplementedError
-        return "<img src=\"%s\" alt=\"%s\">" % (
+        return '<img src="%s" alt="%s">' % (
             self.attr_escape(target), self.attr_escape(text))
 
     def macro_emit(self, node):
@@ -179,7 +179,7 @@ class ImageLookupHtmlEmitter(HtmlEmitter):
             except Image.DoesNotExist:
                 # @@@ do something better here
                 return ""
-            return "<img src=\"%s\" />" % (image.image.url,)
+            return '<img src="%s" />' % (image.image.url,)
 
 
 class PinaxBlogHtmlEmitter(PygmentsHtmlEmitter, ImageLookupHtmlEmitter):
