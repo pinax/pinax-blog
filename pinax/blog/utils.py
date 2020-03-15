@@ -12,9 +12,9 @@ def load_path_attr(path):
     try:
         mod = import_module(module)
     except ImportError as e:
-        raise ImproperlyConfigured("Error importing %s: '%s'" % (module, e))
+        raise ImproperlyConfigured("Error importing {}: '{}'".format(module, e))
     try:
         attr = getattr(mod, attr)
     except AttributeError:
-        raise ImproperlyConfigured("Module '%s' does not define a '%s'" % (module, attr))
+        raise ImproperlyConfigured("Module '{}' does not define a '{}'".format(module, attr))
     return attr

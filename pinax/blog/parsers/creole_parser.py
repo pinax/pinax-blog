@@ -57,41 +57,41 @@ class HtmlEmitter(object):
         return "<hr>"
 
     def paragraph_emit(self, node):
-        return "<p>%s</p>\n" % self.emit_children(node)
+        return "<p>{}</p>\n".format(self.emit_children(node))
 
     def bullet_list_emit(self, node):
-        return "<ul>\n%s</ul>\n" % self.emit_children(node)
+        return "<ul>\n{}</ul>\n".format(self.emit_children(node))
 
     def number_list_emit(self, node):
-        return "<ol>\n%s</ol>\n" % self.emit_children(node)
+        return "<ol>\n{}</ol>\n".format(self.emit_children(node))
 
     def list_item_emit(self, node):
-        return "<li>%s</li>\n" % self.emit_children(node)
+        return "<li>{}</li>\n".format(self.emit_children(node))
 
     def table_emit(self, node):
-        return "<table>\n%s</table>\n" % self.emit_children(node)
+        return "<table>\n{}</table>\n".format(self.emit_children(node))
 
     def table_row_emit(self, node):
-        return "<tr>%s</tr>\n" % self.emit_children(node)
+        return "<tr>{}</tr>\n".format(self.emit_children(node))
 
     def table_cell_emit(self, node):
-        return "<td>%s</td>" % self.emit_children(node)
+        return "<td>{}</td>".format(self.emit_children(node))
 
     def table_head_emit(self, node):
-        return "<th>%s</th>" % self.emit_children(node)
+        return "<th>{}</th>".format(self.emit_children(node))
 
     def emphasis_emit(self, node):
-        return "<i>%s</i>" % self.emit_children(node)
+        return "<i>{}</i>".format(self.emit_children(node))
 
     def strong_emit(self, node):
-        return "<b>%s</b>" % self.emit_children(node)
+        return "<b>{}</b>".format(self.emit_children(node))
 
     def header_emit(self, node):
-        return "<h%d>%s</h%d>\n" % (
+        return "<h{}>{}</h{}>\n".format(
             node.level, self.html_escape(node.content), node.level)
 
     def code_emit(self, node):
-        return "<tt>%s</tt>" % self.html_escape(node.content)
+        return "<tt>{}</tt>".format(self.html_escape(node.content))
 
     def link_emit(self, node):
         target = node.content
@@ -102,11 +102,11 @@ class HtmlEmitter(object):
         m = self.addr_re.match(target)
         if m:
             if m.group("extern_addr"):
-                return '<a href="%s">%s</a>' % (
+                return '<a href="{}">{}</a>'.format(
                     self.attr_escape(target), inside)
             elif m.group("inter_wiki"):
                 raise NotImplementedError
-        return '<a href="%s">%s</a>' % (
+        return '<a href="{}">{}</a>'.format(
             self.attr_escape(target), inside)
 
     def image_emit(self, node):
@@ -115,11 +115,11 @@ class HtmlEmitter(object):
         m = self.addr_re.match(target)
         if m:
             if m.group("extern_addr"):
-                return '<img src="%s" alt="%s">' % (
+                return '<img src="{}" alt="{}">'.format(
                     self.attr_escape(target), self.attr_escape(text))
             elif m.group("inter_wiki"):
                 raise NotImplementedError
-        return '<img src="%s" alt="%s">' % (
+        return '<img src="{}" alt="{}">'.format(
             self.attr_escape(target), self.attr_escape(text))
 
     def macro_emit(self, node):
@@ -129,7 +129,7 @@ class HtmlEmitter(object):
         return "<br>"
 
     def preformatted_emit(self, node):
-        return "<pre>%s</pre>" % self.html_escape(node.content)
+        return "<pre>{}</pre>".format(self.html_escape(node.content))
 
     def default_emit(self, node):
         """Fallback function for emitting unknown nodes."""
@@ -141,7 +141,7 @@ class HtmlEmitter(object):
 
     def emit_node(self, node):
         """Emit a single node."""
-        emit = getattr(self, "%s_emit" % node.kind, self.default_emit)
+        emit = getattr(self, "{}s_emit".format(node.kind), self.default_emit)
         return emit(node)
 
     def emit(self):
@@ -179,7 +179,7 @@ class ImageLookupHtmlEmitter(HtmlEmitter):
             except Image.DoesNotExist:
                 # @@@ do something better here
                 return ""
-            return '<img src="%s" />' % (image.image.url,)
+            return '<img src="{}" />'.format(image.image.url)
 
 
 class PinaxBlogHtmlEmitter(PygmentsHtmlEmitter, ImageLookupHtmlEmitter):

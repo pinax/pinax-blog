@@ -56,7 +56,7 @@ class PostAdmin(admin.ModelAdmin):
     ]
 
     def show_secret_share_url(self, obj):
-        return '<a href="%s">%s</a>' % (obj.sharable_url, obj.sharable_url)
+        return '<a href="{}">{}</a>'.format(obj.sharable_url, obj.sharable_url)
     show_secret_share_url.short_description = _("Share this url")
     show_secret_share_url.allow_tags = True
 
