@@ -76,10 +76,9 @@ See `setup.py` for specific required versions of these packages.
 
 #### Supported Django and Python versions
 
-Django \ Python | 2.7 | 3.4 | 3.5 | 3.6
---------------- | --- | --- | --- | ---
-1.11 |  *  |  *  |  *  |  *  
-2.0  |     |  *  |  *  |  *
+Django / Python | 3.6 | 3.7 | 3.8
+--------------- | --- | --- | ---
+2.2  |  *  |  *  |  *
 
 
 ## Documentation
@@ -191,7 +190,7 @@ Adjusting for the number of the image, of course.
 ### Settings
 
 #### PINAX_BLOG_SCOPING_MODEL
- 
+
 String in the format `"app.Model"` that will set a ForeignKey on the `blog.Post` model
 
 #### PINAX_BLOG_SCOPING_URL_VAR
