@@ -6,7 +6,7 @@ common: &common
     - checkout
     - restore_cache:
         keys:
-          - v2-deps-{{ .Environment.CIRCLE_JOB }}-{{ checksum "setup.py" }}-{{ checksum "tox.ini" }}
+          -v2-deps-{{ .Environment.CIRCLE_JOB }}-{{ checksum "setup.py" }}-{{ checksum "tox.ini" }}
           -v2-deps-
     - run:
         name: install dependencies
