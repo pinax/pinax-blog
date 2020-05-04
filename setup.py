@@ -99,7 +99,7 @@ setup(
         "pillow>=3.0.0",
         "pinax-images>=3.0.1",
         "pygments>=2.0.2",
-        "pytz>=2016.6.1",
+        "pytz>=2020.1",
     ],
     tests_require=[
         "django-bootstrap-form>=3.0.0",
