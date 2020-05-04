@@ -1,6 +1,7 @@
+from functools import partial as curry
+
 from django import forms
 from django.utils import timezone
-from functools import partial as curry
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 
