@@ -6,8 +6,8 @@ common: &common
     - checkout
     - restore_cache:
         keys:
-          -v2-deps-{{ .Environment.CIRCLE_JOB }}-{{ checksum "setup.py" }}-{{ checksum "tox.ini" }}
-          -v2-deps-
+          - v2-deps-{{ .Environment.CIRCLE_JOB }}-{{ checksum "setup.py" }}-{{ checksum "tox.ini" }}
+          - v2-deps-
     - run:
         name: install dependencies
         command: pip install --user tox codecov "coverage<5"
@@ -44,18 +44,36 @@ jobs:
       - image: circleci/python:3.6
         environment:
           TOXENV=py36-dj22
+  py36dj30:
+    <<: *common
+    docker:
+      - image: circleci/python:3.6
+        environment:
+          TOXENV=py36-dj30
   py37dj22:
     <<: *common
     docker:
       - image: circleci/python:3.7
         environment:
           TOXENV=py37-dj22
+  py37dj30:
+    <<: *common
+    docker:
+      - image: circleci/python:3.7
+        environment:
+          TOXENV=py37-dj30
   py38dj22:
     <<: *common
     docker:
       - image: circleci/python:3.8
         environment:
           TOXENV=py38-dj22
+  py38dj30:
+    <<: *common
+    docker:
+      - image: circleci/python:3.8
+        environment:
+          TOXENV=py38-dj30
 
 workflows:
   version: 2
@@ -63,5 +81,9 @@ workflows:
     jobs:
       - lint
       - py36dj22
+      - py36dj30
       - py37dj22
+      - py37dj30
       - py38dj22
+      - py38dj30
+
