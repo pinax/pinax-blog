@@ -11,7 +11,7 @@ from .tests import randomword
 class TestForms(TestCase):
 
     def setUp(self):
-        super(TestForms, self).setUp()
+        super().setUp()
 
         self.user = get_user_model().objects.create_user(
             username="patrick",

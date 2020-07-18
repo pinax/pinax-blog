@@ -3,7 +3,7 @@ from django.http import Http404
 from pinax.blog.conf import settings
 
 
-class PinaxBlogDefaultHookSet(object):
+class PinaxBlogDefaultHookSet:
 
     def get_blog(self, **kwargs):
         """
@@ -35,7 +35,7 @@ class PinaxBlogDefaultHookSet(object):
         raise Http404()
 
 
-class HookProxy(object):
+class HookProxy:
 
     def __getattr__(self, attr):
         return getattr(settings.PINAX_BLOG_HOOKSET, attr)
