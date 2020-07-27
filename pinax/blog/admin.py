@@ -1,6 +1,7 @@
+from functools import partial as curry
+
 from django.contrib import admin
 from django.utils import timezone
-from django.utils.functional import curry
 from django.utils.translation import ugettext_lazy as _
 
 from pinax.images.admin import ImageInline

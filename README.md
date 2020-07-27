@@ -399,6 +399,10 @@ Both templates ship already configured to work out of the box.
 
 ## Change Log
 
+### 8.0.1
+
+* Change `from django.utils.functional import curry` to `from functools import partial as curry`
+
 ### 8.0.0
 
 * Drop Django 1.11, 2.0, and 2.1, and Python 2,7, 3.4, and 3.5 support
