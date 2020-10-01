@@ -63,7 +63,6 @@ Where you can find what you need:
 
 #### Features
 
-Current features include:
 
 * support for multiple channels (e.g. technical vs business)
 * use of Creole (optional) and Markdown as markup format
