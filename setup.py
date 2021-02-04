@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-VERSION = "8.0.1"
+VERSION = "8.1.0"
 LONG_DESCRIPTION = """
 .. image:: http://pinaxproject.com/pinax-design/patches/pinax-blog.svg
     :target: https://pypi.python.org/pypi/pinax-blog/
@@ -95,7 +95,7 @@ setup(
     install_requires=[
         "django>=2.2",
         "django-appconf>=1.0.1",
-        "markdown==2.6.11",
+        "markdown==3.1.1",
         "pillow>=3.0.0",
         "pinax-images>=3.0.1",
         "pygments>=2.0.2",

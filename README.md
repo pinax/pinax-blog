@@ -399,6 +399,10 @@ Both templates ship already configured to work out of the box.
 
 ## Change Log
 
+### 8.1.0
+
+* Upgrade Markdown from 2.6.11 to 3.1.1
+
 ### 8.0.1
 
 * Change `from django.utils.functional import curry` to `from functools import partial as curry`

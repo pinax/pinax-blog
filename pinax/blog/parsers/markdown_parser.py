@@ -1,9 +1,9 @@
 from markdown import Markdown
-from markdown.inlinepatterns import IMAGE_LINK_RE, ImagePattern
+from markdown.inlinepatterns import IMAGE_LINK_RE, ImageInlineProcessor
 from pinax.images.models import Image
 
 
-class ImageLookupImagePattern(ImagePattern):
+class ImageLookupImagePattern(ImageInlineProcessor):
 
     def sanitize_url(self, url):
         if url.startswith("http"):
