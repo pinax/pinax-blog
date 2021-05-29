@@ -34,7 +34,7 @@ jobs:
   lint:
     <<: *common
     docker:
-      - image: circleci/python:3.8
+      - image: circleci/python:3.9
         environment:
           - TOXENV=checkqa
           - UPLOAD_COVERAGE=0
@@ -44,46 +44,86 @@ jobs:
       - image: circleci/python:3.6
         environment:
           TOXENV=py36-dj22
-  py36dj30:
+  py36dj31:
     <<: *common
     docker:
       - image: circleci/python:3.6
         environment:
-          TOXENV=py36-dj30
+          TOXENV=py36-dj31
+  py36dj32:
+    <<: *common
+    docker:
+      - image: circleci/python:3.6
+        environment:
+          TOXENV=py36-dj32
   py37dj22:
     <<: *common
     docker:
       - image: circleci/python:3.7
         environment:
           TOXENV=py37-dj22
-  py37dj30:
+  py37dj31:
     <<: *common
     docker:
       - image: circleci/python:3.7
         environment:
-          TOXENV=py37-dj30
+          TOXENV=py37-dj31
+  py37dj32:
+    <<: *common
+    docker:
+      - image: circleci/python:3.7
+        environment:
+          TOXENV=py37-dj32
   py38dj22:
     <<: *common
     docker:
       - image: circleci/python:3.8
         environment:
           TOXENV=py38-dj22
-  py38dj30:
+  py38dj31:
     <<: *common
     docker:
       - image: circleci/python:3.8
         environment:
-          TOXENV=py38-dj30
-
+          TOXENV=py38-dj31
+  py38dj32:
+    <<: *common
+    docker:
+      - image: circleci/python:3.8
+        environment:
+          TOXENV=py38-dj32
+  py39dj22:
+    <<: *common
+    docker:
+      - image: circleci/python:3.9
+        environment:
+          TOXENV=py39-dj22
+  py39dj31:
+    <<: *common
+    docker:
+      - image: circleci/python:3.9
+        environment:
+          TOXENV=py39-dj31
+  py39dj32:
+    <<: *common
+    docker:
+      - image: circleci/python:3.9
+        environment:
+          TOXENV=py39-dj32
 workflows:
   version: 2
   test:
     jobs:
       - lint
       - py36dj22
-      - py36dj30
+      - py36dj31
+      - py36dj32
       - py37dj22
-      - py37dj30
+      - py37dj31
+      - py37dj32
       - py38dj22
-      - py38dj30
-
+      - py38dj31
+      - py38dj32
+      - py39dj22
+      - py39dj31
+      - py39dj32
