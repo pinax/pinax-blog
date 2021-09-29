@@ -399,6 +399,13 @@ Both templates ship already configured to work out of the box.
 
 ## Change Log
 
+### 8.0.2
+
+* Change `url` to `re_path`
+* Remove `default_app_config`
+* Change `ugettext_lazy` to `gettext_lazy`
+* Remove `providing_args` parameters from `django.dispatch.Signal()`
+
 ### 8.0.1
 
 * Change `from django.utils.functional import curry` to `from functools import partial as curry`
