@@ -23,15 +23,18 @@ class TestForms(TestCase):
         self.content = "You won't believe what happened next!"
         self.teaser = "Only his dog knows the truth"
         self.title_len = Post._meta.get_field("title").max_length
+        self.subtitle_len = Post._meta.get_field("subtitle").max_length
 
     def test_max_slug(self):
         """
         Ensure Post can be created with slug same length as title.
         """
         title = randomword(self.title_len)
+        subtitle = randomword(self.subtitle_len)
         form_data = {
             "section": self.section,
             "title": title,
+            "subtitle": subtitle,
             "content": self.content,
             "teaser": self.teaser,
             "state": 1

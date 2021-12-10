@@ -113,6 +113,11 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterField(
             model_name='post',
+            name='subtitle',
+            field=models.CharField(max_length=90, verbose_name='Subtitle'),
+        ),
+        migrations.AlterField(
+            model_name='post',
             name='tweet_text',
             field=models.CharField(editable=False, max_length=140, verbose_name='Tweet text'),
         ),
@@ -175,6 +180,11 @@ class Migration(migrations.Migration):
             model_name='revision',
             name='title',
             field=models.CharField(max_length=90, verbose_name='Title'),
+        ),
+        migrations.AlterField(
+            model_name='revision',
+            name='subtitle',
+            field=models.CharField(max_length=90, verbose_name='Subtitle'),
         ),
         migrations.AlterField(
             model_name='revision',

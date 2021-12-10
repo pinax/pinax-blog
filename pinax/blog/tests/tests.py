@@ -34,20 +34,24 @@ class TestBlog(TestCase):
 
         # Create two published Posts, one in each section.
         self.orange_title = "Orange You Wonderful"
+        self.orange_subtitle = "Subtitle for you orange"
         self.orange_slug = slugify(self.orange_title)
         self.orange_post = Post.objects.create(blog=self.blog,
                                                section=self.oranges,
                                                title=self.orange_title,
+                                               subtitle=self.orange_subtitle,
                                                slug=self.orange_slug,
                                                author=self.user,
                                                markup=self.markup,
                                                state=Post.STATE_CHOICES[-1][0])
 
         self.apple_title = "Apple of My Eye"
+        self.apple_subtitle = "Subtitle for you apple"
         self.apple_slug = slugify(self.apple_title)
         self.apple_post = Post.objects.create(blog=self.blog,
                                               section=self.apples,
                                               title=self.apple_title,
+                                              subtitle=self.apple_subtitle,
                                               slug=self.apple_slug,
                                               author=self.user,
                                               markup=self.markup,
@@ -105,11 +109,14 @@ class TestModelFieldValidation(TestBlog):
     def test_overlong_slug(self):
         title_len = Post._meta.get_field("title").max_length
         title = randomword(title_len)
+        subtitle_len = Post._meta.get_field("subtitle").max_length
+        subtitle = randomword(subtitle_len)
         slug_len = Post._meta.get_field("slug").max_length
         slug = randomword(slug_len + 1)
         slug_post = Post(blog=self.blog,
                          section=self.apples,
                          title=title,
+                         subtitle=subtitle,
                          slug=slug,
                          author=self.user,
                          state=Post.STATE_CHOICES[-1][0])
@@ -165,9 +172,11 @@ class TestViews(TestBlog):
         self.user.is_staff = True
         self.user.save()
         post_title = "You'll never believe what happened next!"
+        post_subtitle = "never believe what happened subtitle!"
         post_data = dict(
             section=self.apples.pk,
             title=post_title,
+            subtitle=post_subtitle,
             teaser="teaser",
             content="content",
             description="description",

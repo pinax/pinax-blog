@@ -42,6 +42,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('section', models.IntegerField(choices=[(1, 'all'), (2, b'Release Notes')])),
                 ('title', models.CharField(max_length=90)),
+                ('subtitle', models.CharField(max_length=90)),
                 ('slug', models.SlugField()),
                 ('markup', models.CharField(max_length=25, choices=[('markdown', 'Markdown'), ('creole', 'Creole')])),
                 ('teaser_html', models.TextField(editable=False)),
@@ -80,6 +81,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('title', models.CharField(max_length=90)),
+                ('subtitle', models.CharField(max_length=90)),
                 ('teaser', models.TextField()),
                 ('content', models.TextField()),
                 ('updated', models.DateTimeField(default=timezone.now)),

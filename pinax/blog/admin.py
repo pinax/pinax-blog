@@ -38,6 +38,7 @@ class PostAdmin(admin.ModelAdmin):
     fields = [
         "section",
         "title",
+        "subtitle",
         "slug",
         "author",
         "markup",
