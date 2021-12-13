@@ -17,6 +17,7 @@ FIELDS = [
     "author",
     "markup",
     "title",
+    "subtitle",
     "slug",
     "teaser",
     "content",
@@ -62,6 +63,7 @@ class PostFormMixin:
         r = Revision()
         r.post = post
         r.title = post.title
+        r.subtitle = post.subtitle
         r.teaser = self.cleaned_data["teaser"]
         r.content = self.cleaned_data["content"]
         r.author = post.author
@@ -79,6 +81,11 @@ class AdminPostForm(PostFormMixin, forms.ModelForm):
 
     title = forms.CharField(
         label=_("Title"),
+        max_length=90,
+        widget=forms.TextInput(attrs={"style": "width: 50%;"}),
+    )
+    subtitle = forms.CharField(
+        label=_("Subtitle"),
         max_length=90,
         widget=forms.TextInput(attrs={"style": "width: 50%;"}),
     )
@@ -126,6 +133,7 @@ class PostForm(PostFormMixin, forms.ModelForm):
         fields = [
             "section",
             "title",
+            "subtitle",
             "teaser",
             "content",
             "description",

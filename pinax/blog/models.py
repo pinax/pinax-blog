@@ -68,6 +68,7 @@ class Post(models.Model):
     section = models.ForeignKey(Section, on_delete=models.CASCADE)
 
     title = models.CharField(_("Title"), max_length=90)
+    subtitle = models.CharField(_("Subtitle"), max_length=90)
     slug = models.SlugField(_("Slug"), max_length=90, unique=settings.PINAX_BLOG_SLUG_UNIQUE)
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -227,6 +228,7 @@ class Revision(models.Model):
     )
 
     title = models.CharField(_("Title"), max_length=90)
+    subtitle = models.CharField(_("Subtitle"), max_length=90)
     teaser = models.TextField(_("Teaser"))
 
     content = models.TextField(_("Content"))
